@@ -635,6 +635,96 @@ something close to the main event.
 
 ---
 
+## Stage 8 — optimal range width ⭐
+
+Promoted from appendix by 5.4: if range management is 70-78% of the gap between
+advertised and realised return, then how to choose a range is close to the main
+question.
+
+### 8.1 The model and its closed form
+
+In log price with driftless Brownian motion, a band of half-width `delta`
+re-centred on exit. Three rates, per unit value per year:
+
+| Term | Form | Source |
+|---|---|---|
+| Fees | `F / delta` | `L = V/(sqrt(P) delta)`, income proportional to `L` |
+| LVR | `sigma^2 / (4 delta)` | `l = (sigma^2/2) S^2 |dn/dS|` on the v3 amount function |
+| Re-centring | `(g/V) sigma^2 / delta^2` | exit rate `sigma^2/delta^2` from `E[tau] = delta^2/sigma^2` |
+
+    net(delta) = kappa/delta - A sigma^2/delta^2,   kappa = F - sigma^2/4,  A = g/V
+    delta* = 2 A sigma^2 / kappa        net* = kappa^2 / (4 A sigma^2)
+
+Second derivative at `delta*` is `-kappa/delta*^3 < 0`. The closed form agrees
+with a grid search over the same objective to **0.02%**.
+
+### 8.2 The result that matters: concentration is sign-neutral ⭐
+
+Fees and LVR **both scale as `1/delta`**. Narrowing a range amplifies income and
+adverse selection identically, so range width sets the *scale* of the outcome
+and never its *sign*. Whether liquidity provision pays is decided entirely by
+
+    kappa > 0   <=>   F > sigma^2 / 4
+
+and not at all by how the LP concentrates.
+
+**Confirmed empirically.** Sweeping nine widths on ETH/USDC 30bp, January 2023,
+with re-centring on exit:
+
+| requested | delta | re-centres | fees | LVR | gas | net | fees/LVR |
+|---|---|---|---|---|---|---|---|
+| +/-1% | 0.0126 | 85 | +460.95% | -498.34% | -22.70% | **-60.10%** | 0.925 |
+| +/-2% | 0.0236 | 34 | +258.67% | -283.76% | -9.24% | **-34.33%** | 0.912 |
+| +/-5% | 0.0537 | 9 | +118.01% | -127.62% | -2.64% | **-12.25%** | 0.925 |
+| +/-10% | 0.1035 | 3 | +62.98% | -68.78% | -1.06% | **-6.86%** | 0.916 |
+| +/-25% | 0.2580 | 1 | +27.06% | -29.48% | -0.53% | **-2.95%** | 0.918 |
+| +/-40% | 0.4260 | 0 | +18.77% | -20.36% | -0.26% | **-1.85%** | 0.922 |
+
+Across a **34x span of widths** the fee/LVR ratio moves from 0.912 to 0.928 — a
+spread of **1.85%**. Fees and LVR scale together, exactly as derived.
+
+`fees * delta` and `lvr * delta` are each near-constant (0.058 -> 0.080 and
+0.063 -> 0.087), drifting up slightly at wide ranges where the small-`delta`
+approximation weakens — which is the expected direction and magnitude.
+
+### 8.3 January 2023 was a losing month at every width
+
+Fees covered **92%** of LVR. So `kappa < 0`, and the closed form predicts no
+interior optimum: losses shrink monotonically as the range widens, and the
+least-bad position is the widest. The sweep does exactly that, improving
+monotonically from -60.1% to -1.85%.
+
+This reframes the earlier never-re-centred result. That position looked *better*
+(-0.55% at +/-10%) only because it spent 73% of the month out of range, where it
+earned nothing and lost nothing. Re-centring keeps it exposed to a
+negative-margin activity, so staying in range makes the loss larger. **Being out
+of range was accidental risk management, not a cost.**
+
+Stated carefully: one month, one pool, one entry date. The full sample will say
+whether `kappa < 0` is typical or particular to a 40% trending month.
+
+### 8.4 Open question 4 answered — the tick grid binds, not capacity
+
+Two floors constrain how narrow a range can be, and which binds is a question
+about position size.
+
+| Floor | Value on ETH/USDC 30bp | Meaning |
+|---|---|---|
+| Fee saturation `beta` | 2.95e-4 (2.95 bp) | position dilutes its own fee share |
+| Tick grid (60 ticks) | 6.0e-3 (0.602%) | pool cannot express a narrower range |
+
+The grid binds **twenty times** before saturation does. A $100k position holds
+0.29% of active liquidity at +/-10%; capacity does not bind until roughly
+**$2m** on this pool. Below that the linear fee model is sound; above it the
+saturating form `(R/V) beta/(delta + beta)` is required.
+
+This also caught a real modelling error. Without the saturation term the model
+diverges: `kappa/delta` grows without bound as the range narrows, and a
+calibrated run returned an "optimum" of +/-0.2% paying **364% a year**. That is
+the model failing, not a finding, and the bound is what makes it physical.
+
+---
+
 ## Log of reversals
 
 Anything decided above and later changed goes here with the date and the
