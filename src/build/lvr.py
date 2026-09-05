@@ -74,6 +74,10 @@ class LVRResult:
     days: Decimal
     pool_path_stale_share: Decimal = Decimal(0)   # share of |LVR| from long gaps
     pool_path_reliable: bool = True
+    #: In-range concentration factor: analytical LVR rate over the textbook
+    #: sigma^2/8 rate, compared only on blocks where the position is actually
+    #: in range. This is the *pure* amplification concentration causes.
+    in_range_concentration_factor: Decimal = Decimal(1)
 
 
 # --------------------------------------------------------------------------- #
@@ -275,6 +279,22 @@ def compute_lvr(
     abs_stale = sum((abs(v) for v in df.loc[stale, "lvr_pool_path"]), Decimal(0))
     stale_share = (abs_stale / abs_total) if abs_total > 0 else Decimal(0)
 
+    # Concentration amplification, compared like with like. The whole-period
+    # ratio of the two annualised totals is NOT this quantity: the analytical
+    # rate is zero out of range while the naive one is not, so over a month
+    # spent mostly out of range two large effects — ~20x amplification while in
+    # range, and a naive formula charging LVR when the position cannot lose any
+    # — very nearly cancel. Reporting that near-cancellation as "the
+    # concentration effect" would understate the amplification by an order of
+    # magnitude.
+    live = df["lvr_analytical_rate"] > 0
+    if live.any():
+        num = sum(df.loc[live, "lvr_analytical_rate"], Decimal(0))
+        den = sum(df.loc[live, "lvr_naive_v2_rate"], Decimal(0))
+        conc = num / den if den > 0 else Decimal(1)
+    else:
+        conc = Decimal(1)
+
     span = Decimal(int(df["block_timestamp"].iloc[-1] - df["block_timestamp"].iloc[0]))
     days = span / Decimal(86400)
     mean_value = sum(df["value_usd"], Decimal(0)) / Decimal(len(df))
@@ -293,6 +313,7 @@ def compute_lvr(
         days=days,
         pool_path_stale_share=stale_share,
         pool_path_reliable=stale_share < Decimal("0.25"),
+        in_range_concentration_factor=conc,
     )
 
 

@@ -400,8 +400,68 @@ sensitivity per dollar deployed. The implementation differentiates the
 position's own amount function, which handles any range exactly and collapses
 back to `sigma^2 V/8` in the full-range limit — asserted in `tests/test_lvr.py`.
 
-Measured on a +/-10% position, January 2023: **1.19x**, i.e. the textbook form
-understates LVR by 16%. Both are reported.
+**CORRECTION.** An earlier version of this entry reported the amplification as
+**1.19x**. That number is real but it is not the concentration effect, and
+labelling it so understated the effect by more than an order of magnitude.
+
+1.19x was the ratio of two *whole-period* annualised totals. The concentrated
+rate is zero while the position is out of range; the naive textbook rate is not.
+Over a month the position spent 73% out of range, two large and opposite errors
+very nearly cancelled: ~20x amplification while in range, against a naive
+formula charging LVR during a period when a single-sided position cannot lose
+any.
+
+Measured like with like — comparing the two rates only on blocks where the
+position is actually in range — the amplification is:
+
+| Half-width | measured | `2/delta` closed form |
+|---|---|---|
+| +/-2% | 83.8x | 101.0 |
+| +/-5% | 37.5x | 41.0 |
+| +/-10% | **19.6x** | 21.0 |
+| +/-25% | 8.3x | 9.0 |
+| +/-50% | 4.2x | 4.9 |
+
+The implementation and the closed form `2/delta` (delta = half-width in log
+price) are independent, and they agree to within the small-delta approximation
+throughout — which validates both.
+
+So a +/-10% position carries roughly **twenty times** the LVR per dollar of a
+full-range one. Both quantities are now reported separately:
+`in_range_concentration_factor` is the amplification, and the whole-period ratio
+is what an analyst gets wrong by applying the textbook form naively.
+
+### 3.4 Tick spacing is bundled with the fee tier — a confound in H4 ⚠️
+
+Uniswap ties tick spacing to the fee tier: 10 ticks at 5bp, 60 at 30bp, 200 at
+100bp. Snapping a requested range outward to that grid therefore inflates it by
+a different amount on each tier:
+
+| Requested +/-2% | realised | inflation | ticks wide |
+|---|---|---|---|
+| ETH/USDC 5bp | 2.07% | 1.04x | 41 |
+| ETH/USDC 30bp | 2.43% | 1.21x | 8 |
+| ETH/USDC 100bp | 3.05% | **1.52x** | 3 |
+
+**The tiers cannot hold the same position.** So H4's "same asset, same
+volatility, different fee" is not a clean natural experiment: the tiers differ
+in minimum range granularity as well as in fee, and a cross-tier comparison at a
+fixed *requested* width is comparing different *realised* positions. Since LVR
+per dollar goes as `2/delta`, a 1.5x difference in realised width is a 1.5x
+difference in LVR before any fee-band effect is considered.
+
+Mitigations, to be applied in Stage 5: compare at fixed *realised* width rather
+than fixed requested width, and report the realised width alongside every row.
+At +/-10% the inflation is 1.06x / 1.11x / 1.16x, so the confound is modest at
+the baseline and severe only for narrow ranges.
+
+### 3.5 Arithmetic +/-w is not centred in log price
+
+`[S(1-w), S(1+w)]` has geometric mean `S*sqrt(1-w^2)` — 13% below spot at
+w = 0.5. The price process and the range-width optimisation are both specified
+in log price, so `snap_range(..., log_centred=True)` provides the symmetric
+alternative. The baseline stays arithmetic because that is how range widths are
+quoted in practice; the log-centred variant is swept in robustness.
 
 ### 3.3 `lvr_pool_path` has a validity limit — **GUARDED**
 

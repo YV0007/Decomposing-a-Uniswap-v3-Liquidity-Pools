@@ -162,16 +162,46 @@ def range_state(position: Position, tick: int) -> RangeState:
 # --------------------------------------------------------------------------- #
 
 def snap_range(
-    pool_price: Decimal, half_width: Decimal, spec: PoolSpec
+    pool_price: Decimal, half_width: Decimal, spec: PoolSpec, log_centred: bool = False
 ) -> tuple[int, int]:
     """Range bounds as ticks, snapped outward to the pool's tick spacing.
 
     Snapping outward guarantees the realised range is never narrower than
     requested, so a `+/-10%` position is at least +/-10% wide. Inward snapping
     would quietly bias every position toward more concentration than specified.
+
+    Two things about the realised range differ from the request, and both matter
+    enough to be measured rather than assumed away.
+
+    **Tick spacing is a hard floor on narrowness**, and it is bundled with the
+    fee tier: 10 ticks at 5bp, 60 at 30bp, 200 at 100bp. A requested +/-2% range
+    realises as 2.07% on the 5bp pool (41 ticks) but 3.05% on the 100bp pool
+    (3 ticks) — a 1.5x inflation. So the H4 "natural experiment" is not clean:
+    the tiers differ in minimum range granularity as well as in fee, and a
+    cross-tier comparison at a fixed requested width is comparing different
+    realised positions.
+
+    **Arithmetic +/-w is not centred in log price.** `[S(1-w), S(1+w)]` has
+    geometric mean `S*sqrt(1-w^2)`, which for w = 0.5 sits 13% below spot. Set
+    `log_centred=True` for `[S*exp(-w), S*exp(+w)]`, which is symmetric in the
+    variable the price process is actually specified in and is what the
+    range-width optimisation assumes.
     """
-    lo_price = Decimal(str(pool_price)) * (Decimal(1) - Decimal(str(half_width)))
-    hi_price = Decimal(str(pool_price)) * (Decimal(1) + Decimal(str(half_width)))
+    hw = Decimal(str(half_width))
+    if not (0 < hw < 1):
+        raise ValueError(
+            f"half_width must be in (0, 1); got {hw}. A width of 1 puts the lower "
+            f"bound at a price of zero, and above 1 it goes negative. For a "
+            f"full-range position set the tick bounds directly rather than "
+            f"expressing it as a percentage."
+        )
+    if log_centred:
+        factor = Decimal(str(math.exp(float(hw))))
+        lo_price = Decimal(str(pool_price)) / factor
+        hi_price = Decimal(str(pool_price)) * factor
+    else:
+        lo_price = Decimal(str(pool_price)) * (Decimal(1) - hw)
+        hi_price = Decimal(str(pool_price)) * (Decimal(1) + hw)
 
     d0, d1, inv = spec.token0.decimals, spec.token1.decimals, spec.invert_price
     t_a = pr.price_to_tick(lo_price, d0, d1, inv)
@@ -189,7 +219,7 @@ def snap_range(
 
 def open_position(
     spec: PoolSpec, block: int, sqrt_price_x96: int, pool_price: Decimal,
-    notional_usd: Decimal, half_width: Decimal,
+    notional_usd: Decimal, half_width: Decimal, log_centred: bool = False,
 ) -> Position:
     """Size a position to a USD notional at the prevailing price.
 
@@ -197,7 +227,7 @@ def open_position(
     valuing a reference liquidity and scaling — exactly, in Decimal, with the
     result floored to an integer as the pool would hold it.
     """
-    t_lo, t_hi = snap_range(pool_price, half_width, spec)
+    t_lo, t_hi = snap_range(pool_price, half_width, spec, log_centred)
     probe = Position(spec.id, block, sqrt_price_x96, t_lo, t_hi, _REFERENCE_LIQUIDITY, Decimal(0))
     probe_value = value_usd(probe, sqrt_price_x96, pool_price, spec)
     if probe_value <= 0:
