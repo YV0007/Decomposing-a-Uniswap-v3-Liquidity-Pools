@@ -129,11 +129,17 @@ lvr:
 # -----------------------------------------------------------------------------
 mev:
   primary_source: dune_classified     # dune_classified | own_classifier
-  attribution_method: flow_toxicity   # see DECISIONS.md open question 1
+  attribution_method: neutral         # revised — see DECISIONS.md 4.2
   report_with_and_without: true
   sandwich_matching:
     same_address: true
-    bundle_level: true                # Flashbots relay — catches address rotation
+    bundle_level: false               # Flashbots public relay serves only recent
+                                      # slots; empty for the sample period (4.3)
+    reversal_tolerance: 0.10          # back leg must unwind the front leg
+    max_leg_span: 24                  # legs bracket the victim, not the block
+    require_positive_profit: true
+    sweeps:
+      reversal_tolerance: [0.02, 0.05, 0.10, 0.25, 0.50, 1.00]
 
 # -----------------------------------------------------------------------------
 # Fee accrual (Stage 2.2)

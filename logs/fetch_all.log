@@ -38,3 +38,381 @@
   boundary 2025-11 -> block 23700766
   boundary 2025-12 -> block 23914920
   boundary 2026-01 -> block 24136052
+  boundary 2026-02 -> block 24358292
+  boundary 2026-03 -> block 24558867
+  boundary 2026-04 -> block 24781026
+  boundary 2026-05 -> block 24996367
+  boundary 2026-06 -> block 25218797
+  boundary 2026-07 -> block 25433938
+  boundary 2026-08 -> block 25656292
+  boundary 2026-09 -> block 25878704
+
+--- Binance 1s klines + funding ---
+  cache hit: ETHUSDT-1s-2023-01.zip (62.0 MB)
+  cache hit: ETHUSDT-fundingRate-2023-01.zip (0.0 MB)
+  downloading ETHUSDT-1s-2023-02.zip ...
+    -> 61.2 MB
+  downloading ETHUSDT-fundingRate-2023-02.zip ...
+    -> 0.0 MB
+  downloading ETHUSDT-1s-2023-03.zip ...
+    -> 73.2 MB
+  downloading ETHUSDT-fundingRate-2023-03.zip ...
+    -> 0.0 MB
+  downloading ETHUSDT-1s-2023-04.zip ...
+    -> 66.8 MB
+  downloading ETHUSDT-fundingRate-2023-04.zip ...
+    -> 0.0 MB
+  downloading ETHUSDT-1s-2023-05.zip ...
+    -> 61.8 MB
+  downloading ETHUSDT-fundingRate-2023-05.zip ...
+    -> 0.0 MB
+  downloading ETHUSDT-1s-2023-06.zip ...
+    -> 57.3 MB
+  downloading ETHUSDT-fundingRate-2023-06.zip ...
+    -> 0.0 MB
+  downloading ETHUSDT-1s-2023-07.zip ...
+    -> 52.9 MB
+  downloading ETHUSDT-fundingRate-2023-07.zip ...
+    -> 0.0 MB
+  downloading ETHUSDT-1s-2023-08.zip ...
+    -> 50.2 MB
+  downloading ETHUSDT-fundingRate-2023-08.zip ...
+    -> 0.0 MB
+  downloading ETHUSDT-1s-2023-09.zip ...
+    -> 48.7 MB
+  downloading ETHUSDT-fundingRate-2023-09.zip ...
+    -> 0.0 MB
+  downloading ETHUSDT-1s-2023-10.zip ...
+    -> 57.6 MB
+  downloading ETHUSDT-fundingRate-2023-10.zip ...
+  funding 2023-10: unavailable (TimeoutError)
+  downloading ETHUSDT-1s-2023-11.zip ...
+  klines 2023-11: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2023-11.zip ...
+  funding 2023-11: unavailable (URLError)
+  downloading ETHUSDT-1s-2023-12.zip ...
+  klines 2023-12: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2023-12.zip ...
+  funding 2023-12: unavailable (URLError)
+  downloading ETHUSDT-1s-2024-01.zip ...
+  klines 2024-01: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2024-01.zip ...
+  funding 2024-01: unavailable (URLError)
+  downloading ETHUSDT-1s-2024-02.zip ...
+  klines 2024-02: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2024-02.zip ...
+  funding 2024-02: unavailable (URLError)
+  downloading ETHUSDT-1s-2024-03.zip ...
+  klines 2024-03: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2024-03.zip ...
+  funding 2024-03: unavailable (URLError)
+  downloading ETHUSDT-1s-2024-04.zip ...
+  klines 2024-04: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2024-04.zip ...
+  funding 2024-04: unavailable (URLError)
+  downloading ETHUSDT-1s-2024-05.zip ...
+  klines 2024-05: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2024-05.zip ...
+  funding 2024-05: unavailable (URLError)
+  downloading ETHUSDT-1s-2024-06.zip ...
+  klines 2024-06: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2024-06.zip ...
+  funding 2024-06: unavailable (URLError)
+  downloading ETHUSDT-1s-2024-07.zip ...
+  klines 2024-07: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2024-07.zip ...
+  funding 2024-07: unavailable (URLError)
+  downloading ETHUSDT-1s-2024-08.zip ...
+  klines 2024-08: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2024-08.zip ...
+  funding 2024-08: unavailable (URLError)
+  downloading ETHUSDT-1s-2024-09.zip ...
+  klines 2024-09: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2024-09.zip ...
+  funding 2024-09: unavailable (URLError)
+  downloading ETHUSDT-1s-2024-10.zip ...
+  klines 2024-10: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2024-10.zip ...
+  funding 2024-10: unavailable (URLError)
+  downloading ETHUSDT-1s-2024-11.zip ...
+  klines 2024-11: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2024-11.zip ...
+  funding 2024-11: unavailable (URLError)
+  downloading ETHUSDT-1s-2024-12.zip ...
+  klines 2024-12: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2024-12.zip ...
+  funding 2024-12: unavailable (URLError)
+  downloading ETHUSDT-1s-2025-01.zip ...
+  klines 2025-01: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2025-01.zip ...
+  funding 2025-01: unavailable (URLError)
+  downloading ETHUSDT-1s-2025-02.zip ...
+  klines 2025-02: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2025-02.zip ...
+  funding 2025-02: unavailable (URLError)
+  downloading ETHUSDT-1s-2025-03.zip ...
+  klines 2025-03: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2025-03.zip ...
+  funding 2025-03: unavailable (URLError)
+  downloading ETHUSDT-1s-2025-04.zip ...
+  klines 2025-04: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2025-04.zip ...
+  funding 2025-04: unavailable (URLError)
+  downloading ETHUSDT-1s-2025-05.zip ...
+  klines 2025-05: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2025-05.zip ...
+  funding 2025-05: unavailable (URLError)
+  downloading ETHUSDT-1s-2025-06.zip ...
+  klines 2025-06: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2025-06.zip ...
+  funding 2025-06: unavailable (URLError)
+  downloading ETHUSDT-1s-2025-07.zip ...
+  klines 2025-07: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2025-07.zip ...
+  funding 2025-07: unavailable (URLError)
+  downloading ETHUSDT-1s-2025-08.zip ...
+  klines 2025-08: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2025-08.zip ...
+  funding 2025-08: unavailable (URLError)
+  downloading ETHUSDT-1s-2025-09.zip ...
+  klines 2025-09: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2025-09.zip ...
+  funding 2025-09: unavailable (URLError)
+  downloading ETHUSDT-1s-2025-10.zip ...
+  klines 2025-10: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2025-10.zip ...
+  funding 2025-10: unavailable (URLError)
+  downloading ETHUSDT-1s-2025-11.zip ...
+  klines 2025-11: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2025-11.zip ...
+  funding 2025-11: unavailable (URLError)
+  downloading ETHUSDT-1s-2025-12.zip ...
+  klines 2025-12: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2025-12.zip ...
+  funding 2025-12: unavailable (URLError)
+  downloading ETHUSDT-1s-2026-01.zip ...
+  klines 2026-01: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2026-01.zip ...
+  funding 2026-01: unavailable (URLError)
+  downloading ETHUSDT-1s-2026-02.zip ...
+  klines 2026-02: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2026-02.zip ...
+  funding 2026-02: unavailable (URLError)
+  downloading ETHUSDT-1s-2026-03.zip ...
+  klines 2026-03: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2026-03.zip ...
+  funding 2026-03: unavailable (URLError)
+  downloading ETHUSDT-1s-2026-04.zip ...
+  klines 2026-04: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2026-04.zip ...
+  funding 2026-04: unavailable (URLError)
+  downloading ETHUSDT-1s-2026-05.zip ...
+  klines 2026-05: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2026-05.zip ...
+  funding 2026-05: unavailable (URLError)
+  downloading ETHUSDT-1s-2026-06.zip ...
+  klines 2026-06: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2026-06.zip ...
+  funding 2026-06: unavailable (URLError)
+  downloading ETHUSDT-1s-2026-07.zip ...
+  klines 2026-07: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2026-07.zip ...
+  funding 2026-07: unavailable (URLError)
+  downloading ETHUSDT-1s-2026-08.zip ...
+  klines 2026-08: unavailable (URLError)
+  downloading ETHUSDT-fundingRate-2026-08.zip ...
+  funding 2026-08: unavailable (URLError)
+
+--- Uniswap swaps, core pools ---
+
+### ETH_USDC_5bp
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 16308189-16530246
+  2023-01: FAILED RPCError eth_getLogs failed on all endpoints:
+  https://docs-demo.quiknode.pro: URLError 
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 16530247-16730070
+  2023-02: FAILED RPCError eth_getLogs failed on all endpoints:
+  https://gateway.tenderly.co/public/mainne
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 16730071-16950601
+  2023-03: FAILED RPCError eth_getLogs failed on all endpoints:
+  https://rpc.mevblocker.io: URLError <urlo
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 16950602-17162285
+  blocks 16950602-17000601  +38272 logs  (total   38272)   23.6%
+  blocks 17000602-17050601  +41130 logs  (total   79402)   47.2%
+  blocks 17050602-17100601  +41121 logs  (total  120523)   70.9%
+  blocks 17100602-17150601  +33068 logs  (total  153591)   94.5%
+  blocks 17150602-17162285  + 7435 logs  (total  161026)  100.0%
+  wrote 161026 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_16950602_17162285_v3.parquet
+  2023-04: 161,026 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 17162286-17382264
+  blocks 17162286-17212285  +36164 logs  (total   36164)   22.7%
+  blocks 17212286-17262285  +36377 logs  (total   72541)   45.5%
+  blocks 17262286-17312285  +27497 logs  (total  100038)   68.2%
+  blocks 17312286-17362285  +30378 logs  (total  130416)   90.9%
+  blocks 17362286-17382264  +11681 logs  (total  142097)  100.0%
+  wrote 142097 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_17162286_17382264_v3.parquet
+  2023-05: 142,097 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 17382265-17595508
+  blocks 17382265-17432264  +27895 logs  (total   27895)   23.4%
+  blocks 17432265-17482264  +31377 logs  (total   59272)   46.9%
+  blocks 17482265-17532264  +31084 logs  (total   90356)   70.3%
+  blocks 17532265-17582264  +31551 logs  (total  121907)   93.8%
+  blocks 17582265-17595508  + 8478 logs  (total  130385)  100.0%
+  wrote 130385 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_17382265_17595508_v3.parquet
+  2023-06: 130,385 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 17595509-17816432
+  blocks 17595509-17645508  +24898 logs  (total   24898)   22.6%
+  blocks 17645509-17695508  +27151 logs  (total   52049)   45.3%
+  blocks 17695509-17745508  +26745 logs  (total   78794)   67.9%
+  blocks 17745509-17795508  +22168 logs  (total  100962)   90.5%
+  blocks 17795509-17816432  +10218 logs  (total  111180)  100.0%
+  wrote 111180 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_17595509_17816432_v3.parquet
+  2023-07: 111,180 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 17816433-18037986
+  blocks 17816433-17866432  +25660 logs  (total   25660)   22.6%
+  blocks 17866433-17916432  +25353 logs  (total   51013)   45.1%
+  blocks 17916433-17966432  +33011 logs  (total   84024)   67.7%
+  blocks 17966433-18016432  +32169 logs  (total  116193)   90.3%
+  blocks 18016433-18037986  +12631 logs  (total  128824)  100.0%
+  wrote 128824 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_17816433_18037986_v3.parquet
+  2023-08: 128,824 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 18037987-18251963
+  blocks 18037987-18087986  +24119 logs  (total   24119)   23.4%
+  blocks 18087987-18137986  +25322 logs  (total   49441)   46.7%
+  blocks 18137987-18187986  +24615 logs  (total   74056)   70.1%
+  blocks 18187987-18237986  +23883 logs  (total   97939)   93.5%
+  blocks 18237987-18251963  + 6990 logs  (total  104929)  100.0%
+  wrote 104929 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_18037987_18251963_v3.parquet
+  2023-09: 104,929 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 18251964-18473541
+  blocks 18251964-18301963  +28474 logs  (total   28474)   22.6%
+  blocks 18301964-18351963  +29882 logs  (total   58356)   45.1%
+  blocks 18351964-18401963  +32339 logs  (total   90695)   67.7%
+  blocks 18401964-18451963  +38761 logs  (total  129456)   90.3%
+  blocks 18451964-18473541  +12627 logs  (total  142083)  100.0%
+  wrote 142083 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_18251964_18473541_v3.parquet
+  2023-10: 142,083 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 18473542-18687849
+  blocks 18473542-18523541  +32642 logs  (total   32642)   23.3%
+  blocks 18523542-18573541  +34966 logs  (total   67608)   46.7%
+  blocks 18573542-18623541  +35324 logs  (total  102932)   70.0%
+  blocks 18623542-18673541  +29932 logs  (total  132864)   93.3%
+  blocks 18673542-18687849  + 7713 logs  (total  140577)  100.0%
+  wrote 140577 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_18473542_18687849_v3.parquet
+  2023-11: 140,577 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 18687850-18908893
+  blocks 18687850-18737849  +34590 logs  (total   34590)   22.6%
+  blocks 18737850-18787849  +40278 logs  (total   74868)   45.2%
+  blocks 18787850-18837849  +37928 logs  (total  112796)   67.9%
+  blocks 18837850-18887849  +41485 logs  (total  154281)   90.5%
+  blocks 18887850-18908893  +15254 logs  (total  169535)  100.0%
+  wrote 169535 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_18687850_18908893_v3.parquet
+  2023-12: 169,535 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 18908894-19129887
+  blocks 18908894-18958893  +39405 logs  (total   39405)   22.6%
+  blocks 18958894-19008893  +44950 logs  (total   84355)   45.3%
+  blocks 19008894-19058893  +37644 logs  (total  121999)   67.9%
+  blocks 19058894-19108893  +48024 logs  (total  170023)   90.5%
+  blocks 19108894-19129887  +17346 logs  (total  187369)  100.0%
+  wrote 187369 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_18908894_19129887_v3.parquet
+  2024-01: 187,369 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 19129888-19336605
+  blocks 19129888-19179887  +32697 logs  (total   32697)   24.2%
+  blocks 19179888-19229887  +35950 logs  (total   68647)   48.4%
+  blocks 19229888-19279887  +42467 logs  (total  111114)   72.6%
+  blocks 19279888-19329887  +38592 logs  (total  149706)   96.8%
+  blocks 19329888-19336605  + 6220 logs  (total  155926)  100.0%
+  wrote 155926 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_19129888_19336605_v3.parquet
+  2024-02: 155,926 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 19336606-19557287
+  blocks 19336606-19386605  +41977 logs  (total   41977)   22.7%
+  blocks 19386606-19436605  +41383 logs  (total   83360)   45.3%
+  blocks 19436606-19461605  +27327 logs  (total  110687)   56.6%
+  blocks 19461606-19486605  +31424 logs  (total  142111)   68.0%
+  blocks 19486606-19511605  +21754 logs  (total  163865)   79.3%
+  blocks 19511606-19536605  +24255 logs  (total  188120)   90.6%
+  blocks 19536606-19557287  +18195 logs  (total  206315)  100.0%
+  wrote 206315 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_19336606_19557287_v3.parquet
+  2024-03: 206,315 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 19557288-19771558
+  blocks 19557288-19607287  +45518 logs  (total   45518)   23.3%
+  blocks 19607288-19632287  +23664 logs  (total   69182)   35.0%
+  blocks 19632288-19657287  +30618 logs  (total   99800)   46.7%
+  blocks 19657288-19682287  +27198 logs  (total  126998)   58.3%
+  blocks 19682288-19707287  +24305 logs  (total  151303)   70.0%
+  blocks 19707288-19732287  +23328 logs  (total  174631)   81.7%
+  blocks 19732288-19757287  +21982 logs  (total  196613)   93.3%
+  blocks 19757288-19771558  +14781 logs  (total  211394)  100.0%
+  wrote 211394 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_19557288_19771558_v3.parquet
+  2024-04: 211,394 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 19771559-19993248
+  blocks 19771559-19796558  +26439 logs  (total   26439)   11.3%
+  blocks 19796559-19821558  +23594 logs  (total   50033)   22.6%
+  blocks 19821559-19846558  +24893 logs  (total   74926)   33.8%
+  blocks 19846559-19871558  +22528 logs  (total   97454)   45.1%
+  blocks 19871559-19896558  +25252 logs  (total  122706)   56.4%
+  blocks 19896559-19921558  +28891 logs  (total  151597)   67.7%
+  blocks 19921559-19946558  +28783 logs  (total  180380)   78.9%
+  blocks 19946559-19971558  +23127 logs  (total  203507)   90.2%
+  blocks 19971559-19993248  +19162 logs  (total  222669)  100.0%
+  wrote 222669 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_19771559_19993248_v3.parquet
+  2024-05: 222,669 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 19993249-20207947
+  blocks 19993249-20043248  +36894 logs  (total   36894)   23.3%
+  blocks 20043249-20093248  +44298 logs  (total   81192)   46.6%
+  blocks 20093249-20143248  +48848 logs  (total  130040)   69.9%
+  blocks 20143249-20193248  +46158 logs  (total  176198)   93.2%
+  blocks 20193249-20207947  +11128 logs  (total  187326)  100.0%
+  wrote 187326 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_19993249_20207947_v3.parquet
+  2024-06: 187,326 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 20207948-20429971
+  blocks 20207948-20257947  +47437 logs  (total   47437)   22.5%
+  blocks 20257948-20307947  +42786 logs  (total   90223)   45.0%
+  blocks 20307948-20357947  +41382 logs  (total  131605)   67.6%
+  blocks 20357948-20407947  +41650 logs  (total  173255)   90.1%
+  blocks 20407948-20429971  +19946 logs  (total  193201)  100.0%
+  wrote 193201 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_20207948_20429971_v3.parquet
+  2024-07: 193,201 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 20429972-20651992
+  blocks 20429972-20454971  +23196 logs  (total   23196)   11.3%
+  blocks 20454972-20479971  +46374 logs  (total   69570)   22.5%
+  blocks 20479972-20504971  +25100 logs  (total   94670)   33.8%
+  blocks 20504972-20529971  +20681 logs  (total  115351)   45.0%
+  blocks 20529972-20554971  +16511 logs  (total  131862)   56.3%
+  blocks 20554972-20579971  +19238 logs  (total  151100)   67.6%
+  blocks 20579972-20604971  +17837 logs  (total  168937)   78.8%
+  blocks 20604972-20629971  +20055 logs  (total  188992)   90.1%
+  blocks 20629972-20651992  +15034 logs  (total  204026)  100.0%
+  wrote 204026 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_20429972_20651992_v3.parquet
+  2024-08: 204,026 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 20651993-20866917
+  blocks 20651993-20701992  +40749 logs  (total   40749)   23.3%
+  blocks 20701993-20751992  +32638 logs  (total   73387)   46.5%
+  blocks 20751993-20801992  +28470 logs  (total  101857)   69.8%
+  blocks 20801993-20851992  +24797 logs  (total  126654)   93.1%
+  blocks 20851993-20866917  + 7740 logs  (total  134394)  100.0%
+  wrote 134394 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_20651993_20866917_v3.parquet
+  2024-09: 134,394 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 20866918-21089067
+  blocks 20866918-20916917  +30694 logs  (total   30694)   22.5%
+  blocks 20916918-20966917  +29129 logs  (total   59823)   45.0%
+  blocks 20966918-21016917  +25402 logs  (total   85225)   67.5%
+  blocks 21016918-21066917  +26683 logs  (total  111908)   90.0%
+  blocks 21066918-21089067  +13460 logs  (total  125368)  100.0%
+  wrote 125368 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_20866918_21089067_v3.parquet
+  2024-10: 125,368 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 21089068-21303932
+  blocks 21089068-21139067  +36115 logs  (total   36115)   23.3%
+  blocks 21139068-21189067  +41452 logs  (total   77567)   46.5%
+  blocks 21189068-21239067  +39198 logs  (total  116765)   69.8%
+  blocks 21239068-21289067  +41288 logs  (total  158053)   93.1%
+  blocks 21289068-21303932  +10501 logs  (total  168554)  100.0%
+  wrote 168554 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_21089068_21303932_v3.parquet
+  2024-11: 168,554 swaps
+fetching swaps 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 blocks 21303933-21525889
+  blocks 21303933-21353932  +37926 logs  (total   37926)   22.5%
+  blocks 21353933-21403932  +38549 logs  (total   76475)   45.1%
+  blocks 21403933-21453932  +48348 logs  (total  124823)   67.6%
+  blocks 21453933-21503932  +39729 logs  (total  164552)   90.1%
+  blocks 21503933-21525889  +17759 logs  (total  182311)  100.0%
+  wrote 182311 swaps -> 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_21303933_21525889_v3.parquet
+  2024-12: 182,311 swaps

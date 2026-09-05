@@ -324,6 +324,192 @@ arbitrageur is actually trading against.
 
 ---
 
+## Stages 2-4 — findings and defects
+
+### 2.1 Fee accrual: a third method, used as the reference — **DECIDED**
+
+The plan specifies two approaches: replay every Mint/Burn to rebuild the tick
+liquidity map (A), or use the `liquidity` field on each Swap event (B). There is
+a third that is strictly better as a *reference*:
+
+**C — `feeGrowthInside`, read from the pool contract at historical blocks.**
+Uniswap accounts fees exactly as `L * delta(feeGrowthInside) / 2**128`, derived
+from `feeGrowthGlobal` and the `feeGrowthOutside` stored on the range's boundary
+ticks. Four `eth_call`s reproduce the contract's own arithmetic with no replay
+and no approximation — and it is what the subgraph derives its figures from, so
+validating against it is validating against the source rather than a copy.
+
+Valid only where the boundary ticks are initialised. Checked: all 51 ticks on
+the spacing-60 grid around the test range are initialised, because on a major
+pool real LPs sit at essentially every tick.
+
+B remains the pipeline's method — `feeGrowthInside` can only be read for a range
+that already happened, so forecasts, range-width sweeps and hypothetical
+positions all need the replay. C is what proves B is right.
+
+### 2.2 DEFECT FOUND AND FIXED — fees lost at the range boundary
+
+**What happened.** Approach B tested whether the *post-swap* tick was in range.
+A swap that carries the price out of the range therefore got zero credit for the
+part of its path that was still earning.
+
+**How it was localised.** Comparing over a strictly in-range sub-period gave
++0.27% / -0.43%, against -1.88% over the full month. That located the entire
+error in the single boundary-crossing swap on the day the position exited,
+rather than in the liquidity estimator — which was the initial suspicion, and
+was wrong: sweeping post-swap, pre-swap and mean liquidity moved nothing.
+
+**Fix.** Pro-rate each swap's fee by the fraction of its tick path that lay
+inside the range. Max error 1.88% -> 0.52% against a 2% gate.
+
+The pro-rating is linear in tick space, which is an approximation — fees accrue
+with the liquidity actually traversed, and that is not uniform. It is a
+first-order correction to a first-order method, and the gate is what says
+whether it is good enough.
+
+### 2.3 Range-state naming — tick space is not price space
+
+On an inverted pool the tick *falls* as the risky asset appreciates, so a
+position whose tick dropped below `tick_lower` has had ETH move *above* the top
+of its USD range. The enum is named in tick space, deliberately, because tick
+space drives fee accrual and is unambiguous; `price_side()` translates for
+anything a human reads. "Below" meaning "ETH rallied" is a trap that would
+eventually be read the wrong way round in a caption.
+
+### 3.1 Three LVR measures, not two — **DECIDED**
+
+Splitting the empirical side in two makes H3 sharper, because they answer
+different questions:
+
+| Measure | What it is | Depends on the fee tier? |
+|---|---|---|
+| `lvr_cex_path` | Loss under perfect arbitrage every block | **No — by construction** |
+| `lvr_pool_path` | Loss from the pool price actually moving | Yes |
+| `lvr_analytical` | `(sigma^2/2) S^2 |dn/dS|` on the position's own amount function | No |
+
+This matters for H4. `cex_path` depends only on the external price path and the
+position's shape, so it is *fee-tier-blind*: it cannot show a fee-band effect
+even in principle. H4's mechanism lives in `pool_path`. Reporting a single
+"empirical LVR" would have made H4 untestable without anyone noticing.
+
+### 3.2 The naive `sigma^2 V / 8` understates a concentrated position
+
+`sigma^2/8` is stated for a *full-range* constant-product pool. Applied to a
+concentrated v3 position it understates LVR, because concentration raises price
+sensitivity per dollar deployed. The implementation differentiates the
+position's own amount function, which handles any range exactly and collapses
+back to `sigma^2 V/8` in the full-range limit — asserted in `tests/test_lvr.py`.
+
+Measured on a +/-10% position, January 2023: **1.19x**, i.e. the textbook form
+understates LVR by 16%. Both are reported.
+
+### 3.3 `lvr_pool_path` has a validity limit — **GUARDED**
+
+The measure marks a whole pool move at the external price of the *ending*
+block. Sound when consecutive trades are seconds apart; meaningless over a
+multi-hour gap, because the external price has itself travelled.
+
+Inter-trade gaps, January 2023:
+
+| Pool | median | p99 | max | share of \|LVR\| from gaps > 10 min |
+|---|---|---|---|---|
+| ETH/USDC 5bp | 12 s | 72 s | 252 s | **0.0%** |
+| ETH/USDC 30bp | 48 s | 2,981 s | 22,668 s | **10.6%** |
+| ETH/USDC 100bp | 144 s | 60,500 s | 185,328 s | **49.6%** |
+
+`compute_lvr` now reports `pool_path_stale_share` and sets
+`pool_path_reliable=False` above 25%. Half the 100bp pool's pool-path LVR rests
+on unmarkable intervals, so its -7.55% figure is withheld rather than reported.
+Without this guard it would have looked like evidence *against* H4.
+
+### 4.1 DEFECT FOUND AND FIXED — the sandwich classifier was mostly false positives
+
+**What happened.** Same-address, same-block, opposite-direction bracketing — the
+rule as specified — fires on any address that trades both ways in one block.
+Routers, aggregators and market makers all do.
+
+**How it showed.** Three signals, all from the data:
+- 45.3% of detected "sandwiches" were **loss-making**. A sandwich is profitable
+  by construction.
+- The top 1% of events carried **105%** of total profit; the remainder netted
+  negative.
+- The largest candidate sold 1,245,885 USDC on the front leg and bought back
+  10,000 on the back. The legs did not reverse.
+
+**Fix.** Three constraints, each a swept parameter:
+- **Reversal** — the back leg must return within 10% of what the front leg
+  acquired. This is the constraint that does the work.
+- **Span** — legs within 24 positions. A sandwich brackets its victim.
+- **Profit** — positive, by construction.
+
+**Result on ETH/USDC 5bp, January 2023:** 2,620 candidates -> **241**; attacker
+profit $1,565,909 -> **$394,217**. The tolerance sweep behaves as a correct
+constraint should: the loss-making share falls monotonically 10.0% -> 0.0% as
+reversal tightens, and the **median reversal ratio of the surviving set is
+exactly 1.0000** — real searchers unwind precisely. The unconstrained number
+was inflated roughly 4x.
+
+### 4.2 Q1 MEV attribution — **working preference REVISED to `neutral`**
+
+Walking a sandwich through from the LP's side changes the answer. The attacker
+buys and the LP sells; the victim buys at the worse price and the LP sells
+*better* than it otherwise would; the attacker sells back and the LP buys back.
+The LP has done a round trip, ends near the inventory the victim alone would
+have left it, and has earned a fee on all three legs instead of one. **The
+victim pays. The LP is not the counterparty being exploited.**
+
+So the flow-toxicity story is weaker than it first looked. It is a *dynamic*
+claim — that sandwiching degrades execution and drives uninformed flow away over
+time — and that is not identified from one pool's swap log.
+
+**Revised position:** `neutral` leads for the direct decomposition;
+`exclude_sandwich_volume` is the conservative bound; sandwich intensity is
+carried as a forecasting covariate (`mev_intensity_30d`) rather than dressed up
+as a per-block cost. Config updated from `flow_toxicity`.
+
+This supersedes the working preference recorded under Q1 above.
+
+### 4.3 Bundle-level identification is unavailable — **SCOPE LIMITATION**
+
+The Flashbots public relay serves only recent slots and returns empty for 2023.
+So address rotation between the front and back legs cannot be caught, and the
+same-address count is a **one-sided** bound: it undercounts, and by an unknown
+amount. A Dune key would partly recover this. Stated in the limitations.
+
+### 5.1 In-range share must be time-weighted
+
+Reported as a share of *traded blocks*, the same position on the same price path
+showed 23.2% / 14.8% / 11.9% across the 5bp, 30bp and 100bp pools — an artefact
+of trade frequency, since the 5bp pool trades ~350x more often. Time-weighted it
+is 27.1% / 27.2% / 27.9%, which is what it must be. Any cross-sectional
+statistic over pools with different trade frequencies needs the same treatment.
+
+### 5.2 First decomposition — ETH/USDC, January 2023
+
+$100k at +/-10%, never re-centred, raw (unhedged) variant. Annualised.
+
+| Pool | in range | fees | LVR (cex path) | LVR (analytical) | gas | net |
+|---|---|---|---|---|---|---|
+| ETH/USDC 5bp | 27.1% | +6.47% | -5.54% | -4.47% | -0.26% | **+0.67%** |
+| ETH/USDC 30bp | 27.2% | +5.71% | -5.92% | -4.51% | -0.34% | **-0.55%** |
+| ETH/USDC 100bp | 27.9% | +6.80% | -5.45% | -4.12% | -0.43% | **+0.92%** |
+
+MEV excluded (neutral attribution, per 4.2), so these are the full picture on
+the direct-P&L view.
+
+**What can be said:** all three tiers sit within a percentage point of zero net
+return. Fee income and LVR very nearly cancel, which is what an efficient market
+in liquidity provision would look like.
+
+**What cannot be said yet:** anything about H4's ranking. One month, one entry
+date, one range width, no confidence intervals — and January 2023 was a strong
+uptrend, which is the regime least favourable to a fee band, since the price
+trends straight through it rather than oscillating inside it. The fee tier's
+protection plausibly depends on the price path's mean reversion, not just its
+volatility. That is a hypothesis the full sample can test and this month cannot.
+
+---
+
 ## Log of reversals
 
 Anything decided above and later changed goes here with the date and the
@@ -331,4 +517,4 @@ evidence that forced it. Empty is fine; silently editing an entry above is not.
 
 | Date | Entry | Was | Now | Evidence |
 |---|---|---|---|---|
-| — | — | — | — | — |
+| 2026-09-05 | Q1 MEV attribution | `flow_toxicity` leads | `neutral` leads | Walking the three legs from the LP's side: the LP round-trips, keeps ~the victim's inventory effect, and earns three fees instead of one. The toxicity channel is dynamic and not identified from one pool's swap log. See 4.2 |
