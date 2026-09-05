@@ -508,6 +508,71 @@ trends straight through it rather than oscillating inside it. The fee tier's
 protection plausibly depends on the price path's mean reversion, not just its
 volatility. That is a hypothesis the full sample can test and this month cannot.
 
+### 5.3 Advertised APR computed on-chain, not from the subgraph
+
+The Graph's gateway now needs a key and everything required is readable from the
+chain: TVL from `balanceOf` at historical blocks, pool fee revenue from swap
+amounts. `src/fetch/pool_metrics.py` replaces the planned subgraph fetcher.
+
+Convention: **pool fee revenue over the window / TVL, annualised** — the common
+dashboard form. Two properties of it are worth stating, because they are exactly
+why it overstates what an LP earns. It divides by *total* TVL as though every
+dollar earned every fee, when in v3 only liquidity spanning the current tick
+earns anything. And it is gross of LVR, MEV and gas.
+
+TVL is averaged across the endpoints rather than taken at one. On a month where
+ETH moved 40%, an endpoint TVL would swing the advertised figure by tens of
+percent purely through the choice of date.
+
+Measured, January 2023: **40.41%** (5bp), **15.48%** (30bp), **12.28%** (100bp).
+
+### 5.4 The gap is mostly NOT LVR — the thesis needs qualifying ⚠️
+
+Setting the advertised APR beside the realised net return gives a headline gap
+that looks devastating: 40.41% advertised against +0.67% realised on the 5bp
+pool. Attributing that gap to adverse selection would be wrong, and easy to
+catch. It has three distinct causes carrying different messages.
+
+| Pool | advertised | range mgmt | concentration | gross fees | LVR | gas | **net** |
+|---|---|---|---|---|---|---|---|
+| 5bp | +40.41% | -29.46% | -4.47% | +6.47% | -5.54% | -0.26% | **+0.67%** |
+| 30bp | +15.48% | -11.27% | +1.50% | +5.71% | -5.92% | -0.34% | **-0.55%** |
+| 100bp | +12.28% | -8.85% | +3.37% | +6.80% | -5.45% | -0.43% | **+0.92%** |
+
+Share of the advertised-to-net gap:
+
+| Pool | range management | LVR + MEV + gas |
+|---|---|---|
+| 5bp | **74%** | 15% |
+| 30bp | **70%** | 39% |
+| 100bp | **78%** | 52% |
+
+**Range management dominates.** The advertised figure implicitly assumes capital
+earns all the time; a +/-10% position that is never re-centred sits out of range
+73% of the month and earns nothing there. That is a cost of *using a
+concentrated range*, not adverse selection, and an LP could reduce it by
+re-centring or going full-range — at the cost of gas or of lower fee capture.
+
+**The concentration effect has an unexpected sign on the busiest pool.** On the
+5bp pool a +/-10% position captures **less** than a proportional share of fees
+(-4.47%): the pool's own LPs cluster far tighter than +/-10%, so this position is
+*wider* than average and earns below the per-dollar rate the advertised figure
+implies. On the thinner 30bp and 100bp pools the same range is tighter than
+average and the sign flips positive.
+
+**What this means for the paper.** The thesis — that advertised yields are gross
+of costs LPs actually pay — survives, but the honest version is narrower than
+the headline number suggests. LVR is the *irreducible* part: an LP can avoid
+range-management cost by choosing a different strategy, and cannot avoid LVR at
+all. The right comparison is therefore the advertised APR against a
+*well-managed* position, with LVR as the part that remains however the position
+is managed. Saying "advertised 40% is really 0.7% because of LVR" would
+overstate our own result by roughly five times.
+
+This also reframes H4 and Stage 8: if range management is the dominant cost,
+then the optimal-range-width derivation moves from an appendix curiosity to
+something close to the main event.
+
 ---
 
 ## Log of reversals

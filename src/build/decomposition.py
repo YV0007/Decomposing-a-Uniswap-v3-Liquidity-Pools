@@ -148,3 +148,59 @@ def gate_signs_and_magnitudes(table: pd.DataFrame) -> dict:
         ),
     }
     return {"checks": checks, "passed": all(checks.values())}
+
+
+# --------------------------------------------------------------------------- #
+# Advertised APR -> realised net: the bridge
+# --------------------------------------------------------------------------- #
+
+def advertised_to_net_bridge(
+    advertised_apr: Decimal, fees: Decimal, lvr: Decimal, mev: Decimal,
+    gas: Decimal, share_in_range: Decimal,
+) -> dict:
+    """Decompose the gap between the advertised APR and the realised net return.
+
+    The headline claim is that advertised yields overstate what an LP earns.
+    That is true, but attributing the whole gap to LVR would be wrong and easy
+    to catch. The gap has three distinct causes and they carry different
+    messages:
+
+    1. **Range management.** The advertised figure implicitly assumes capital is
+       earning all the time. A concentrated position is out of range whenever
+       the price leaves it, earning nothing. This is a cost of *using v3*, not
+       an adverse-selection cost, and an LP could in principle avoid it by
+       re-centring or by going full-range.
+    2. **Concentration.** While in range, a position earns in proportion to its
+       share of *active* liquidity, not of total TVL. Whether that beats or
+       trails the advertised per-dollar rate depends on how the position's range
+       compares with the pool's own liquidity distribution — a tight range on a
+       pool whose LPs cluster even more tightly can capture *less* than the
+       average dollar, which is counterintuitive and worth reporting.
+    3. **Adverse selection and costs.** LVR, MEV and gas. This is the paper's
+       thesis, and separating it from (1) and (2) is what makes the claim
+       falsifiable rather than rhetorical.
+
+    Returns each step so the bridge can be shown as a waterfall.
+    """
+    expected_if_proportional = advertised_apr * share_in_range
+    range_cost = advertised_apr - expected_if_proportional
+    concentration_effect = fees - expected_if_proportional
+    return {
+        "advertised_apr": advertised_apr,
+        "range_management_cost": range_cost,
+        "expected_if_proportional": expected_if_proportional,
+        "concentration_effect": concentration_effect,
+        "gross_fees_realised": fees,
+        "lvr": lvr,
+        "mev": mev,
+        "gas": gas,
+        "net": fees - lvr - mev - gas,
+        "share_of_gap_from_range": (
+            range_cost / (advertised_apr - (fees - lvr - mev - gas))
+            if advertised_apr != (fees - lvr - mev - gas) else Decimal(0)
+        ),
+        "share_of_gap_from_costs": (
+            (lvr + mev + gas) / (advertised_apr - (fees - lvr - mev - gas))
+            if advertised_apr != (fees - lvr - mev - gas) else Decimal(0)
+        ),
+    }

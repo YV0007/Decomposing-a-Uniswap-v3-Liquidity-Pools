@@ -24,6 +24,8 @@ handled in `src.build.align`, and asserted in `tests/test_no_lookahead.py`.
 from __future__ import annotations
 
 import io
+import time
+import urllib.error
 import urllib.request
 import zipfile
 from datetime import date
@@ -51,15 +53,50 @@ def _cache_dir() -> Path:
     return d
 
 
-def _download(url: str, dest: Path, force: bool = False) -> Path:
+#: Pause between successive downloads. Binance's static host throttles a client
+#: that pulls many 60 MB files back to back: a bulk run without this returned
+#: HTTP 200 on a manual probe while every request from the loop failed with
+#: URLError, which reads like missing data and is not.
+DOWNLOAD_PAUSE_SECONDS = 2.0
+MAX_DOWNLOAD_ATTEMPTS = 5
+
+
+def _download(url: str, dest: Path, force: bool = False,
+              pause: float = DOWNLOAD_PAUSE_SECONDS) -> Path:
+    """Download with exponential backoff, resuming from cache when present.
+
+    A transient network failure mid-bulk-run must not be mistaken for an
+    unavailable month — that would silently truncate the sample and the
+    truncation would look like a data limitation rather than a bug.
+    """
     if dest.exists() and not force and dest.stat().st_size > 0:
         print(f"  cache hit: {dest.name} ({dest.stat().st_size / 1e6:.1f} MB)")
         return dest
-    print(f"  downloading {url.rsplit('/', 1)[-1]} ...", flush=True)
-    with urllib.request.urlopen(url, timeout=600) as r, open(dest, "wb") as fh:
-        fh.write(r.read())
-    print(f"    -> {dest.stat().st_size / 1e6:.1f} MB")
-    return dest
+
+    last: Exception | None = None
+    for attempt in range(MAX_DOWNLOAD_ATTEMPTS):
+        try:
+            print(f"  downloading {url.rsplit('/', 1)[-1]}"
+                  f"{'' if attempt == 0 else f' (attempt {attempt + 1})'} ...", flush=True)
+            with urllib.request.urlopen(url, timeout=600) as r:
+                payload = r.read()
+            tmp = dest.with_suffix(dest.suffix + ".part")
+            tmp.write_bytes(payload)
+            tmp.replace(dest)          # atomic: never leave a truncated cache file
+            print(f"    -> {dest.stat().st_size / 1e6:.1f} MB")
+            time.sleep(pause)
+            return dest
+        except urllib.error.HTTPError as exc:
+            if exc.code == 404:
+                raise                  # genuinely absent; do not retry
+            last = exc
+        except (urllib.error.URLError, TimeoutError, OSError) as exc:
+            last = exc
+        backoff = pause * (2**attempt)
+        print(f"    transient failure ({type(last).__name__}); retrying in {backoff:.0f}s",
+              flush=True)
+        time.sleep(backoff)
+    raise RuntimeError(f"download failed after {MAX_DOWNLOAD_ATTEMPTS} attempts: {url}") from last
 
 
 def _read_zipped_csv(path: Path, columns: list[str]) -> pd.DataFrame:
