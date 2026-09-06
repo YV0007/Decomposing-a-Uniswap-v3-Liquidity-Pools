@@ -998,6 +998,88 @@ prior been the other way round it might not have been questioned.
 
 ---
 
+## Stage 7 — the allocation strategy ⚠️ H7
+
+352 pool-weeks, 2023-03 to 2026-07. Weekly rebalance, full costs from the first
+run, all predictions out-of-sample under the Stage 6 purged folds.
+
+### 7.4 The engine: predict the components, not the total
+
+H5 showed that pointing gradient boosting at next week's *net* return fails —
+significantly worse than the historical mean. Predicting the two components
+separately works, because they have different mechanisms and different best
+models:
+
+| Component | Model | Out-of-sample R² |
+|---|---|---|
+| LVR | σ²/8 with a HAR-RV variance forecast | **+0.126** |
+| Fees | LightGBM on volume and liquidity features | **+0.084** |
+| *Net, directly* | *LightGBM* | *−0.128* |
+
+**Each arm beats its own baseline where the combined target does not.** That is
+the argument for decomposing rather than regressing the thing you care about,
+and it is a methodological result independent of whether the strategy makes
+money.
+
+The fee feature set was chosen on out-of-sample *fee-prediction* R² before any
+backtest was run, and logged. Seven features scored −0.037 against +0.084 for
+four; selecting on backtest performance instead would be exactly the
+multiple-testing trap the deflated Sharpe exists to punish.
+
+### 7.5 Result
+
+| Strategy | ann. return | vol | Sharpe | max DD | turnover | invested | DSR |
+|---|---|---|---|---|---|---|---|
+| Strategy (net > 0.2%/wk) | **−4.0%** | 2.9% | −1.35 | −12.3% | 0.65 | 55.7% | 0.000 |
+| Strategy (net > 0, equal) | −5.0% | 3.0% | −1.66 | −15.3% | 0.58 | 75.6% | 0.000 |
+| Strategy (net > 0, prop.) | −5.2% | 3.0% | −1.72 | −16.0% | 0.68 | 75.6% | 0.000 |
+| Equal-weight LP (passive) | −6.4% | 3.0% | −2.12 | −19.4% | 0.00 | 100% | 0.000 |
+| Best single pool ex-post | −2.6% | 3.5% | −0.77 | −10.6% | 0.00 | 100% | 0.005 |
+| Hold 50/50 tokens | **+8.2%** | 37.2% | 0.22 | −48.9% | 0.00 | 100% | 0.163 |
+| 50/50 rebalanced weekly | **+10.8%** | 31.4% | 0.35 | −40.8% | 0.00 | 100% | 0.229 |
+
+**The signal works. The activity does not.**
+
+The strategy beats passive LP by **+2.46% annualised, t = 2.75, p = 0.0066** on
+a paired weekly test, and cuts maximum drawdown from −19.4% to −12.3%. It sits
+entirely in cash in 44% of weeks. So the forecast is doing real work: it
+identifies when *not* to provide liquidity.
+
+But it cannot make an unprofitable activity profitable. Every LP variant is
+negative. Holding the tokens returned +8.2% over the same window against −4.0%
+for the best strategy configuration.
+
+**No strategy clears the deflated Sharpe bar.** Every `beats_null` is False,
+including both token benchmarks. With 7 logged specifications and 176 weeks,
+nothing here is distinguishable from the best of a small search.
+
+### 7.6 H7 verdict — economically insignificant, and that is the finding
+
+The plan permitted this outcome explicitly, and it is the honest one:
+**advertised LP yields are systematically overstated, and a forecast-driven
+allocation does not recover them.**
+
+The nuance worth keeping is that the failure is not a failure of the model. The
+model has genuine out-of-sample skill on both components and a significant edge
+over passive provision. What it cannot do is overcome an activity where fees
+cover 92-99% of adverse selection before costs. Avoidance shrinks the loss; it
+does not create a profit.
+
+### 7.7 Two defects found while running it
+
+**Token benchmarks were identical.** "Hold 50/50" and "50/50 rebalanced"
+returned exactly the same number, which is impossible — the first drifts as ETH
+appreciates and the second does not. Cause: the price series passed in was the
+*position value*, which is re-anchored to a fixed notional at every re-centring
+and therefore barely moves. Replaced with the actual CEX price from the derived
+layer, and the two benchmarks now differ as they must (+8.2% vs +10.8%).
+
+**Fee model overfitted on seven features.** Out-of-sample R² was −0.037 in the
+backtest against +0.084 in the standalone diagnostic. 352 pool-weeks does not
+support seven features. Reduced to four, chosen on the prediction task.
+
+---
+
 ## Log of reversals
 
 Anything decided above and later changed goes here with the date and the
