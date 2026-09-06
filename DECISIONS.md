@@ -195,7 +195,7 @@ its better slope is the evidence for the jump interpretation.
 sensitivity — forecasting LVR *changes* rather than measuring LVR *amounts* —
 bipower's slope advantage would matter more than 5-minute RV's level advantage.
 
-### Q3 — Block timestamp alignment — OPEN
+### Q3 — Block timestamp alignment — **CLOSED, then reopened, then re-closed (R.10)**
 
 Block timestamps are proposer-set and can drift by seconds. Baseline is the last
 CEX trade at or before the block timestamp. Alternatives: parent-block
@@ -1367,6 +1367,50 @@ sign, and the least-bad position is the widest one.
 Confirming it on the full sample rather than one month matters, because January
 2023 was a 40% trending month and the obvious objection was that the corner was
 a property of that trend. It is not.
+
+### R.10 Q3 REOPENED AND RE-CLOSED — the alignment rule matters after all ⚠️
+
+Stage 1.5 closed open question 3 with "the rule earns a sentence, not a slide",
+on the basis that the three alignment rules moved the mean pool-versus-CEX
+*gap* by under 2bp on a 22bp base, in one month.
+
+**That conclusion was wrong**, and re-testing on 15 months across both pools
+shows why:
+
+| Rule | mean LVR vs baseline | p5 | p95 | max deviation |
+|---|---|---|---|---|
+| Last trade at or before block ts (baseline) | 1.000 | — | — | — |
+| One slot earlier | **0.817** | 0.717 | 0.917 | **31.0%** |
+| Midpoint interpolation *(lookahead)* | 0.997 | 0.930 | 1.045 | 10.5% |
+
+Using a reference one slot (12s) earlier **understates LVR by 18% on average and
+by up to 31%**.
+
+**Two reasons the earlier test missed it.** It measured the *price gap*, and LVR
+is quadratic in the gap and accumulates along a path, so it is far more
+sensitive than the gap's own mean. And one month is not 15.
+
+**The mechanism, and it is economically meaningful.** Blocks are not uniformly
+spaced — trading clusters immediately after a price move. A reference 1s before
+the block captures the move that *triggered* the trade; one 13s before misses
+it. So the understatement scales with how sparse the pool is:
+
+| Pool | median inter-trade gap | share of gaps > 60s | LVR ratio |
+|---|---|---|---|
+| ETH/USDC 5bp | 12s | 1.9% | **0.878** |
+| ETH/USDC 30bp | 48s | 44.3% | **0.755** |
+
+The denser pool loses 12%, the sparser one 25%, exactly as the trigger story
+predicts.
+
+**This vindicates the baseline rather than undermining it.** The arbitrageur
+*saw* the move that made the trade profitable, so the reference must sit after
+it. A 13s-stale reference is not a more conservative choice — it is a
+systematically biased one, and the bias is downward.
+
+**Re-closed: baseline stands, and it now earns a robustness slide rather than a
+sentence.** The lesson is that a robustness check has to be run on the quantity
+being reported, not on a proxy for it.
 
 ### R.9 Hedge frequency — the cheapest hedge is the one that does not hedge
 
