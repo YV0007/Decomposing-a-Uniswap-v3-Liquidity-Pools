@@ -110,3 +110,61 @@ def test_equal_weight_benchmark_is_always_invested():
 
 def test_normalise_weights_handles_all_negative():
     assert normalise_weights(pd.Series([-1.0, -2.0])).sum() == 0.0
+
+
+# --------------------------------------------------------------------------- #
+# The return identity
+# --------------------------------------------------------------------------- #
+
+def test_return_identity_holds_on_real_data():
+    """`total = rebalanced + market_making`, and the three are distinct.
+
+    Regression for a labelling error that ran through Stage 5: `fees - LVR - gas`
+    was called the "raw" variant when, by the definition of LVR, it is the
+    *delta-hedged* one. That made a hedged result look unhedged, and made adding
+    a perp hedge appear to RAISE volatility, which is impossible.
+    """
+    from decimal import Decimal
+
+    from src.build.derived import load_derived, month_bounds
+    from src.build.recentre import simulate_recentred
+    from src.fetch.rpc_client import fetch_swaps, load_big_ints
+    from src.utils.config import pool as get_pool
+
+    spec = get_pool("ETH_USDC_30bp")
+    b = month_bounds()
+    d = load_derived(spec, [(2023, 6)])
+    sw = load_big_ints(fetch_swaps(spec.address, b["2023-06"], b["2023-07"] - 1))
+    r = simulate_recentred(d, sw, spec, Decimal("100000"), Decimal("0.10"),
+                           d["rv_annualised"], Decimal("22.39"), Decimal("22.39"))
+    r.check_identity()
+    assert r.net_market_making != r.total_return
+    assert r.rebalanced_return != 0
+
+
+def test_market_making_return_excludes_the_price_move():
+    """Two months with opposite ETH moves must not flip the market-making sign
+    merely because the price direction flipped."""
+    from decimal import Decimal
+
+    from src.build.derived import load_derived, month_bounds
+    from src.build.recentre import simulate_recentred
+    from src.fetch.rpc_client import fetch_swaps, load_big_ints
+    from src.utils.config import pool as get_pool
+
+    spec = get_pool("ETH_USDC_30bp")
+    b = month_bounds()
+    out = {}
+    for mo, nxt in (("2023-01", "2023-02"), ("2026-01", "2026-02")):
+        d = load_derived(spec, [(int(mo[:4]), int(mo[5:]))])
+        sw = load_big_ints(fetch_swaps(spec.address, b[mo], b[nxt] - 1))
+        r = simulate_recentred(d, sw, spec, Decimal("100000"), Decimal("0.10"),
+                               d["rv_annualised"], Decimal("22.39"), Decimal("22.39"))
+        eth = float(d.iloc[-1].price) / float(d.iloc[0].price) - 1
+        out[mo] = (eth, float(r.rebalanced_return), float(r.net_market_making))
+
+    # opposite price directions
+    assert out["2023-01"][0] > 0 > out["2026-01"][0]
+    # the rebalanced leg follows the price; market-making need not
+    assert out["2023-01"][1] > 0 > out["2026-01"][1]
+    assert abs(out["2023-01"][2]) < abs(out["2023-01"][1])

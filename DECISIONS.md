@@ -1289,7 +1289,87 @@ profiling rather than guessing found it in one step.
 
 ---
 
-## Log of reversals
+## Robustness — position specification, and a labelling correction
+
+### R.7 DEFECT FOUND AND FIXED — the headline was mislabelled "raw" ⚠️
+
+`fees − LVR − gas` was reported throughout Stage 5 as the **raw** variant, with
+a separate "hedged" column formed by subtracting perp funding. That is backwards.
+
+LVR is *defined* as the P&L gap between the AMM position and a continuously
+rebalanced portfolio holding the same delta, so
+
+    AMM_return = rebalanced_return + fees − LVR
+
+Subtracting the rebalanced portfolio is exactly what a delta hedge does, and
+what remains is `fees − LVR`. **That quantity is already delta-hedged by
+construction.** It carries no directional term at all.
+
+**How it announced itself.** In the full-sample sweep the "hedged" series had
+*higher* volatility than the "raw" one — 0.1714 against 0.1614. A hedge cannot
+raise volatility. Chasing that impossibility found the labelling error.
+
+**Three returns, now kept distinct:**
+
+| Quantity | Definition | What it is |
+|---|---|---|
+| `net_market_making` | fees − LVR − gas | Delta-hedged under a frictionless hedge. **The headline.** |
+| `net_hedged_implemented` | that, − perp funding − trading | What an LP could actually achieve |
+| `total_return` | value change + fees − gas | Unhedged, directional beta intact |
+| `rebalanced_return` | value change + LVR | The benchmark's own return; what a hedge removes |
+
+with `total_return = rebalanced_return + net_market_making`, asserted per cohort
+by `check_identity`.
+
+One further subtlety the fix exposed: the position's **value change is not
+purely directional** — by the identity it equals `rebalanced_return − LVR`, so
+adverse selection is already inside it. Recovering the directional piece means
+adding LVR back, not subtracting it.
+
+**What this changes.** The headline numbers are unaffected in value: −9.10% and
+−2.31% were always the delta-hedged market-making return, which is what Stage 0
+chose to lead with. What changes is that they were described as the robustness
+column when they were the headline, and the *actual* unhedged return was never
+computed. It is now.
+
+### R.8 Range width across the full sample — the corner solution holds
+
+430 pool-months, both pools, five widths. Mean annualised market-making return:
+
+| Requested | realised delta | mean re-centres | ETH/USDC 5bp | ETH/USDC 30bp | pooled CI |
+|---|---|---|---|---|---|
+| ±2% | 2.20% | 60.3 | **−64.36%** | −33.22% | [−70.1%, −30.8%] |
+| ±5% | 5.19% | 12.6 | −20.13% | −7.83% | [−22.0%, −7.3%] |
+| ±10% | 10.19% | 3.3 | −9.10% | −2.31% | [−10.0%, −2.2%] |
+| ±25% | 25.71% | 0.36 | −3.65% | −0.66% | [−4.0%, −0.6%] |
+| ±50% | 55.11% | 0.07 | −1.76% | −0.31% | [−1.9%, −0.3%] |
+
+**Monotone in width, on both pools, across 43 months — and every confidence
+interval excludes zero.** This is the corner solution Stage 8 predicted when
+`kappa < 0`: fees and LVR scale together, so concentration cannot change the
+sign, and the least-bad position is the widest one.
+
+Confirming it on the full sample rather than one month matters, because January
+2023 was a 40% trending month and the obvious objection was that the corner was
+a property of that trend. It is not.
+
+### R.9 Hedge frequency — the cheapest hedge is the one that does not hedge
+
+| Rebalance | net (implemented) | mean unhedged exposure | as % of notional |
+|---|---|---|---|
+| Hourly | −10.20% | $1,931 | 1.9% |
+| Daily | −4.45% | $8,517 | 8.5% |
+| Weekly | −3.24% | $15,038 | 15.0% |
+
+Weekly looks best and is worst. Leaving 15% of a $100k position in naked delta
+is not a saving, it is a failure to hedge — and the resulting number is
+contaminated by exactly the directional beta the variant exists to remove.
+
+The Q7 decision (hourly) stands, on a refined reason: hourly costs about 7
+percentage points a year more in trading and funding, and buys an eightfold
+reduction in tracking error. For a paper measuring market-making economics that
+is the right trade. For an LP maximising realised return it might not be, and
+the table says so.
 
 Anything decided above and later changed goes here with the date and the
 evidence that forced it. Empty is fine; silently editing an entry above is not.

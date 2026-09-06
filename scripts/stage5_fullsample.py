@@ -1,5 +1,16 @@
 """Stage 5 across the full sample — the headline decomposition.
 
+Three returns, kept distinct (see `src.build.recentre`):
+
+- `net_market_making` = fees − LVR − gas. **Already delta-hedged**, because LVR
+  is defined against a continuously rebalanced portfolio. The headline.
+- `net_hedged_implemented` = that, less real perp funding and trading costs.
+  What an LP could actually achieve with a purchasable hedge.
+- `total_return` = value change + fees − gas. The unhedged position, directional
+  beta intact.
+
+They satisfy `total = rebalanced + market_making`, asserted per cohort.
+
 One monthly cohort per pool per month: open a $100k position at +/-10%, re-centre
 on range exit, hold to month end. Both variants reported — delta-hedged leads,
 raw is the robustness column.
@@ -56,8 +67,12 @@ def run_cohort(spec, year: int, month: int, bounds: dict) -> dict | None:
         "median_liquidity_share": r.median_liquidity_share,
         "fees": float(r.fees), "lvr": float(r.lvr_cex_path),
         "lvr_analytical": float(r.lvr_analytical), "gas": float(r.gas),
-        "net_raw": float(r.net),
+        "net_market_making": float(r.net_market_making),
+        "rebalanced_return": float(r.rebalanced_return),
+        "total_return": float(r.total_return),
+        "median_liquidity_share": r.median_liquidity_share,
     }
+    r.check_identity()
 
     try:
         perp = load_perp_klines_1m("ETHUSDT", year, month)
@@ -67,11 +82,12 @@ def run_cohort(spec, year: int, month: int, bounds: dict) -> dict | None:
             "funding": float(h.funding), "hedge_trading_cost": float(h.trading_cost),
             "hedge_pnl": float(h.pnl),
             "hedge_error_usd": float(h.mean_abs_error_usd),
-            "net_hedged": float(r.net) - float(h.funding) - float(h.trading_cost),
+            "net_hedged_implemented": float(r.net_market_making) - float(h.funding)
+                                      - float(h.trading_cost),
         })
     except Exception as exc:
         row.update({"funding": None, "hedge_trading_cost": None, "hedge_pnl": None,
-                    "hedge_error_usd": None, "net_hedged": None,
+                    "hedge_error_usd": None, "net_hedged_implemented": None,
                     "hedge_note": f"{type(exc).__name__}: {str(exc)[:60]}"})
     return row
 
@@ -89,8 +105,8 @@ def main() -> int:
                     rows.append(r)
                     print(f"  {y}-{m:02d}  in-range {r['share_in_range']:5.1%}  "
                           f"fees {r['fees']:+8.2%}  lvr {r['lvr']:+8.2%}  "
-                          f"net_raw {r['net_raw']:+8.2%}  "
-                          f"net_hedged {(f'{r['net_hedged']:+8.2%}' if r['net_hedged'] is not None else '     n/a')}",
+                          f"mkt-making {r['net_market_making']:+8.2%}  "
+                          f"total {r['total_return']:+9.2%}",
                           flush=True)
             except Exception as exc:
                 print(f"  {y}-{m:02d}: FAILED {type(exc).__name__} {str(exc)[:70]}", flush=True)
@@ -113,28 +129,28 @@ def main() -> int:
     agg = []
     for pid, g in t.groupby("pool", sort=False):
         row = {"pool": pid, "fee_tier_bps": int(g.fee_tier_bps.iloc[0]), "n_cohorts": len(g)}
-        for col in ("share_in_range", "fees", "lvr", "gas", "net_raw"):
+        for col in ("share_in_range", "fees", "lvr", "gas", "net_market_making",
+                    "rebalanced_return", "total_return"):
             row[col] = g[col].mean()
-        hg = g.dropna(subset=["net_hedged"])
+        hg = g.dropna(subset=["net_hedged_implemented"])
         row["funding"] = hg["funding"].mean() if len(hg) else float("nan")
-        row["net_hedged"] = hg["net_hedged"].mean() if len(hg) else float("nan")
-        try:
-            lo, hi = block_bootstrap_ci(g["net_raw"], block_size=6, n_boot=2000)
-            row["net_raw_ci"] = f"[{lo:+.1%}, {hi:+.1%}]"
-        except Exception:
-            row["net_raw_ci"] = "n/a"
-        try:
-            lo, hi = block_bootstrap_ci(hg["net_hedged"], block_size=6, n_boot=2000)
-            row["net_hedged_ci"] = f"[{lo:+.1%}, {hi:+.1%}]"
-        except Exception:
-            row["net_hedged_ci"] = "n/a"
-        row["share_of_months_positive"] = float((g["net_raw"] > 0).mean())
+        row["net_hedged_implemented"] = (hg["net_hedged_implemented"].mean()
+                                         if len(hg) else float("nan"))
+        for col, key in (("net_market_making", "mm_ci"),
+                         ("total_return", "total_ci")):
+            try:
+                lo, hi = block_bootstrap_ci(g[col], block_size=6, n_boot=2000)
+                row[key] = f"[{lo:+.1%}, {hi:+.1%}]"
+            except Exception:
+                row[key] = "n/a"
+        row["share_of_months_positive"] = float((g["net_market_making"] > 0).mean())
         agg.append(row)
 
     a = pd.DataFrame(agg)
     show = a.copy()
-    for c in ("share_in_range", "fees", "lvr", "gas", "net_raw", "funding", "net_hedged",
-              "share_of_months_positive"):
+    for c in ("share_in_range", "fees", "lvr", "gas", "net_market_making",
+              "rebalanced_return", "total_return", "funding",
+              "net_hedged_implemented", "share_of_months_positive"):
         show[c] = show[c].map(lambda v: f"{v:+.2%}" if pd.notna(v) else "n/a")
     print(show.to_string(index=False))
     a.to_csv(out / "decomposition_fullsample.csv", index=False)

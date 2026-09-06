@@ -1,0 +1,34 @@
+
+=== ETH_USDC_5bp: 43 cohorts ===
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_16308189_16530246_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-01.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2023-01.zip (0.0 MB)
+  2023-01  in-range 100.0%  fees  +65.15%  lvr  +69.35%  mkt-making   -5.26%  total  +143.37%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_16530247_16730070_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-02.zip (1.7 MB)
+  cache hit: ETHUSDT-fundingRate-2023-02.zip (0.0 MB)
+  2023-02  in-range 100.0%  fees  +70.26%  lvr  +71.63%  mkt-making   -1.66%  total   +76.56%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_16730071_16950601_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-03.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2023-03.zip (0.0 MB)
+  2023-03  in-range 100.0%  fees +131.41%  lvr +100.95%  mkt-making  +29.40%  total  +115.27%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_16950602_17162285_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-04.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-04.zip (0.0 MB)
+  2023-04  in-range 100.0%  fees  +46.03%  lvr  +61.25%  mkt-making  -16.05%  total    +0.09%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_17162286_17382264_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-05.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2023-05.zip (0.0 MB)
+  2023-05  in-range 100.0%  fees  +36.21%  lvr  +42.05%  mkt-making   -6.10%  total   +36.45%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_17382265_17595508_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-06.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-06.zip (0.0 MB)
+  2023-06  in-range 100.0%  fees  +38.65%  lvr  +45.07%  mkt-making   -7.23%  total    -7.03%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_17595509_17816432_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-07.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-07.zip (0.0 MB)
+  2023-07  in-range 100.0%  fees  +20.99%  lvr  +24.53%  mkt-making   -3.81%  total    -6.72%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_17816433_18037986_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-08.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-08.zip (0.0 MB)
+  2023-08  in-range 100.0%  fees  +26.73%  lvr  +31.48%  mkt-making   -5.28%  total   -77.72%

@@ -1,5 +1,35 @@
 """Simulation of a re-centred LP position.
 
+Three returns, and keeping them apart matters
+---------------------------------------------
+**`net_market_making` = fees − LVR − gas.** LVR is *defined* as the P&L gap
+between the AMM position and a continuously rebalanced portfolio holding the
+same delta, so `AMM_return = rebalanced_portfolio_return + fees − LVR`. Subtract
+the rebalanced portfolio — which is exactly what a delta hedge does — and what
+remains is `fees − LVR`. **This quantity is already delta-hedged by
+construction**, under a frictionless continuous hedge. It is the theoretical
+market-making return and it carries no directional term.
+
+**`net_hedged_implemented` = that, minus real perp funding and trading costs.**
+What an LP could actually achieve, since the frictionless continuous hedge is
+not purchasable.
+
+**`total_return` = position value change + fees − gas.** The unhedged position,
+directional beta intact, dominated by whether ETH went up.
+
+**`rebalanced_return` = value change + LVR.** The benchmark portfolio's own
+return — the purely directional piece a delta hedge removes. Recovered by adding
+LVR back, because the position's value change already has adverse selection
+inside it.
+
+These satisfy `total_return = rebalanced_return + net_market_making`, asserted by
+`check_identity`.
+
+Confused, these mislabel the headline: an earlier version called
+`fees − LVR − gas` the "raw" variant when it is the hedged one, which made a
+hedged result look unhedged and made adding a perp hedge look like it *raised*
+volatility.
+
 The baseline position spec re-centres on range exit, and the range-width theory
 assumes it — the whole point of that model is that concentration's cost appears
 as re-centring gas rather than as idle time out of range. Validating the theory
@@ -47,10 +77,53 @@ class RecentredResult:
     #: the position is not a price-taker and the simulation's assumptions fail —
     #: $100k is 0.09% of ETH/USDC 5bp but 22.6% of the 100bp pool.
     median_liquidity_share: float = 0.0
+    #: Position mark-to-market change, summed per segment. NOT purely
+    #: directional: by the LVR identity it equals the rebalanced portfolio's
+    #: return MINUS LVR, so the adverse selection is already inside it.
+    value_change: Decimal = Decimal(0)
 
     @property
     def net(self) -> Decimal:
+        """Delta-hedged market-making return under a frictionless hedge.
+
+        Kept as `net` for continuity, but it is the *hedged* quantity — see the
+        module docstring. `net_market_making` is the unambiguous alias.
+        """
         return self.fees - self.lvr_cex_path - self.gas
+
+    @property
+    def net_market_making(self) -> Decimal:
+        return self.net
+
+    @property
+    def total_return(self) -> Decimal:
+        """Unhedged position return: value change plus fees, less gas."""
+        return self.value_change + self.fees - self.gas
+
+    @property
+    def rebalanced_return(self) -> Decimal:
+        """Return of the continuously rebalanced portfolio LVR is defined against.
+
+        From `AMM_return = rebalanced_return + fees - LVR`, the position's value
+        change equals `rebalanced_return - LVR`, so the benchmark's own return is
+        recovered by adding LVR back. This is the purely directional piece, and
+        it is what a delta hedge removes.
+        """
+        return self.value_change + self.lvr_cex_path
+
+    def check_identity(self, tol: Decimal = Decimal("1e-9")) -> None:
+        """`total_return == rebalanced_return + net_market_making`.
+
+        The decomposition's central identity. If it fails, one of the three
+        return concepts has been computed against the wrong benchmark.
+        """
+        gap = self.total_return - (self.rebalanced_return + self.net_market_making)
+        if abs(gap) > tol:
+            raise AssertionError(
+                f"return identity violated by {gap}: total {self.total_return}, "
+                f"rebalanced {self.rebalanced_return}, "
+                f"market-making {self.net_market_making}"
+            )
 
     @property
     def net_analytical(self) -> Decimal:
@@ -93,6 +166,7 @@ def simulate_recentred(
     delta_rows: list[dict] = []
     liq_shares: list[float] = []
     total_fees = Decimal(0)
+    total_value_change = Decimal(0)
     total_lvr_cex = Decimal(0)
     total_lvr_ana = Decimal(0)
     n_recentres = 0
@@ -150,6 +224,17 @@ def simulate_recentred(
             })
         seg_liq = [int(v) for v in seg.get("liquidity", pd.Series(dtype=object)) ] if "liquidity" in seg else []
         liq_shares.extend(pos.liquidity / L for L in seg_liq if L > 0)
+
+        # Directional P&L for this segment: the position's mark-to-market move
+        # at the pool price, before fees. Summed across segments because the
+        # notional is reset at each re-centring.
+        from src.build.position import value_usd
+
+        v_in = value_usd(pos, int(seg.iloc[0].sqrt_price_x96),
+                         Decimal(str(seg.iloc[0].price)), spec)
+        v_out = value_usd(pos, int(seg.iloc[-1].sqrt_price_x96),
+                          Decimal(str(seg.iloc[-1].price)), spec)
+        total_value_change += (v_out - v_in)
         values.append(notional_usd)
 
         if seg_end >= n - 1:
@@ -174,6 +259,7 @@ def simulate_recentred(
         lvr_cex_path=ann(total_lvr_cex),
         lvr_analytical=ann(total_lvr_ana),
         gas=ann(gas_total),
+        value_change=ann(total_value_change),
         share_in_range=Decimal(in_range_seconds) / Decimal(max(1, span)),
         delta_path=pd.DataFrame(delta_rows).drop_duplicates("block_number", keep="last"),
         median_liquidity_share=float(pd.Series(liq_shares).median()) if liq_shares else 0.0,
