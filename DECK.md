@@ -109,7 +109,7 @@ Every stage passed a gate that could have failed.
 | Stage 3 | LVR positive, plausible, same order as theory | **all four checks** |
 | Stage 6 | purged CV demonstrably closes a leak | **pass, both directions** |
 
-**Eight defects were caught by these gates**, every one producing plausible
+**Nine defects were caught by these gates**, every one producing plausible
 numbers rather than errors. Listed in the appendix — that list is the main
 evidence the pipeline is sound.
 
@@ -303,6 +303,16 @@ rejection of β = 1 is driven by 2023.
 $12.8M, a **1.18× spread**. Outside it the classifier fails self-announcingly:
 at 100% reversal tolerance total attacker "profit" is *negative*.
 
+**Block alignment** — a reference one slot (12s) earlier **understates LVR by
+18% on average, up to 31%**, because blocks cluster right after a price move and
+a staler reference misses the move that triggered the trade. The effect scales
+with sparsity: 12% on the dense 5bp pool, 25% on the sparse 30bp pool. This
+vindicates the baseline — the arbitrageur *saw* that move.
+
+*We closed this question once on one month, measured on the price gap, and got
+it wrong. LVR is quadratic in the gap, so it is far more sensitive than the gap
+itself. A robustness check has to run on the quantity being reported.*
+
 **Hedge frequency** — weekly looks cheapest and is worst, leaving 15% of the
 position in naked delta.
 
@@ -348,7 +358,7 @@ widths.
 **A2 — Capacity.** Two floors: the tick grid and fee saturation. The grid binds
 **20× before** capacity for a $100k position; capacity binds above ~$2M.
 
-**A3 — The eight defects the gates caught.**
+**A3 — The nine defects the gates caught.**
 
 | # | Defect | How it announced itself |
 |---|---|---|
@@ -360,6 +370,7 @@ widths.
 | 6 | HAR trained on labels past the forecast origin | caught by my own leak test |
 | 7 | Headline mislabelled "raw" when it was hedged | "hedged" series had *higher* volatility |
 | 8 | MEV span measured in `log_index` | a span of 4 found zero sandwiches |
+| 9 | Q3 closed on a proxy quantity, one month | full sample moved LVR 18%, not 2bp |
 
 **A4 — Every open question, closed.** All seven, with evidence, in
 `DECISIONS.md`.

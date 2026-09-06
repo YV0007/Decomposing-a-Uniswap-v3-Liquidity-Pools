@@ -19,32 +19,69 @@ what would reverse it.
 
 ---
 
-## Status
+## Headline result
+
+43 monthly cohorts per pool, 2023-01 to 2026-07, $100k at ±10%, re-centred on
+range exit. All annualised, with block-bootstrap confidence intervals.
+
+| Pool | fees | LVR | gas | **market-making** | 95% CI | months > 0 |
+|---|---|---|---|---|---|---|
+| ETH/USDC 5bp | +88.84% | −96.77% | −1.17% | **−9.10%** | [−15.6%, −3.3%] | 26% |
+| ETH/USDC 30bp | +96.72% | −97.90% | −1.14% | **−2.31%** | [−5.2%, +1.3%] | 21% |
+
+**Fees covered 92% and 99% of adverse selection.** On the 30bp pool the unhedged
+return was −0.29% — essentially break-even — but only because a +2.02%
+directional gain offset a −2.31% market-making loss.
+
+> **LPs who made money made it from holding ETH, not from providing liquidity.**
+
+`fees − LVR` is *already delta-hedged*, because LVR is defined against a
+continuously rebalanced portfolio. Its confidence interval is 6–11× tighter than
+the unhedged return's.
+
+### The three results worth reading
+
+**σ²/8 works, and fails informatively.** Across 3,842 pool-days the closed form
+explains **62% of daily LVR variation with no fitted parameters** and predicts
+the aggregate three-and-a-half-year transfer to within **1%**. Its slope is
+significantly below one — but only in the volatile tercile (β = 0.753 against
+0.963 and 0.965 in calm and middle markets). The theory holds where its
+assumptions hold.
+
+**Theory beats machine learning.** On identical purged folds, σ²/8 with a HAR-RV
+variance forecast is the only model with positive out-of-sample R² (+0.126),
+beating LightGBM by 19% on RMSE at **p < 0.0001**. One parameter fixed by
+derivation against hundreds fitted on 366 observations.
+
+**A fee band does not reduce LVR.** H4's stated premise is false, by derivation
+and by measurement. One arbitrage trade transfers `(L√P/4)(g² − f²)`; the gap is
+a walk reflected at `±f` with local time `σ²/(2f)`; the `f` cancels. Measured
+across a 20× fee range, LVR per unit variance moves 6.7% with t = +0.30.
+
+## Status — complete
 
 | Stage | Scope | State |
 |---|---|---|
-| 0 | Decisions: delta-hedged primary, position spec, universe, data source | **Settled** |
-| 1 | Data layer: pool state, price reconstruction, CEX alignment | **Gate passed** |
-| 2 | LP position reconstruction and fee accrual | Not started |
-| 3 | LVR — empirical and analytical | Not started |
-| 4 | MEV classification and attribution | Not started |
-| 5 | Decomposition table (H2, H4) | Not started |
-| 6 | Forecasting and the theory-vs-ML horse race (H5, H6) | Not started |
-| 7 | Strategy backtest (H7) | Not started |
-| 8 | Optimal range width (appendix) | Not started |
+| 0 | Decisions, universe, data source | ✅ settled |
+| 1 | Data layer, price reconstruction, alignment | ✅ gate passed |
+| 2 | Position reconstruction and fee accrual | ✅ gate passed |
+| 3 | LVR, empirical and analytical | ✅ gate passed |
+| 4 | MEV classification and attribution | ✅ |
+| 5 | Decomposition, full sample | ✅ |
+| 6 | Forecasting, theory-vs-ML (H5, H6) | ✅ |
+| 7 | Strategy backtest (H7) | ✅ |
+| 8 | Optimal range width | ✅ |
+| — | Robustness, all 7 open questions | ✅ closed |
 
-### Stage 1 results
-
-Pool-versus-CEX price gap, ETH/USDC, January 2023, basis-corrected:
-
-| Pool | blocks | mean abs gap | p95 abs gap | fee |
-|---|---|---|---|---|
-| ETH/USDC 5bp | 135,091 | 4.08 bp | **8.18 bp** | 5 bp |
-| ETH/USDC 30bp | 9,959 | 22.99 bp | **33.63 bp** | 30 bp |
-
-Each pool's p95 gap sits at roughly its own fee tier — the no-arbitrage band,
-measured directly. This is the mechanism H4 rests on, confirmed before anything
-is built on it.
+| Hypothesis | Verdict |
+|---|---|
+| H1 the decomposition is computable | ✅ every gate passed |
+| H2 advertised yields overstate returns | ✅ confirmed, and qualified |
+| H3 σ²/8 holds | ✅ R² 0.618, level match 0.991 |
+| H4 fee tier is the dominant determinant | ❌ **premise falsified** |
+| H5 net return is forecastable | ❌ worse than the mean |
+| H6 theory beats ML on LVR | ✅ **p < 0.0001** |
+| H7 economic significance | ❌ negative, as permitted |
 
 ---
 
