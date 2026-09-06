@@ -1,0 +1,532 @@
+
+=== ETH_USDC_5bp: 43 cohorts ===
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_16308189_16530246_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-01.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2023-01.zip (0.0 MB)
+  2023-01  in-range 100.0%  fees  +65.15%  lvr  +69.35%  net_raw   -5.26%  net_hedged   -7.95%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_16530247_16730070_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-02.zip (1.7 MB)
+  cache hit: ETHUSDT-fundingRate-2023-02.zip (0.0 MB)
+  2023-02  in-range 100.0%  fees  +70.26%  lvr  +71.63%  net_raw   -1.66%  net_hedged   -5.41%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_16730071_16950601_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-03.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2023-03.zip (0.0 MB)
+  2023-03  in-range 100.0%  fees +131.41%  lvr +100.95%  net_raw  +29.40%  net_hedged  +23.96%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_16950602_17162285_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-04.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-04.zip (0.0 MB)
+  2023-04  in-range 100.0%  fees  +46.03%  lvr  +61.25%  net_raw  -16.05%  net_hedged  -20.56%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_17162286_17382264_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-05.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2023-05.zip (0.0 MB)
+  2023-05  in-range 100.0%  fees  +36.21%  lvr  +42.05%  net_raw   -6.10%  net_hedged   -8.21%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_17382265_17595508_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-06.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-06.zip (0.0 MB)
+  2023-06  in-range 100.0%  fees  +38.65%  lvr  +45.07%  net_raw   -7.23%  net_hedged  -10.10%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_17595509_17816432_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-07.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-07.zip (0.0 MB)
+  2023-07  in-range 100.0%  fees  +20.99%  lvr  +24.53%  net_raw   -3.81%  net_hedged   -3.91%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_17816433_18037986_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-08.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-08.zip (0.0 MB)
+  2023-08  in-range 100.0%  fees  +26.73%  lvr  +31.48%  net_raw   -5.28%  net_hedged   -6.83%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_18037987_18251963_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-09.zip (1.7 MB)
+  cache hit: ETHUSDT-fundingRate-2023-09.zip (0.0 MB)
+  2023-09  in-range 100.0%  fees  +23.81%  lvr  +23.68%  net_raw   -0.14%  net_hedged   -2.68%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_18251964_18473541_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-10.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-10.zip (0.0 MB)
+  2023-10  in-range 100.0%  fees  +39.83%  lvr  +45.26%  net_raw   -5.96%  net_hedged   -7.02%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_18473542_18687849_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-11.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-11.zip (0.0 MB)
+  2023-11  in-range 100.0%  fees  +52.08%  lvr  +60.85%  net_raw   -9.31%  net_hedged  -10.65%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_18687850_18908893_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-12.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2023-12.zip (0.0 MB)
+  2023-12  in-range 100.0%  fees  +62.73%  lvr  +61.07%  net_raw   +1.13%  net_hedged   +2.94%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_18908894_19129887_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-01.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-01.zip (0.0 MB)
+  2024-01  in-range 100.0%  fees  +78.21%  lvr  +81.54%  net_raw   -4.12%  net_hedged   -5.85%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_19129888_19336605_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-02.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2024-02.zip (0.0 MB)
+  2024-02  in-range 100.0%  fees  +83.47%  lvr  +72.01%  net_raw  +10.05%  net_hedged   +7.22%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_19336606_19557287_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-03.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2024-03.zip (0.0 MB)
+  2024-03  in-range 100.0%  fees +160.62%  lvr +146.48%  net_raw  +12.03%  net_hedged  +17.81%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_19557288_19771558_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-04.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-04.zip (0.0 MB)
+  2024-04  in-range 100.0%  fees +112.53%  lvr +126.90%  net_raw  -16.55%  net_hedged  -22.52%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_19771559_19993248_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-05.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-05.zip (0.0 MB)
+  2024-05  in-range 100.0%  fees  +73.77%  lvr  +96.84%  net_raw  -23.86%  net_hedged  -27.61%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_19993249_20207947_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-06.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2024-06.zip (0.0 MB)
+  2024-06  in-range 100.0%  fees  +40.87%  lvr  +49.68%  net_raw   -9.35%  net_hedged  -10.21%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_20207948_20429971_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-07.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-07.zip (0.0 MB)
+  2024-07  in-range 100.0%  fees  +75.22%  lvr  +83.73%  net_raw   -9.83%  net_hedged  -15.62%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_20429972_20651992_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-08.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-08.zip (0.0 MB)
+  2024-08  in-range 100.0%  fees +194.10%  lvr +178.92%  net_raw  +13.34%  net_hedged   +4.32%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_20651993_20866917_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-09.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-09.zip (0.0 MB)
+  2024-09  in-range 100.0%  fees  +60.50%  lvr  +71.43%  net_raw  -12.02%  net_hedged  -18.15%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_20866918_21089067_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-10.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-10.zip (0.0 MB)
+  2024-10  in-range 100.0%  fees  +54.21%  lvr  +61.63%  net_raw   -8.21%  net_hedged  -11.74%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_21089068_21303932_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-11.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-11.zip (0.0 MB)
+  2024-11  in-range 100.0%  fees +109.66%  lvr +133.41%  net_raw  -25.66%  net_hedged  -28.68%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_21303933_21525889_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-12.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2024-12.zip (0.0 MB)
+  2024-12  in-range 100.0%  fees +107.81%  lvr +126.56%  net_raw  -20.33%  net_hedged  -25.34%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_21525890_21747948_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-01.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-01.zip (0.0 MB)
+  2025-01  in-range 100.0%  fees +118.75%  lvr +124.53%  net_raw   -7.10%  net_hedged  -12.85%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_21747949_21948290_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-02.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2025-02.zip (0.0 MB)
+  2025-02  in-range 100.0%  fees +204.50%  lvr +225.23%  net_raw  -23.65%  net_hedged  -33.44%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_21948291_22170333_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-03.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-03.zip (0.0 MB)
+  2025-03  in-range 100.0%  fees +115.57%  lvr +173.78%  net_raw  -59.79%  net_hedged  -69.20%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_22170334_22385292_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-04.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-04.zip (0.0 MB)
+  2025-04  in-range 100.0%  fees +163.26%  lvr +166.96%  net_raw   -5.60%  net_hedged  -15.41%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_22385293_22606141_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-05.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-05.zip (0.0 MB)
+  2025-05  in-range 100.0%  fees +117.22%  lvr +147.21%  net_raw  -31.83%  net_hedged  -40.15%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_22606142_22820672_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-06.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-06.zip (0.0 MB)
+  2025-06  in-range 100.0%  fees  +82.52%  lvr +107.62%  net_raw  -26.46%  net_hedged  -32.70%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_22820673_23042512_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-07.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-07.zip (0.0 MB)
+  2025-07  in-range 100.0%  fees  +86.73%  lvr  +92.56%  net_raw   -7.15%  net_hedged  -12.96%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_23042513_23264564_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-08.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-08.zip (0.0 MB)
+  2025-08  in-range 100.0%  fees +134.73%  lvr +112.99%  net_raw  +20.42%  net_hedged  +12.89%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_23264565_23479242_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-09.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-09.zip (0.0 MB)
+  2025-09  in-range 100.0%  fees  +62.54%  lvr  +61.45%  net_raw   +0.54%  net_hedged   -4.86%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_23479243_23700765_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-10.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-10.zip (0.0 MB)
+  2025-10  in-range 100.0%  fees +124.66%  lvr +144.76%  net_raw  -21.42%  net_hedged  -29.49%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_23700766_23914919_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-11.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-11.zip (0.0 MB)
+  2025-11  in-range 100.0%  fees +175.52%  lvr +154.95%  net_raw  +18.67%  net_hedged   +9.48%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_23914920_24136051_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-12.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-12.zip (0.0 MB)
+  2025-12  in-range 100.0%  fees  +99.41%  lvr  +94.05%  net_raw   +4.57%  net_hedged   -0.96%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_24136052_24358291_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-01.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-01.zip (0.0 MB)
+  2026-01  in-range 100.0%  fees  +86.54%  lvr  +84.06%  net_raw   +1.16%  net_hedged   -3.90%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_24358292_24558866_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-02.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2026-02.zip (0.0 MB)
+  2026-02  in-range 100.0%  fees +149.76%  lvr +226.64%  net_raw  -79.79%  net_hedged  -94.13%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_24558867_24781025_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-03.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2026-03.zip (0.0 MB)
+  2026-03  in-range 100.0%  fees  +78.53%  lvr +112.35%  net_raw  -35.14%  net_hedged  -45.29%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_24781026_24996366_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-04.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-04.zip (0.0 MB)
+  2026-04  in-range 100.0%  fees  +63.02%  lvr  +61.82%  net_raw   +0.66%  net_hedged   -6.98%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_24996367_25218796_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-05.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-05.zip (0.0 MB)
+  2026-05  in-range 100.0%  fees  +34.08%  lvr  +40.00%  net_raw   -6.46%  net_hedged  -10.14%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_25218797_25433937_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-06.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-06.zip (0.0 MB)
+  2026-06  in-range 100.0%  fees +109.08%  lvr +111.35%  net_raw   -3.63%  net_hedged  -12.34%
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_25433938_25656291_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-07.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-07.zip (0.0 MB)
+  2026-07  in-range 100.0%  fees  +49.08%  lvr  +52.69%  net_raw   -4.40%  net_hedged   -9.34%
+
+=== ETH_USDC_30bp: 43 cohorts ===
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_16308189_16530246_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-01.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2023-01.zip (0.0 MB)
+  2023-01  in-range 100.0%  fees  +62.80%  lvr  +68.85%  net_raw   -7.10%  net_hedged   -8.93%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_16530247_16730070_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-02.zip (1.7 MB)
+  cache hit: ETHUSDT-fundingRate-2023-02.zip (0.0 MB)
+  2023-02  in-range 100.0%  fees  +67.08%  lvr  +71.55%  net_raw   -4.76%  net_hedged   -7.61%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_16730071_16950601_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-03.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2023-03.zip (0.0 MB)
+  2023-03  in-range 100.0%  fees +112.88%  lvr  +98.81%  net_raw  +13.02%  net_hedged   +8.70%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_16950602_17162285_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-04.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-04.zip (0.0 MB)
+  2023-04  in-range 100.0%  fees  +50.99%  lvr  +62.07%  net_raw  -11.90%  net_hedged  -15.14%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_17162286_17382264_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-05.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2023-05.zip (0.0 MB)
+  2023-05  in-range 100.0%  fees  +35.73%  lvr  +41.70%  net_raw   -6.23%  net_hedged   -7.26%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_17382265_17595508_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-06.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-06.zip (0.0 MB)
+  2023-06  in-range 100.0%  fees  +38.97%  lvr  +47.57%  net_raw   -9.42%  net_hedged  -11.44%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_17595509_17816432_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-07.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-07.zip (0.0 MB)
+  2023-07  in-range 100.0%  fees  +20.48%  lvr  +24.01%  net_raw   -3.79%  net_hedged   -2.54%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_17816433_18037986_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-08.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-08.zip (0.0 MB)
+  2023-08  in-range 100.0%  fees  +33.23%  lvr  +33.26%  net_raw   -0.55%  net_hedged   -0.98%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_18037987_18251963_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-09.zip (1.7 MB)
+  cache hit: ETHUSDT-fundingRate-2023-09.zip (0.0 MB)
+  2023-09  in-range 100.0%  fees  +23.51%  lvr  +25.67%  net_raw   -2.44%  net_hedged   -3.94%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_18251964_18473541_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-10.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-10.zip (0.0 MB)
+  2023-10  in-range 100.0%  fees  +42.29%  lvr  +48.79%  net_raw   -7.03%  net_hedged   -7.05%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_18473542_18687849_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-11.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-11.zip (0.0 MB)
+  2023-11  in-range 100.0%  fees  +55.59%  lvr  +61.77%  net_raw   -6.73%  net_hedged   -6.82%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_18687850_18908893_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-12.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2023-12.zip (0.0 MB)
+  2023-12  in-range 100.0%  fees  +61.07%  lvr  +61.12%  net_raw   -0.58%  net_hedged   +2.79%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_18908894_19129887_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-01.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-01.zip (0.0 MB)
+  2024-01  in-range 100.0%  fees  +80.95%  lvr  +88.08%  net_raw   -7.92%  net_hedged   -8.39%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_19129888_19336605_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-02.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2024-02.zip (0.0 MB)
+  2024-02  in-range 100.0%  fees  +70.16%  lvr  +72.91%  net_raw   -4.16%  net_hedged   -5.57%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_19336606_19557287_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-03.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2024-03.zip (0.0 MB)
+  2024-03  in-range 100.0%  fees +152.99%  lvr +153.52%  net_raw   -2.65%  net_hedged   +1.62%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_19557288_19771558_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-04.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-04.zip (0.0 MB)
+  2024-04  in-range 100.0%  fees +122.96%  lvr +124.89%  net_raw   -3.56%  net_hedged   -8.19%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_19771559_19993248_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-05.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-05.zip (0.0 MB)
+  2024-05  in-range 100.0%  fees  +87.80%  lvr  +97.45%  net_raw  -10.43%  net_hedged  -12.92%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_19993249_20207947_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-06.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2024-06.zip (0.0 MB)
+  2024-06  in-range 100.0%  fees  +43.07%  lvr  +52.89%  net_raw  -10.36%  net_hedged   -9.98%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_20207948_20429971_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-07.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-07.zip (0.0 MB)
+  2024-07  in-range 100.0%  fees  +82.92%  lvr  +85.63%  net_raw   -3.51%  net_hedged   -5.98%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_20429972_20651992_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-08.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-08.zip (0.0 MB)
+  2024-08  in-range 100.0%  fees +227.16%  lvr +193.08%  net_raw  +32.24%  net_hedged  +24.00%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_20651993_20866917_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-09.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-09.zip (0.0 MB)
+  2024-09  in-range 100.0%  fees  +70.66%  lvr  +74.23%  net_raw   -4.39%  net_hedged   -9.63%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_20866918_21089067_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-10.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-10.zip (0.0 MB)
+  2024-10  in-range 100.0%  fees  +58.61%  lvr  +61.48%  net_raw   -3.66%  net_hedged   -5.81%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_21089068_21303932_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-11.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-11.zip (0.0 MB)
+  2024-11  in-range 100.0%  fees +123.75%  lvr +138.55%  net_raw  -16.70%  net_hedged  -19.38%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_21303933_21525889_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-12.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2024-12.zip (0.0 MB)
+  2024-12  in-range 100.0%  fees +113.61%  lvr +129.96%  net_raw  -16.88%  net_hedged  -20.75%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_21525890_21747948_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-01.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-01.zip (0.0 MB)
+  2025-01  in-range 100.0%  fees +114.63%  lvr +128.66%  net_raw  -15.35%  net_hedged  -20.21%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_21747949_21948290_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-02.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2025-02.zip (0.0 MB)
+  2025-02  in-range 100.0%  fees +237.11%  lvr +225.69%  net_raw   +8.51%  net_hedged   -1.62%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_21948291_22170333_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-03.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-03.zip (0.0 MB)
+  2025-03  in-range 100.0%  fees +150.57%  lvr +169.04%  net_raw  -20.06%  net_hedged  -28.28%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_22170334_22385292_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-04.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-04.zip (0.0 MB)
+  2025-04  in-range 100.0%  fees +196.24%  lvr +167.41%  net_raw  +26.65%  net_hedged  +17.35%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_22385293_22606141_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-05.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-05.zip (0.0 MB)
+  2025-05  in-range 100.0%  fees +135.95%  lvr +147.38%  net_raw  -13.27%  net_hedged  -20.51%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_22606142_22820672_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-06.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-06.zip (0.0 MB)
+  2025-06  in-range 100.0%  fees  +94.93%  lvr +104.84%  net_raw  -11.27%  net_hedged  -17.37%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_22820673_23042512_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-07.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-07.zip (0.0 MB)
+  2025-07  in-range 100.0%  fees  +93.52%  lvr  +93.26%  net_raw   -1.06%  net_hedged   -6.21%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_23042513_23264564_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-08.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-08.zip (0.0 MB)
+  2025-08  in-range 100.0%  fees +140.22%  lvr +117.43%  net_raw  +21.47%  net_hedged  +14.62%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_23264565_23479242_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-09.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-09.zip (0.0 MB)
+  2025-09  in-range 100.0%  fees  +59.35%  lvr  +62.38%  net_raw   -3.58%  net_hedged   -7.77%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_23479243_23700765_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-10.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-10.zip (0.0 MB)
+  2025-10  in-range 100.0%  fees +153.63%  lvr +139.57%  net_raw  +12.22%  net_hedged   +5.34%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_23700766_23914919_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-11.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-11.zip (0.0 MB)
+  2025-11  in-range 100.0%  fees +180.72%  lvr +157.26%  net_raw  +21.55%  net_hedged  +13.01%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_23914920_24136051_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-12.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-12.zip (0.0 MB)
+  2025-12  in-range 100.0%  fees  +89.48%  lvr  +92.22%  net_raw   -3.53%  net_hedged   -8.31%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_24136052_24358291_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-01.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-01.zip (0.0 MB)
+  2026-01  in-range 100.0%  fees  +96.09%  lvr  +81.93%  net_raw  +12.84%  net_hedged   +8.97%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_24358292_24558866_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-02.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2026-02.zip (0.0 MB)
+  2026-02  in-range 100.0%  fees +219.72%  lvr +220.75%  net_raw   -3.66%  net_hedged  -17.98%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_24558867_24781025_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-03.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2026-03.zip (0.0 MB)
+  2026-03  in-range 100.0%  fees +104.55%  lvr +111.65%  net_raw   -8.95%  net_hedged  -18.97%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_24781026_24996366_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-04.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-04.zip (0.0 MB)
+  2026-04  in-range 100.0%  fees  +54.77%  lvr  +61.93%  net_raw   -7.71%  net_hedged  -14.19%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_24996367_25218796_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-05.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-05.zip (0.0 MB)
+  2026-05  in-range 100.0%  fees  +33.81%  lvr  +42.36%  net_raw   -9.07%  net_hedged  -11.41%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_25218797_25433937_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-06.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-06.zip (0.0 MB)
+  2026-06  in-range 100.0%  fees +115.49%  lvr +112.59%  net_raw   +1.53%  net_hedged   -6.52%
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_25433938_25656291_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-07.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-07.zip (0.0 MB)
+  2026-07  in-range 100.0%  fees  +49.04%  lvr  +55.47%  net_raw   -7.23%  net_hedged  -11.28%
+
+=== ETH_USDC_100bp: 43 cohorts ===
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_16308189_16530246_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-01.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2023-01.zip (0.0 MB)
+  2023-01  in-range 100.0%  fees  +67.72%  lvr  +80.09%  net_raw  -13.47%  net_hedged  -12.39%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_16530247_16730070_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-02.zip (1.7 MB)
+  cache hit: ETHUSDT-fundingRate-2023-02.zip (0.0 MB)
+  2023-02  in-range 100.0%  fees  +52.15%  lvr  +70.90%  net_raw  -19.05%  net_hedged  -18.80%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_16730071_16950601_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-03.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2023-03.zip (0.0 MB)
+  2023-03  in-range 100.0%  fees  +90.04%  lvr  +96.14%  net_raw   -7.18%  net_hedged   -8.69%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_16950602_17162285_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-04.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-04.zip (0.0 MB)
+  2023-04  in-range 100.0%  fees  +43.16%  lvr  +53.89%  net_raw  -11.57%  net_hedged  -11.76%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_17162286_17382264_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-05.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2023-05.zip (0.0 MB)
+  2023-05  in-range 100.0%  fees  +34.31%  lvr  +39.93%  net_raw   -5.89%  net_hedged   -4.62%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_17382265_17595508_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-06.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-06.zip (0.0 MB)
+  2023-06  in-range 100.0%  fees  +38.00%  lvr  +36.80%  net_raw   +0.38%  net_hedged   +0.64%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_17595509_17816432_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-07.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-07.zip (0.0 MB)
+  2023-07  in-range 100.0%  fees  +18.34%  lvr  +27.21%  net_raw   -9.16%  net_hedged   -6.54%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_17816433_18037986_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-08.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-08.zip (0.0 MB)
+  2023-08  in-range 100.0%  fees  +26.51%  lvr  +23.49%  net_raw   +2.49%  net_hedged   +3.42%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_18037987_18251963_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-09.zip (1.7 MB)
+  cache hit: ETHUSDT-fundingRate-2023-09.zip (0.0 MB)
+  2023-09  in-range 100.0%  fees  +15.59%  lvr  +18.52%  net_raw   -3.22%  net_hedged   -2.96%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_18251964_18473541_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-10.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-10.zip (0.0 MB)
+  2023-10  in-range 100.0%  fees  +29.65%  lvr  +42.14%  net_raw  -12.77%  net_hedged  -11.19%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_18473542_18687849_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-11.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-11.zip (0.0 MB)
+  2023-11  in-range 100.0%  fees  +35.47%  lvr  +57.28%  net_raw  -22.39%  net_hedged  -18.51%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_18687850_18908893_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-12.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2023-12.zip (0.0 MB)
+  2023-12  in-range 100.0%  fees  +41.81%  lvr  +68.66%  net_raw  -27.39%  net_hedged  -20.68%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_18908894_19129887_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-01.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-01.zip (0.0 MB)
+  2024-01  in-range 100.0%  fees  +50.84%  lvr  +75.01%  net_raw  -24.97%  net_hedged  -22.42%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_19129888_19336605_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-02.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2024-02.zip (0.0 MB)
+  2024-02  in-range 100.0%  fees  +55.79%  lvr  +69.21%  net_raw  -14.83%  net_hedged  -13.17%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_19336606_19557287_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-03.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2024-03.zip (0.0 MB)
+  2024-03  in-range 100.0%  fees +120.35%  lvr +135.51%  net_raw  -16.23%  net_hedged   -9.31%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_19557288_19771558_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-04.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-04.zip (0.0 MB)
+  2024-04  in-range 100.0%  fees +102.43%  lvr +116.38%  net_raw  -14.50%  net_hedged  -13.30%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_19771559_19993248_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-05.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-05.zip (0.0 MB)
+  2024-05  in-range 100.0%  fees  +73.04%  lvr  +91.82%  net_raw  -19.59%  net_hedged  -18.38%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_19993249_20207947_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-06.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2024-06.zip (0.0 MB)
+  2024-06  in-range 100.0%  fees  +35.35%  lvr  +37.74%  net_raw   -2.95%  net_hedged   +0.97%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_20207948_20429971_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-07.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-07.zip (0.0 MB)
+  2024-07  in-range 100.0%  fees  +65.46%  lvr  +70.06%  net_raw   -5.40%  net_hedged   -4.92%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_20429972_20651992_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-08.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-08.zip (0.0 MB)
+  2024-08  in-range 100.0%  fees +104.81%  lvr +185.40%  net_raw  -82.24%  net_hedged  -87.00%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_20651993_20866917_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-09.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-09.zip (0.0 MB)
+  2024-09  in-range 100.0%  fees  +30.02%  lvr  +76.21%  net_raw  -47.01%  net_hedged  -48.94%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_20866918_21089067_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-10.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-10.zip (0.0 MB)
+  2024-10  in-range 100.0%  fees  +25.94%  lvr  +56.65%  net_raw  -30.98%  net_hedged  -27.73%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_21089068_21303932_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-11.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-11.zip (0.0 MB)
+  2024-11  in-range 100.0%  fees  +50.32%  lvr +121.36%  net_raw  -72.13%  net_hedged  -67.62%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_21303933_21525889_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-12.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2024-12.zip (0.0 MB)
+  2024-12  in-range 100.0%  fees  +46.65%  lvr +146.10%  net_raw  -99.99%  net_hedged -100.11%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_21525890_21747948_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-01.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-01.zip (0.0 MB)
+  2025-01  in-range 100.0%  fees  +45.81%  lvr +117.73%  net_raw  -72.72%  net_hedged  -72.86%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_21747949_21948290_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-02.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2025-02.zip (0.0 MB)
+  2025-02  in-range 100.0%  fees  +91.72%  lvr +248.88%  net_raw -159.54%  net_hedged -164.03%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_21948291_22170333_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-03.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-03.zip (0.0 MB)
+  2025-03  in-range 100.0%  fees  +65.11%  lvr +159.25%  net_raw  -95.22%  net_hedged  -99.85%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_22170334_22385292_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-04.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-04.zip (0.0 MB)
+  2025-04  in-range 100.0%  fees  +61.55%  lvr +143.89%  net_raw  -84.27%  net_hedged  -89.42%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_22385293_22606141_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-05.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-05.zip (0.0 MB)
+  2025-05  in-range 100.0%  fees  +62.77%  lvr +132.82%  net_raw  -71.38%  net_hedged  -74.94%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_22606142_22820672_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-06.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-06.zip (0.0 MB)
+  2025-06  in-range 100.0%  fees  +39.67%  lvr +110.09%  net_raw  -71.79%  net_hedged  -74.27%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_22820673_23042512_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-07.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-07.zip (0.0 MB)
+  2025-07  in-range 100.0%  fees  +41.00%  lvr  +95.90%  net_raw  -56.22%  net_hedged  -57.55%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_23042513_23264564_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-08.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-08.zip (0.0 MB)
+  2025-08  in-range 100.0%  fees  +47.14%  lvr +105.21%  net_raw  -58.85%  net_hedged  -60.05%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_23264565_23479242_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-09.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-09.zip (0.0 MB)
+  2025-09  in-range 100.0%  fees  +29.34%  lvr  +52.92%  net_raw  -24.13%  net_hedged  -25.38%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_23479243_23700765_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-10.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-10.zip (0.0 MB)
+  2025-10  in-range 100.0%  fees  +80.78%  lvr +144.06%  net_raw  -64.62%  net_hedged  -67.87%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_23700766_23914919_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-11.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-11.zip (0.0 MB)
+  2025-11  in-range 100.0%  fees  +63.06%  lvr +154.88%  net_raw  -93.22%  net_hedged  -96.42%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_23914920_24136051_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-12.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-12.zip (0.0 MB)
+  2025-12  in-range 100.0%  fees  +38.26%  lvr  +87.58%  net_raw  -50.11%  net_hedged  -51.64%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_24136052_24358291_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-01.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-01.zip (0.0 MB)
+  2026-01  in-range 100.0%  fees  +33.69%  lvr  +86.84%  net_raw  -54.51%  net_hedged  -56.50%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_24358292_24558866_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-02.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2026-02.zip (0.0 MB)
+  2026-02  in-range 100.0%  fees  +84.94%  lvr +191.30%  net_raw -108.40%  net_hedged -118.36%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_24558867_24781025_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-03.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2026-03.zip (0.0 MB)
+  2026-03  in-range 100.0%  fees  +52.68%  lvr +131.07%  net_raw  -78.92%  net_hedged  -83.96%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_24781026_24996366_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-04.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-04.zip (0.0 MB)
+  2026-04  in-range 100.0%  fees  +24.91%  lvr  +53.68%  net_raw  -29.34%  net_hedged  -32.75%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_24996367_25218796_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-05.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-05.zip (0.0 MB)
+  2026-05  in-range 100.0%  fees  +14.85%  lvr  +38.64%  net_raw  -24.32%  net_hedged  -23.79%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_25218797_25433937_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-06.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-06.zip (0.0 MB)
+  2026-06  in-range 100.0%  fees  +40.92%  lvr +102.80%  net_raw  -63.26%  net_hedged  -67.59%
+  cache hit: 0x7bea39867e4169dbe237d55c8242a8f2fcdcc387_25433938_25656291_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-07.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-07.zip (0.0 MB)
+  2026-07  in-range 100.0%  fees  +18.30%  lvr  +49.84%  net_raw  -32.33%  net_hedged  -33.23%
+
+
+=== Output 1: full sample, monthly cohorts, $100k at +/-10% ===
+
+          pool  fee_tier_bps  n_cohorts share_in_range    fees     lvr    gas net_raw funding net_hedged       net_raw_ci    net_hedged_ci share_of_months_positive
+  ETH_USDC_5bp             5         43       +100.00% +88.84% +96.77% +1.17%  -9.10%  -3.10%    -14.06%  [-15.6%, -3.3%]  [-22.0%, -7.0%]                  +25.58%
+ ETH_USDC_30bp            30         43       +100.00% +96.72% +97.90% +1.14%  -2.31%  -3.04%     -6.34%   [-5.2%, +1.3%]   [-9.4%, -3.3%]                  +20.93%
+ETH_USDC_100bp           100         43       +100.00% +50.94% +93.11% +0.92% -43.10%  -3.10%    -43.59% [-64.9%, -23.2%] [-66.7%, -22.3%]                   +4.65%
+
+wrote outputs/tables/decomposition_fullsample.csv and cohorts_fullsample.csv

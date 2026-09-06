@@ -28,7 +28,21 @@ Approach B remains necessary: `feeGrowthInside` can only be read for a range
 that has already happened, so a forecast, a sweep over hypothetical range
 widths, or a backtest of an unrealised position all need the replay. B is what
 the pipeline uses; C is what proves B is right.
+
+**C is not always available.** `feeGrowthOutside` is stored per tick and is reset
+whenever a tick flips from uninitialized to initialized. If either boundary tick
+loses all its liquidity and is later re-initialized between the two readings,
+the second reading is measured from a different epoch than the first and their
+difference is meaningless — it typically underflows into a number near 2**256.
+
+That is not hypothetical: on ETH/USDC 5bp (10-tick spacing, heavy LP churn) a
+boundary tick's gross liquidity moved by a factor of a million within March 2023
+and the naive difference implied fees of 8.7e48 dollars. So C is a **spot check
+that works when the boundary ticks are stable**, not a universal reference, and
+`fees_exact` raises rather than returning a wrapped number when it is not
+applicable.
 """
+
 
 from __future__ import annotations
 
@@ -47,6 +61,16 @@ UINT256 = 1 << 256
 SEL_FEE_GROWTH_GLOBAL_0 = "0xf3058399"
 SEL_FEE_GROWTH_GLOBAL_1 = "0x46141319"
 SEL_TICKS = "0xf30dba93"
+
+
+class FeeGrowthUnavailable(RuntimeError):
+    """Raised when `feeGrowthInside` cannot be differenced across two blocks.
+
+    Means a boundary tick was re-initialized in between, resetting its
+    `feeGrowthOutside`. The position's fees are still well defined; they just
+    cannot be recovered from two point readings, and approach A (event replay)
+    would be needed to validate that period.
+    """
 
 
 # --------------------------------------------------------------------------- #
@@ -108,14 +132,22 @@ def fee_growth_inside(
     return _sub256(_sub256(g0, below0), above0), _sub256(_sub256(g1, below1), above1)
 
 
+#: A month of fee growth on a busy pool sits around 1e30-1e33 in X128 units.
+#: A wrapped underflow lands near 2**256 ~ 1.2e77, so anything above this
+#: threshold is an epoch mismatch rather than a large month.
+_FEE_GROWTH_SANITY_CEILING = 1 << 200
+
+
 def fees_exact(
     client: RPCClient, spec: PoolSpec, position: Position,
     block_start: int, tick_start: int, block_end: int, tick_end: int,
 ) -> tuple[int, int]:
     """Reference fee accrual, in token base units, from the contract's own state.
 
-    This is the ground truth the Stage 2 gate uses. Four `eth_call`s per
-    endpoint, no replay, no approximation.
+    Four `eth_call`s per endpoint, no replay, no approximation — when it is
+    applicable. Raises :class:`FeeGrowthUnavailable` when a boundary tick was
+    re-initialized between the two blocks, because the difference is then a
+    wrapped underflow rather than a fee.
     """
     i0_s, i1_s = fee_growth_inside(
         client, spec.address, position.tick_lower, position.tick_upper, tick_start, block_start
@@ -123,9 +155,18 @@ def fees_exact(
     i0_e, i1_e = fee_growth_inside(
         client, spec.address, position.tick_lower, position.tick_upper, tick_end, block_end
     )
-    fees0 = position.liquidity * _sub256(i0_e, i0_s) // Q128
-    fees1 = position.liquidity * _sub256(i1_e, i1_s) // Q128
-    return fees0, fees1
+    d0, d1 = _sub256(i0_e, i0_s), _sub256(i1_e, i1_s)
+    for name, delta in (("token0", d0), ("token1", d1)):
+        if delta > _FEE_GROWTH_SANITY_CEILING:
+            raise FeeGrowthUnavailable(
+                f"feeGrowthInside for {name} decreased across blocks "
+                f"{block_start}->{block_end} on {spec.id} (wrapped delta {delta:.3e}). "
+                f"A boundary tick of range [{position.tick_lower}, "
+                f"{position.tick_upper}] was almost certainly re-initialized in "
+                f"between, resetting its feeGrowthOutside. Validate this period "
+                f"with approach A instead."
+            )
+    return position.liquidity * d0 // Q128, position.liquidity * d1 // Q128
 
 
 # --------------------------------------------------------------------------- #
@@ -163,6 +204,7 @@ def _boundary_fraction(pre_tick: int, post_tick: int, position: Position) -> Dec
 def accrue_fees_approach_b(
     swaps: pd.DataFrame, position: Position, spec: PoolSpec,
     entry_tick: int | None = None, split_boundary: bool = True,
+    deposited: bool = True,
 ) -> pd.DataFrame:
     """Per-swap fee accrual from the `liquidity` field on each Swap event.
 
@@ -170,12 +212,22 @@ def accrue_fees_approach_b(
     is the gross transfer, which already includes the fee — so the fee is
     exactly `amount_in * fee_rate`, not `amount_in * fee_rate / (1 - fee_rate)`.
 
-    The position's share is `L_position / L_active`, matching how the pool
-    increments `feeGrowthGlobal` (by `feeAmount / L_active`). Using
-    `L / (L_active + L)` instead would be the share an actually-deposited
-    position receives, and would systematically undershoot the reference —
-    the difference is second-order at $100k in a pool this size, and it is what
-    the capacity study in open question 4 measures.
+    **Two different shares, and which is right depends on the question.**
+
+    - `deposited=True` (default) — `L / (L_active + L)`. The share an LP who
+      actually deposits receives, because their own liquidity joins the
+      denominator. This is what the paper simulates.
+    - `deposited=False` — `L / L_active`. The share of an infinitesimal
+      position that does *not* join the pool, which is how the pool increments
+      `feeGrowthGlobal` (by `feeAmount / L_active`). Use this when validating
+      against `feeGrowthInside`, or the gate compares two different quantities.
+
+    The gap is the position's own liquidity share, so it is negligible where the
+    position is small and decisive where it is not. Measured at $100k: 0.09% of
+    active liquidity on ETH/USDC 5bp, 0.32% on 30bp, and **22.6% on 100bp** —
+    where ignoring it overstates fees by more than a fifth, and where the
+    position is in any case large enough to move the pool price, which no fee
+    correction repairs.
 
     Known source of divergence from the exact method: `liquidity` on the event
     is the active liquidity **after** the swap settles, so a swap that crossed
@@ -203,10 +255,11 @@ def accrue_fees_approach_b(
         )
         f0 = f1 = 0
         if frac > 0 and int(liq) > 0:
+            denom = int(liq) + (position.liquidity if deposited else 0)
             if int(a0) > 0:
-                f0 = int(Decimal(int(a0) * num // den * position.liquidity // int(liq)) * frac)
+                f0 = int(Decimal(int(a0) * num // den * position.liquidity // denom) * frac)
             if int(a1) > 0:
-                f1 = int(Decimal(int(a1) * num // den * position.liquidity // int(liq)) * frac)
+                f1 = int(Decimal(int(a1) * num // den * position.liquidity // denom) * frac)
         rows.append(
             {
                 "block_number": int(blk), "block_timestamp": int(ts), "tick": tick,

@@ -111,6 +111,76 @@ def accrued_funding(
     return total
 
 
+def simulate_hedge_on_path(
+    delta_path: pd.DataFrame, perp: pd.DataFrame, funding: pd.DataFrame,
+    freq_seconds: int = 3600, taker_fee: Decimal = DEFAULT_TAKER_FEE,
+    base_usd: Decimal = Decimal("100000"),
+) -> HedgeResult:
+    """Hedge against an arbitrary delta path.
+
+    Needed because a re-centred position is not one position: its delta jumps
+    when it is closed and reopened, and the hedge must follow the path rather
+    than any single position's amount function. `delta_path` carries
+    `block_timestamp` and `risky_delta` per block.
+    """
+    if delta_path is None or delta_path.empty:
+        raise ValueError("no delta path to hedge")
+    dp = delta_path.sort_values("block_timestamp").reset_index(drop=True)
+    start, end = int(dp["block_timestamp"].iloc[0]), int(dp["block_timestamp"].iloc[-1])
+    stamps = rebalance_timestamps(start, end, freq_seconds)
+
+    marks = _at_or_before(
+        perp.rename(columns={"minute": "block_timestamp"})[["block_timestamp", "close"]],
+        "block_timestamp", stamps + [end],
+    )
+    prices = [Decimal(str(p)) if pd.notna(p) else None for p in marks["close"]]
+    targets = _at_or_before(dp[["block_timestamp", "risky_delta"]], "block_timestamp",
+                            stamps + [end])["risky_delta"]
+
+    short = Decimal(0)
+    funding_total = pnl = trading = Decimal(0)
+    n = 0
+    for i, ts in enumerate(stamps):
+        p_now = prices[i]
+        tgt = targets.iloc[i]
+        if p_now is None or tgt is None or (isinstance(tgt, float) and pd.isna(tgt)):
+            continue
+        tgt = Decimal(str(tgt))
+        if short != 0 and prices[i - 1] is not None:
+            pnl += short * (prices[i - 1] - p_now)
+            funding_total += accrued_funding(funding, stamps[i - 1], ts, short * p_now)
+        trading += abs(tgt - short) * p_now * taker_fee
+        short = tgt
+        n += 1
+
+    if short != 0 and prices[-1] is not None and prices[-2] is not None:
+        pnl += short * (prices[-2] - prices[-1])
+        funding_total += accrued_funding(funding, stamps[-1], end, short * prices[-1])
+
+    # Unhedged residual: held short vs the delta the position actually had.
+    held, err_eth, err_usd = Decimal(0), [], []
+    j = -1
+    for ts, d in zip(dp["block_timestamp"], dp["risky_delta"]):
+        while j + 1 < len(stamps) and stamps[j + 1] <= int(ts):
+            j += 1
+            t = targets.iloc[j]
+            held = Decimal(str(t)) if t is not None and not (isinstance(t, float) and pd.isna(t)) else held
+        gap = abs(Decimal(str(d)) - held)
+        err_eth.append(gap)
+        px = prices[min(max(j, 0), len(prices) - 1)]
+        err_usd.append(gap * (px if px is not None else Decimal(0)))
+
+    m = Decimal(max(1, len(err_eth)))
+    return HedgeResult(
+        n_rebalances=n, funding_paid_usd=funding_total, hedge_pnl_usd=pnl,
+        trading_cost_usd=trading,
+        mean_abs_hedge_error_eth=sum(err_eth, Decimal(0)) / m,
+        max_abs_hedge_error_eth=max(err_eth) if err_eth else Decimal(0),
+        mean_abs_error_usd=sum(err_usd, Decimal(0)) / m,
+        days=Decimal(max(1, end - start)) / Decimal(86400), base_usd=base_usd,
+    )
+
+
 def simulate_hedge(
     blocks: pd.DataFrame, position: Position, spec: PoolSpec, perp: pd.DataFrame,
     funding: pd.DataFrame, freq_seconds: int = 86_400,

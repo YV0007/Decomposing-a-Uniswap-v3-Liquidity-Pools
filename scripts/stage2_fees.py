@@ -50,7 +50,8 @@ def main() -> int:
 
     # --- approach B: replay from swap events -------------------------------- #
     after_entry = swaps[swaps["block_number"] > int(entry.block_number)]
-    replay = accrue_fees_approach_b(after_entry, pos, spec, entry_tick=int(entry.tick))
+    replay = accrue_fees_approach_b(after_entry, pos, spec, entry_tick=int(entry.tick),
+                                    deposited=False)  # match feeGrowthInside
     rep0, rep1 = int(replay.fee0.sum()), int(replay.fee1.sum())
 
     # --- approach C: the contract's own accounting -------------------------- #

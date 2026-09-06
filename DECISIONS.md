@@ -749,6 +749,101 @@ the model failing, not a finding, and the bound is what makes it physical.
 
 ---
 
+## Stage 5 — full sample ⭐
+
+43 monthly cohorts per pool, 2023-01 to 2026-07. $100k at +/-10%, re-centred on
+range exit, hourly hedge. Annualised, averaged across cohorts, with block
+bootstrap confidence intervals.
+
+### 5.5 Headline result
+
+| Pool | fees | LVR | gas | **net (raw)** | 95% CI | funding | **net (hedged)** | 95% CI | months > 0 |
+|---|---|---|---|---|---|---|---|---|---|
+| ETH/USDC 5bp | +88.84% | -96.77% | -1.17% | **-9.10%** | [-15.6%, -3.3%] | -3.10% | **-14.06%** | [-22.0%, -7.0%] | 26% |
+| ETH/USDC 30bp | +96.72% | -97.90% | -1.14% | **-2.31%** | [-5.2%, +1.3%] | -3.04% | **-6.34%** | [-9.4%, -3.3%] | 21% |
+| ETH/USDC 100bp | — | — | — | *withheld* | — | — | *withheld* | — | — |
+
+**A re-centred +/-10% position on ETH/USDC lost money over the sample.** On the
+5bp pool the loss is statistically significant both raw and hedged. On the 30bp
+pool the raw interval spans zero, but the hedged one does not — stripping the
+directional beta is what makes the loss visible, which is exactly why the
+delta-hedged variant was chosen as the headline in Stage 0.
+
+Only a fifth to a quarter of months were profitable. The distribution is wide
+and left-skewed: the 5bp pool's worst month was -79.8% annualised and its best
++29.4%.
+
+The fee/LVR ratio is **0.918** (5bp) and **0.988** (30bp) — both slightly below
+one, and consistent with the Stage 8 finding that these two quantities move
+together. LPs are earning very nearly, but not quite, enough to cover adverse
+selection.
+
+### 5.6 DEFECT FOUND AND FIXED — the position's own liquidity dilutes its fee share
+
+Approach B computed the position's fee share as `L / L_active`. That is right for
+an *infinitesimal* position matched against `feeGrowthGlobal`, and it is what the
+Stage 2 gate must use. It is wrong for an LP who actually **deposits**, because
+their liquidity joins the denominator: the realised share is
+`L / (L_active + L)`.
+
+The gap is the position's own liquidity share, so it is invisible where the
+position is small and decisive where it is not:
+
+| Pool | $100k as a share of active liquidity | effect on fees |
+|---|---|---|
+| ETH/USDC 5bp | 0.20% | negligible |
+| ETH/USDC 30bp | 0.46% | negligible |
+| ETH/USDC 100bp | **113%** | halves them |
+
+`accrue_fees_approach_b` now takes `deposited` (default `True`, the realistic
+case) and the gate passes `deposited=False` so it keeps comparing like with
+like.
+
+Correcting it moved the 100bp pool's headline from **+34.65% to -43.10%**, which
+is what prompted the capacity check below. Both figures are artefacts.
+
+### 5.7 The 100bp pool has no viable size — **result withheld** ⚠️
+
+A $100k position holds a median 113% of that pool's active liquidity — more than
+the entire pool. It is not a price-taker, so the fee model does not apply and the
+position would move the price it is being measured against.
+
+Sweeping notional down:
+
+| Notional | share of active liquidity | net | price-taker? |
+|---|---|---|---|
+| $1,000 | 1.13% | **-94.84%** | yes |
+| $2,000 | 2.26% | -50.84% | no |
+| $5,000 | 5.66% | -26.25% | no |
+| $10,000 | 11.32% | -20.72% | no |
+| $25,000 | 28.30% | -23.73% | no |
+| $100,000 | 113.19% | -43.10% | no |
+
+**There is no size that works.** Small enough to be a price-taker and gas
+destroys it — $22.39 per re-centre is 2.2% of a $1,000 position. Large enough
+for gas to be negligible and the position *is* the pool. The viable window is
+empty.
+
+That is a finding rather than a failure, and it explains the pool's thinness:
+655 swaps a month is what an economically unviable fee tier looks like from the
+outside. It is reported as a capacity result, and the 100bp row is withheld from
+the decomposition table rather than filled with a number that means nothing.
+
+**Consequence for H4.** The three-way fee-tier experiment is really a two-way
+one. Combined with the tick-spacing confound in 3.4, the "same asset, same
+volatility, different fee" design is weaker than the plan assumed, and the
+comparison that survives is 5bp against 30bp.
+
+### 5.8 What is not yet claimed
+
+One position specification. Range width, re-centring rule and hedge frequency
+are all fixed at their baselines, and the sweeps have not been run across the
+full sample. The result says that *this* strategy lost money, not that liquidity
+provision cannot be profitable — Stage 8 already shows range width cannot change
+the sign, but re-centring policy and entry timing have not been swept.
+
+---
+
 ## Log of reversals
 
 Anything decided above and later changed goes here with the date and the

@@ -1,0 +1,3 @@
+timestamp_utc,spec_hash,stage,component,params_json,metric_name,metric_value,notes
+2026-09-06T12:20:51+00:00,75b5c036c426,5,decomposition_fullsample,"{""cohorts"": ""monthly"", ""half_width"": 0.1, ""hedge_freq_s"": 3600, ""notional"": 100000.0, ""recentre"": ""on_range_exit""}",n_cohorts,129,"full-sample Stage 5, both variants"
+2026-09-06T12:46:42+00:00,75b5c036c426,5,decomposition_fullsample,"{""cohorts"": ""monthly"", ""half_width"": 0.1, ""hedge_freq_s"": 3600, ""notional"": 100000.0, ""recentre"": ""on_range_exit""}",n_cohorts,129,"full-sample Stage 5, both variants"

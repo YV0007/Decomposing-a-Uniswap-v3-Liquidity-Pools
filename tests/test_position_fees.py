@@ -152,11 +152,42 @@ def test_fee_is_charged_on_the_input_token_only():
         "block_number": [10], "block_timestamp": [100], "tick": [mid],
         "liquidity": [pos.liquidity], "amount0": [10**9], "amount1": [-(10**17)],
     })
-    acc = accrue_fees_approach_b(swaps, pos, SPEC, entry_tick=mid)
+    acc = accrue_fees_approach_b(swaps, pos, SPEC, entry_tick=mid, deposited=False)
     assert acc.fee0.iloc[0] > 0, "token0 came in, so token0 fee is charged"
     assert acc.fee1.iloc[0] == 0, "token1 went out; no fee on the output leg"
-    # position holds all the active liquidity -> it earns the whole fee
+    # deposited=False: an infinitesimal position matched against the pool's own
+    # L_active, which here equals its liquidity -> it earns the whole fee.
     assert acc.fee0.iloc[0] == pytest.approx(10**9 * 0.003, rel=1e-6)
+
+
+def test_depositing_dilutes_the_position_own_share():
+    """An LP who actually deposits joins the denominator.
+
+    With the position equal to the pool's existing active liquidity, depositing
+    it halves the share — negligible for a small position, decisive for one
+    holding a fifth of the pool, which is what $100k does on ETH/USDC 100bp.
+    """
+    pos = _position()
+    mid = (pos.tick_lower + pos.tick_upper) // 2
+    swaps = pd.DataFrame({
+        "block_number": [10], "block_timestamp": [100], "tick": [mid],
+        "liquidity": [pos.liquidity], "amount0": [10**9], "amount1": [0],
+    })
+    notional = accrue_fees_approach_b(swaps, pos, SPEC, entry_tick=mid, deposited=False)
+    real = accrue_fees_approach_b(swaps, pos, SPEC, entry_tick=mid, deposited=True)
+    assert real.fee0.iloc[0] == pytest.approx(notional.fee0.iloc[0] / 2, rel=1e-6)
+
+
+def test_dilution_is_negligible_for_a_small_position():
+    pos = _position()
+    mid = (pos.tick_lower + pos.tick_upper) // 2
+    swaps = pd.DataFrame({
+        "block_number": [10], "block_timestamp": [100], "tick": [mid],
+        "liquidity": [pos.liquidity * 1000], "amount0": [10**12], "amount1": [0],
+    })
+    a = accrue_fees_approach_b(swaps, pos, SPEC, entry_tick=mid, deposited=False).fee0.iloc[0]
+    b = accrue_fees_approach_b(swaps, pos, SPEC, entry_tick=mid, deposited=True).fee0.iloc[0]
+    assert abs(b / a - 1) < 0.002
 
 
 def test_fee_scales_with_liquidity_share():
@@ -165,7 +196,36 @@ def test_fee_scales_with_liquidity_share():
     base = dict(block_number=[10], block_timestamp=[100], tick=[mid],
                 amount0=[10**9], amount1=[0])
     full = accrue_fees_approach_b(pd.DataFrame({**base, "liquidity": [pos.liquidity]}),
-                                  pos, SPEC, entry_tick=mid).fee0.iloc[0]
+                                  pos, SPEC, entry_tick=mid, deposited=False).fee0.iloc[0]
     tenth = accrue_fees_approach_b(pd.DataFrame({**base, "liquidity": [pos.liquidity * 10]}),
-                                   pos, SPEC, entry_tick=mid).fee0.iloc[0]
+                                   pos, SPEC, entry_tick=mid, deposited=False).fee0.iloc[0]
     assert tenth == pytest.approx(full / 10, rel=1e-6)
+
+
+# --------------------------------------------------------------------------- #
+# feeGrowthInside is not always available
+# --------------------------------------------------------------------------- #
+
+def test_fee_growth_underflow_is_refused_not_returned():
+    """A boundary tick re-initialized mid-period resets its feeGrowthOutside, so
+    the two-point difference underflows. Returning that wrapped number would put
+    8.7e48 dollars of "fees" into a validation table.
+    """
+    from src.build.fees import FeeGrowthUnavailable, fees_exact
+
+    class FakeClient:
+        """Returns a LOWER feeGrowthGlobal at the later block."""
+
+        def eth_call(self, to, data, block="latest"):
+            sel = data[:10]
+            if sel in ("0xf3058399", "0x46141319"):        # feeGrowthGlobal 0/1
+                return hex(33_736_375_448_156_128_936_901_910_520_626 if block == 1
+                           else 1_893_406_238_805_427_064_435_786_948_891)
+            return "0x" + "00" * 32 * 8                     # ticks(): all zero
+
+    pos = _position()
+    # Current tick inside the range, so feeGrowthInside reduces to the global
+    # value and the two readings differ by exactly the planted decrease.
+    mid = (pos.tick_lower + pos.tick_upper) // 2
+    with pytest.raises(FeeGrowthUnavailable, match="re-initialized"):
+        fees_exact(FakeClient(), SPEC, pos, 1, mid, 2, mid)

@@ -69,7 +69,8 @@ def run_pool_period(
 
     # --- fees: replay for the number, contract state for the check ---------- #
     after = swaps[swaps["block_number"] > int(entry.block_number)]
-    replay = accrue_fees_approach_b(after, pos, spec, entry_tick=int(entry.tick))
+    replay = accrue_fees_approach_b(after, pos, spec, entry_tick=int(entry.tick),
+                                     deposited=False)  # gate compares against feeGrowthInside
     rep0, rep1 = int(replay.fee0.sum()), int(replay.fee1.sum())
     end = aligned.iloc[-1]
     exa0, exa1 = fees_exact(client, spec, pos, int(entry.block_number), int(entry.tick),

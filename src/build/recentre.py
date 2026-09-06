@@ -19,7 +19,8 @@ import pandas as pd
 
 from src.build.fees import accrue_fees_approach_b, fees_to_usd
 from src.build.lvr import analytical_lvr_rate, lvr_from_cex_path
-from src.build.position import Position, open_position, range_state, RangeState
+from src.build.position import (Position, open_position, range_state, RangeState,
+                                risky_delta)
 from src.utils.config import PoolSpec
 
 SECONDS_PER_YEAR = 365 * 24 * 3600
@@ -39,6 +40,13 @@ class RecentredResult:
     lvr_analytical: Decimal
     gas: Decimal
     share_in_range: Decimal
+    #: Per-block risky-asset delta across the whole life, including re-centrings.
+    #: The hedge tracks this, not the delta of any single position.
+    delta_path: pd.DataFrame | None = None
+    #: Median share of active liquidity the position held. Above a few percent
+    #: the position is not a price-taker and the simulation's assumptions fail —
+    #: $100k is 0.09% of ETH/USDC 5bp but 22.6% of the 100bp pool.
+    median_liquidity_share: float = 0.0
 
     @property
     def net(self) -> Decimal:
@@ -82,6 +90,8 @@ def simulate_recentred(
     blocks = aligned.reset_index(drop=True)
     swaps_by_block = swaps.set_index("block_number", drop=False).sort_index()
 
+    delta_rows: list[dict] = []
+    liq_shares: list[float] = []
     total_fees = Decimal(0)
     total_lvr_cex = Decimal(0)
     total_lvr_ana = Decimal(0)
@@ -132,6 +142,14 @@ def simulate_recentred(
         if not pd.isna(vol.iloc[i + len(seg) // 2]):
             sigma = Decimal(str(vol.iloc[i + len(seg) // 2])).sqrt()
             total_lvr_ana += analytical_lvr_rate(pos, spec, Decimal(str(mid.cex_price)), sigma) * seg_years
+        for blk, ts, sq in zip(seg["block_number"], seg["block_timestamp"], seg["sqrt_price_x96"]):
+            delta_rows.append({
+                "block_number": int(blk), "block_timestamp": int(ts),
+                "sqrt_price_x96": int(sq),
+                "risky_delta": risky_delta(pos, int(sq), spec),
+            })
+        seg_liq = [int(v) for v in seg.get("liquidity", pd.Series(dtype=object)) ] if "liquidity" in seg else []
+        liq_shares.extend(pos.liquidity / L for L in seg_liq if L > 0)
         values.append(notional_usd)
 
         if seg_end >= n - 1:
@@ -157,4 +175,6 @@ def simulate_recentred(
         lvr_analytical=ann(total_lvr_ana),
         gas=ann(gas_total),
         share_in_range=Decimal(in_range_seconds) / Decimal(max(1, span)),
+        delta_path=pd.DataFrame(delta_rows).drop_duplicates("block_number", keep="last"),
+        median_liquidity_share=float(pd.Series(liq_shares).median()) if liq_shares else 0.0,
     )
