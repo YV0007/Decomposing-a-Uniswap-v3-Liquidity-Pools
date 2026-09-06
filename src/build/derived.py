@@ -19,6 +19,17 @@ month has a real estimate rather than a NaN or a short-window artefact.
 **Alignment must stay causal across the join.** The aligned CEX price still comes
 from the strictly-causal rule in `src.build.align`; prepending history extends
 what is available to look *back* at, never forward.
+
+Two prices per pool, not one
+----------------------------
+The **reference** is whatever Binance symbol is directly comparable to the
+pool's own quote — ETHUSDT for ETH/USDC, ETHBTC inverted for WBTC/ETH, USDCUSDT
+for USDC/USDT. It is what LVR is measured against.
+
+The **numeraire** is the USD price of token1, needed to turn token amounts into
+dollars so that gas and notional mean anything. For ETH/USDC the two coincide;
+for WBTC/ETH they do not, and conflating them would price a BTC position off a
+BTC/ETH exchange rate.
 """
 
 from __future__ import annotations
@@ -45,6 +56,44 @@ _BIG = ["sqrt_price_x96", "liquidity", "volume0", "volume1"]
 
 def month_bounds() -> dict[str, int]:
     return json.loads(BOUNDS_PATH.read_text())
+
+
+def reference_frame(spec: PoolSpec, year: int, month: int, with_tail: bool = True):
+    """The CEX series comparable to this pool's own price quote.
+
+    Inverted where the exchange quotes the pair the other way round: the pool's
+    WBTC/WETH price is ETH per BTC while Binance ETHBTC is BTC per ETH.
+    """
+    frames = []
+    if with_tail:
+        py, pm = prev_month(year, month)
+        try:
+            frames.append(load_klines_1s(spec.cex_symbol, py, pm).tail(2 * 24 * 3600))
+        except Exception:
+            pass
+    frames.append(load_klines_1s(spec.cex_symbol, year, month))
+    cex = pd.concat(frames, ignore_index=True).sort_values("second")
+    cex = cex.drop_duplicates(subset="second", keep="last").reset_index(drop=True)
+    if spec.cex_invert:
+        for col in ("close", "high", "low"):
+            if col in cex.columns:
+                cex[col] = (1.0 / cex[col].astype(float)).map(lambda v: f"{v:.12f}")
+    return cex
+
+
+def numeraire_frame(spec: PoolSpec, year: int, month: int):
+    """USD price of token1, so token amounts can be turned into dollars.
+
+    WETH is priced from ETHUSDT. A stablecoin token1 is taken as $1 — an
+    assumption, but one whose error is basis points and which only enters the
+    dollar *scale* of a stable/stable pool, never its returns.
+    """
+    t1 = spec.token1.symbol
+    if t1 in {"USDC", "USDT", "DAI"}:
+        return None                      # $1; handled by the caller
+    if t1 == "WETH":
+        return load_klines_1s("ETHUSDT", year, month)
+    raise NotImplementedError(f"no USD numeraire configured for {t1}")
 
 
 def prev_month(year: int, month: int) -> tuple[int, int]:
@@ -78,16 +127,7 @@ def build_pool_month(
 
     # CEX prices, with the previous month prepended so the trailing volatility
     # window is complete on the first day.
-    py, pm = prev_month(year, month)
-    frames = []
-    try:
-        tail = load_klines_1s("ETHUSDT", py, pm)
-        frames.append(tail.tail(2 * 24 * 3600))       # 48h is ample for a 24h window
-    except Exception:
-        pass                                          # first month of the sample
-    frames.append(load_klines_1s("ETHUSDT", year, month))
-    cex = pd.concat(frames, ignore_index=True).sort_values("second")
-    cex = cex.drop_duplicates(subset="second", keep="last").reset_index(drop=True)
+    cex = reference_frame(spec, year, month)
 
     aligned = align_cex_to_blocks(state, cex, AlignmentRule.LAST_TRADE_AT_OR_BEFORE_BLOCK_TS)
     assert_causal(aligned)
@@ -98,10 +138,25 @@ def build_pool_month(
     rv = realized_variance(to_sampled_prices(cex, sample_minutes=5))
     aligned["rv_annualised"] = align_to_blocks(rv, aligned["block_timestamp"]).to_numpy()
 
+    # Numeraire: USD price of token1, aligned by the same causal rule.
+    num = numeraire_frame(spec, year, month)
+    if num is None:
+        aligned["numeraire_usd"] = 1.0
+    else:
+        n = num.rename(columns={"second": "cex_second_n", "close": "numeraire_usd"})
+        left = aligned[["block_timestamp"]].copy()
+        left["_key"] = left["block_timestamp"].astype("int64") - 1
+        merged = pd.merge_asof(
+            left.sort_values("_key"),
+            n[["cex_second_n", "numeraire_usd"]].sort_values("cex_second_n"),
+            left_on="_key", right_on="cex_second_n", direction="backward",
+        )
+        aligned["numeraire_usd"] = merged["numeraire_usd"].astype(float).to_numpy()
+
     out = aligned[
         ["block_number", "block_timestamp", "sqrt_price_x96", "tick", "liquidity",
          "price", "cex_price", "cex_second", "staleness_seconds", "rv_annualised",
-         "volume0", "volume1", "n_swaps"]
+         "numeraire_usd", "volume0", "volume1", "n_swaps"]
     ].copy()
     for c in _BIG:
         out[c] = out[c].map(lambda v: str(int(v)))
@@ -125,11 +180,20 @@ def load_derived(
     for y, m in months:
         p = derived_path(spec, y, m)
         if p.exists():
-            frames.append(pd.read_parquet(p))
+            f = pd.read_parquet(p)
+            f.attrs["invert_price"] = spec.invert_price
+            frames.append(f)
     if not frames:
         raise FileNotFoundError(f"no derived months found for {spec.id}")
 
     df = pd.concat(frames, ignore_index=True).sort_values("block_number").reset_index(drop=True)
+    if "numeraire_usd" not in df.columns:
+        # Files built before the numeraire column existed. For a pool with a
+        # stable leg it is recoverable exactly: the inverted pools quote token1
+        # in USD directly, and a stable token1 is $1.
+        spec_inv = df.attrs.get("invert_price")
+        df["numeraire_usd"] = (df["price"].astype(float) if spec_inv is not False
+                               else 1.0)
     for c in _BIG:
         df[c] = pd.Series([int(v) for v in df[c]], dtype=object)
     if to_decimal:

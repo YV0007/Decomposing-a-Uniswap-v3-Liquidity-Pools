@@ -85,7 +85,8 @@ class LVRResult:
 # --------------------------------------------------------------------------- #
 
 def value_at_external(
-    position: Position, sqrt_price_x96: int, external_price: Decimal, spec: PoolSpec
+    position: Position, sqrt_price_x96: int, external_price: Decimal, spec: PoolSpec,
+    numeraire_usd: Decimal | None = None,
 ) -> Decimal:
     """USD value of the position's holdings, marked at an *external* price.
 
@@ -96,9 +97,15 @@ def value_at_external(
     a0, a1 = amounts_at(position, sqrt_price_x96)
     q0 = Decimal(a0) / Decimal(10**spec.token0.decimals)
     q1 = Decimal(a1) / Decimal(10**spec.token1.decimals)
-    if spec.invert_price:                      # token0 stable, token1 risky
-        return q0 + q1 * external_price
-    return q0 * external_price + q1
+    # Without a numeraire the value is denominated in token1 (USDC for an
+    # inverted pool, WETH otherwise). That is fine for LVR, which is a
+    # difference of two values in the same unit, and wrong for anything that
+    # has to be compared with a dollar figure such as gas.
+    base = q0 + q1 * external_price if spec.invert_price else q0 * external_price + q1
+    if numeraire_usd is None:
+        return base
+    unit = Decimal(str(numeraire_usd)) if not spec.invert_price else Decimal(1)
+    return base * unit
 
 
 def _sqrt_at_usd(price: Decimal, spec: PoolSpec) -> int:

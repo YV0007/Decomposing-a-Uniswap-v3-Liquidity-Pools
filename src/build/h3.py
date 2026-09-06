@@ -55,29 +55,39 @@ def daily_lvr(
 
     d = d.reset_index(drop=True)
     d["day"] = pd.to_datetime(d["block_timestamp"].astype("int64"), unit="s", utc=True).dt.floor("D")
+    # USD price of token1. Present on tables built after the extension pools were
+    # added; recoverable for the older ETH/USDC files, where the pool price *is*
+    # the numeraire. Needed so a $100k notional means $100k on every pool rather
+    # than 100,000 WETH on WBTC/ETH.
+    if "numeraire_usd" not in d.columns:
+        d["numeraire_usd"] = (d["price"].map(float) if spec.invert_price else 1.0)
+    num = [Decimal(str(v)) for v in d["numeraire_usd"]]
 
     rows: list[dict] = []
     i, n = 0, len(d)
     while i < n:
         entry = d.iloc[i]
         pos = open_position(spec, int(entry.block_number), int(entry.sqrt_price_x96),
-                            Decimal(str(entry.price)), notional, half_width)
+                            Decimal(str(entry.price)), notional, half_width,
+                            numeraire_usd=num[i])
         j = i + 1
         while j < n and range_state(pos, int(d.iloc[j].tick)) is RangeState.IN_RANGE:
             j += 1
         seg = d.iloc[i : min(j, n - 1) + 1]
 
         prev_cex = None
-        for day, ts, cex_p, sq, rv in zip(
+        for k, (day, ts, cex_p, sq, rv, nm) in enumerate(zip(
             seg["day"], seg["block_timestamp"], seg["cex_price"],
-            seg["sqrt_price_x96"], seg["rv_annualised"],
-        ):
+            seg["sqrt_price_x96"], seg["rv_annualised"], seg["numeraire_usd"],
+        )):
             c = Decimal(str(cex_p))
-            inc = Decimal(0) if prev_cex is None else lvr_from_cex_path(pos, spec, prev_cex, c)
+            unit = Decimal(str(nm)) if not spec.invert_price else Decimal(1)
+            inc = (Decimal(0) if prev_cex is None
+                   else lvr_from_cex_path(pos, spec, prev_cex, c) * unit)
             prev_cex = c
             rows.append({
                 "day": day, "block_timestamp": int(ts), "lvr_empirical": inc,
-                "cex_price": c, "sqrt_price_x96": int(sq), "rv": rv,
+                "cex_price": c, "sqrt_price_x96": int(sq), "rv": rv, "numeraire": nm,
                 "in_range": range_state(pos, int(seg["tick"].iloc[0])) is RangeState.IN_RANGE,
                 "_pos_lower": pos.tick_lower, "_pos_upper": pos.tick_upper,
                 "_liquidity": pos.liquidity,
@@ -105,8 +115,11 @@ def daily_lvr(
 
         pos = Position(spec.id, 0, int(mid.sqrt_price_x96), int(mid._pos_lower),
                        int(mid._pos_upper), int(mid._liquidity), notional)
-        value = value_at_external(pos, int(mid.sqrt_price_x96), Decimal(str(mid.cex_price)), spec)
-        rate = analytical_lvr_rate(pos, spec, Decimal(str(mid.cex_price)), sigma)
+        nm = Decimal(str(mid.numeraire))
+        unit = nm if not spec.invert_price else Decimal(1)
+        value = value_at_external(pos, int(mid.sqrt_price_x96),
+                                  Decimal(str(mid.cex_price)), spec) * unit
+        rate = analytical_lvr_rate(pos, spec, Decimal(str(mid.cex_price)), sigma) * unit
         analytical = rate * Decimal(seconds) / Decimal(SECONDS_PER_YEAR)
 
         out.append({

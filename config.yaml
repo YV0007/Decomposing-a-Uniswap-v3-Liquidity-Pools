@@ -41,6 +41,8 @@ universe:
       fee_tier_bps: 5
       tick_spacing: 10
       invert_price: true        # price is token1/token0 = WETH/USDC -> invert for USD per ETH
+      cex_symbol: ETHUSDT       # pool price is USD per ETH; ETHUSDT is too
+      cex_invert: false
       verified_on_etherscan: true
     - id: ETH_USDC_30bp
       address: "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8"
@@ -49,6 +51,8 @@ universe:
       fee_tier_bps: 30
       tick_spacing: 60
       invert_price: true
+      cex_symbol: ETHUSDT
+      cex_invert: false
       verified_on_etherscan: true
     - id: ETH_USDC_100bp
       address: "0x7bea39867e4169dbe237d55c8242a8f2fcdcc387"
@@ -57,6 +61,8 @@ universe:
       fee_tier_bps: 100
       tick_spacing: 200
       invert_price: true
+      cex_symbol: ETHUSDT
+      cex_invert: false
       verified_on_etherscan: true
   extension:                    # ONLY after core passes Stage 1-3 gates
     - id: WBTC_ETH_30bp
@@ -66,6 +72,10 @@ universe:
       fee_tier_bps: 30
       tick_spacing: 60
       invert_price: false
+      # Pool price is WETH per WBTC (ETH per BTC). Binance ETHBTC quotes BTC per
+      # ETH, so the reference is its reciprocal.
+      cex_symbol: ETHBTC
+      cex_invert: true
       verified_on_etherscan: true
     - id: USDC_USDT_1bp
       address: "0x3416cf6c708da44db2624d63ea0aaef7113527c6"
@@ -74,6 +84,8 @@ universe:
       fee_tier_bps: 1
       tick_spacing: 1
       invert_price: false
+      cex_symbol: USDCUSDT      # pool price is USDT per USDC; so is USDCUSDT
+      cex_invert: false
       verified_on_etherscan: true
 
 # -----------------------------------------------------------------------------

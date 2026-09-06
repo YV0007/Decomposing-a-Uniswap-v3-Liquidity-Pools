@@ -39,6 +39,11 @@ class PoolSpec:
     tick_spacing: int
     invert_price: bool
     verified_on_etherscan: bool
+    #: Binance symbol whose price is directly comparable to this pool's, and
+    #: whether it must be inverted first. Hard-coding ETHUSDT worked while the
+    #: universe was one asset pair and silently breaks the moment it is not.
+    cex_symbol: str = "ETHUSDT"
+    cex_invert: bool = False
 
     @property
     def fee_rate(self) -> Decimal:
@@ -73,6 +78,8 @@ def _pool_from_dict(d: dict[str, Any]) -> PoolSpec:
         tick_spacing=d["tick_spacing"],
         invert_price=d["invert_price"],
         verified_on_etherscan=d["verified_on_etherscan"],
+        cex_symbol=d.get("cex_symbol", "ETHUSDT"),
+        cex_invert=bool(d.get("cex_invert", False)),
     )
 
 

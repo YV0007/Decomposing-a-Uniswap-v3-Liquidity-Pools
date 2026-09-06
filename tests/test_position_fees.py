@@ -229,3 +229,56 @@ def test_fee_growth_underflow_is_refused_not_returned():
     mid = (pos.tick_lower + pos.tick_upper) // 2
     with pytest.raises(FeeGrowthUnavailable, match="re-initialized"):
         fees_exact(FakeClient(), SPEC, pos, 1, mid, 2, mid)
+
+
+# --------------------------------------------------------------------------- #
+# Numeraire — extending beyond pools with a stable leg
+# --------------------------------------------------------------------------- #
+
+def test_numeraire_and_inference_agree_where_both_apply():
+    """On ETH/USDC the numeraire is recoverable from the pool price itself, so
+    the explicit and inferred routes must give the same answer. If they did not,
+    extending to WBTC/ETH would silently shift every ETH/USDC number too."""
+    px = Decimal("2500")
+    inferred = token_usd_prices(SPEC, px)
+    explicit = token_usd_prices(SPEC, px, numeraire_usd=px)
+    assert inferred == explicit
+
+
+def test_numeraire_prices_a_pool_with_no_stable_leg():
+    """WBTC/ETH: pool price is ETH per BTC, so ETH in USD determines BTC in USD."""
+    wbtc_eth = pool("WBTC_ETH_30bp")
+    usd0, usd1 = token_usd_prices(wbtc_eth, Decimal("15.5"), numeraire_usd=Decimal("2500"))
+    assert usd1 == Decimal("2500")
+    assert usd0 == Decimal("15.5") * Decimal("2500")
+
+
+def test_numeraire_is_required_when_it_cannot_be_inferred():
+    """Refusing beats inventing: a fabricated numeraire would put a wrong dollar
+    value under every figure for that pool, invisibly."""
+    with pytest.raises(NotImplementedError, match="numeraire cannot be inferred"):
+        token_usd_prices(pool("WBTC_ETH_30bp"), Decimal("15.5"))
+
+
+def test_numeraire_orientation_follows_invert_price():
+    """Inverted pools quote token1 in token0; non-inverted the other way round.
+    Getting this backwards would invert every price on the extension pools."""
+    inverted = token_usd_prices(SPEC, Decimal("2000"), numeraire_usd=Decimal("2000"))
+    assert inverted[0] == pytest.approx(Decimal(1))          # USDC ~ $1
+
+    straight = token_usd_prices(pool("USDC_USDT_1bp"), Decimal("0.9998"),
+                                numeraire_usd=Decimal("1"))
+    assert straight[0] == Decimal("0.9998") and straight[1] == Decimal("1")
+
+
+def test_every_configured_pool_can_be_priced():
+    """A pool in the universe that cannot be valued is a pool that cannot be
+    analysed, and that should fail here rather than three stages downstream."""
+    from src.utils.config import pools
+
+    for spec in pools("all"):
+        numeraire = None if spec.token1.symbol in {"USDC", "USDT", "DAI"} else Decimal("2500")
+        px = Decimal("15.5") if spec.id == "WBTC_ETH_30bp" else (
+            Decimal("1.0") if "USDT" in spec.id else Decimal("2500"))
+        usd0, usd1 = token_usd_prices(spec, px, numeraire_usd=numeraire)
+        assert usd0 > 0 and usd1 > 0, spec.id

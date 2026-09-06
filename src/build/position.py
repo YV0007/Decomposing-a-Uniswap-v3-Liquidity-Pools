@@ -87,18 +87,29 @@ class Position:
 # Valuation
 # --------------------------------------------------------------------------- #
 
-def token_usd_prices(spec: PoolSpec, pool_price: Decimal) -> tuple[Decimal, Decimal]:
+def token_usd_prices(
+    spec: PoolSpec, pool_price: Decimal, numeraire_usd: Decimal | None = None
+) -> tuple[Decimal, Decimal]:
     """USD price of each token, given the pool's human-readable price.
 
-    `pool_price` is what `pool_state` produces: for an inverted pool (token0 the
-    stable, token1 the risky asset) it is stable-per-risky, so token0 is worth
-    $1 and token1 is worth `pool_price`.
+    `pool_price` relates the two tokens; a numeraire relates one of them to USD.
+    Passing `numeraire_usd` — the USD price of **token1** — makes the pair
+    determinate whatever the pool is:
 
-    A stable/stable pool prices both legs at ~$1, using the pool's own quote for
-    token1 so any depeg is carried rather than assumed away. A pool with no
-    stable leg (WBTC/ETH) needs an external USD reference and is not handled
-    here — raising is better than silently inventing a numeraire.
+        not inverted (price = token1 per token0):  usd0 = price * usd1
+        inverted     (price = token0 per token1):  usd0 = usd1 / price
+
+    Without it the numeraire has to be inferred, which only works when a leg is
+    a stablecoin. That inference is kept for the ETH/USDC and USDC/USDT pools,
+    where it is exact, and refused elsewhere: WBTC/ETH has no stable leg, and
+    inventing one would put a fabricated dollar value under every figure.
     """
+    if numeraire_usd is not None:
+        usd1 = Decimal(str(numeraire_usd))
+        p = Decimal(str(pool_price))
+        usd0 = (usd1 / p) if spec.invert_price else (p * usd1)
+        return usd0, usd1
+
     stables = {"USDC", "USDT", "DAI"}
     t0, t1 = spec.token0.symbol, spec.token1.symbol
     if t0 in stables and t1 in stables:
@@ -108,8 +119,8 @@ def token_usd_prices(spec: PoolSpec, pool_price: Decimal) -> tuple[Decimal, Deci
     if t1 in stables:                          # token1 stable, token0 risky
         return Decimal(str(pool_price)), Decimal(1)
     raise NotImplementedError(
-        f"{spec.id} has no stable leg; USD valuation needs an external price "
-        f"reference for {t0}/{t1}. Add one explicitly rather than assuming one."
+        f"{spec.id} has no stable leg, so the numeraire cannot be inferred. "
+        f"Pass numeraire_usd (the USD price of {t1}) rather than assuming one."
     )
 
 
@@ -120,10 +131,18 @@ def amounts_at(position: Position, sqrt_price_x96: int) -> tuple[int, int]:
     )
 
 
-def value_usd(position: Position, sqrt_price_x96: int, pool_price: Decimal, spec: PoolSpec) -> Decimal:
-    """Mark-to-market USD value of both legs at the pool price."""
+def value_usd(position: Position, sqrt_price_x96: int, pool_price: Decimal,
+              spec: PoolSpec, numeraire_usd: Decimal | None = None) -> Decimal:
+    """Mark-to-market USD value of both legs at the pool price.
+
+    `numeraire_usd` is required for a pool with no stable leg, where the dollar
+    value cannot be inferred from the pool price alone. Omitting it there raises
+    rather than returning a number denominated in the wrong unit — which for
+    WBTC/ETH would silently value the position in ETH and make a $100k notional
+    mean 100,000 ETH.
+    """
     a0, a1 = amounts_at(position, sqrt_price_x96)
-    p0, p1 = token_usd_prices(spec, pool_price)
+    p0, p1 = token_usd_prices(spec, pool_price, numeraire_usd)
     return (
         Decimal(a0) / Decimal(10**spec.token0.decimals) * p0
         + Decimal(a1) / Decimal(10**spec.token1.decimals) * p1
@@ -220,6 +239,7 @@ def snap_range(
 def open_position(
     spec: PoolSpec, block: int, sqrt_price_x96: int, pool_price: Decimal,
     notional_usd: Decimal, half_width: Decimal, log_centred: bool = False,
+    numeraire_usd: Decimal | None = None,
 ) -> Position:
     """Size a position to a USD notional at the prevailing price.
 
@@ -229,7 +249,7 @@ def open_position(
     """
     t_lo, t_hi = snap_range(pool_price, half_width, spec, log_centred)
     probe = Position(spec.id, block, sqrt_price_x96, t_lo, t_hi, _REFERENCE_LIQUIDITY, Decimal(0))
-    probe_value = value_usd(probe, sqrt_price_x96, pool_price, spec)
+    probe_value = value_usd(probe, sqrt_price_x96, pool_price, spec, numeraire_usd)
     if probe_value <= 0:
         raise ValueError(
             f"reference position has non-positive value at block {block}; "
