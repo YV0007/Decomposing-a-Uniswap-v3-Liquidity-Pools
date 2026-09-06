@@ -93,15 +93,125 @@ def align_to_blocks(vol: pd.Series, block_timestamps: pd.Series) -> pd.Series:
     return merged["vol"]
 
 
-def har_rv_forecast(rv: pd.Series, horizon_days: int = 7) -> pd.Series:
-    """HAR-RV: daily, weekly and monthly realized variance components.
+# --------------------------------------------------------------------------- #
+# Forecasts — the analytical arm of the H6 horse race
+# --------------------------------------------------------------------------- #
 
-    The volatility forecast feeding the analytical arm of the H6 horse race.
-    Fitted strictly on data available at t.
+def har_components(rv_daily: pd.Series) -> pd.DataFrame:
+    """Daily, weekly and monthly realized-variance components.
+
+    Corsi's HAR: today's variance, the trailing 5-day mean, and the trailing
+    22-day mean. Each is computed on data up to and including `t`, and the
+    regression predicts `t+1` onward — so no component may include the period it
+    is used to forecast.
     """
-    raise NotImplementedError("Stage 6.3 — H6 baseline")
+    return pd.DataFrame(
+        {
+            "rv_d": rv_daily,
+            "rv_w": rv_daily.rolling(5, min_periods=3).mean(),
+            "rv_m": rv_daily.rolling(22, min_periods=10).mean(),
+        }
+    )
 
 
-def garch_forecast(returns: pd.Series, horizon_days: int = 7) -> pd.Series:
-    """GARCH(1,1) alternative to HAR-RV, as a robustness arm."""
-    raise NotImplementedError("Stage 6.3")
+def har_rv_forecast(
+    rv_daily: pd.Series, horizon_days: int = 7, min_train: int = 60
+) -> pd.Series:
+    """Expanding-window HAR-RV forecast of average variance over the next `h` days.
+
+    The analytical arm of H6. Refit at every step on data strictly before the
+    forecast origin, so the series is usable out of sample without any further
+    purging — a single fit over the whole sample would leak the future into
+    every earlier prediction.
+
+    Returns the forecast indexed by the origin date: the value at `t` is the
+    prediction for `(t, t + horizon]`.
+    """
+    import numpy as np
+
+    rv = pd.Series(rv_daily).dropna()
+    X = har_components(rv)
+    # Target: mean variance over the next `horizon_days`, known only later.
+    y = rv.shift(-1).rolling(horizon_days, min_periods=1).mean().shift(-(horizon_days - 1))
+
+    out = pd.Series(index=rv.index, dtype=float)
+    valid = X.dropna().index
+    for i, t in enumerate(valid):
+        if i < min_train + horizon_days:
+            continue
+        # Purge the horizon. A training label stamped at t' covers
+        # (t', t' + horizon], so for t' within `horizon` of the forecast origin
+        # that window reaches past t and the label is not yet knowable. Training
+        # on it is a leak — the same one purged cross-validation exists to close,
+        # and it lives inside the forecast too.
+        train_idx = valid[: max(0, i - horizon_days)]
+        xtr = X.loc[train_idx]
+        ytr = y.loc[train_idx]
+        mask = ytr.notna()
+        if mask.sum() < min_train:
+            continue
+        A = np.column_stack([np.ones(int(mask.sum())), xtr[mask].to_numpy(float)])
+        b = ytr[mask].to_numpy(float)
+        try:
+            coef, *_ = np.linalg.lstsq(A, b, rcond=None)
+        except np.linalg.LinAlgError:
+            continue
+        out.loc[t] = float(coef @ np.concatenate([[1.0], X.loc[t].to_numpy(float)]))
+    return out.rename(f"har_rv_{horizon_days}d")
+
+
+def ewma_forecast(rv_daily: pd.Series, lam: float = 0.94) -> pd.Series:
+    """RiskMetrics EWMA variance. One parameter, no fitting, hard to overfit.
+
+    Included as the honest floor for the analytical arm: if HAR-RV cannot beat a
+    single fixed decay constant, the extra structure is not earning its place.
+    """
+    rv = pd.Series(rv_daily).dropna()
+    return rv.ewm(alpha=1 - lam, adjust=False).mean().shift(1).rename("ewma_rv")
+
+
+def garch_forecast(
+    returns: pd.Series, horizon_days: int = 7, min_train: int = 250
+) -> pd.Series:
+    """GARCH(1,1) forecast of average variance over the next `h` days.
+
+    Fitted by Gaussian quasi-maximum likelihood. Refit on an expanding window,
+    like HAR, for the same reason.
+
+    The multi-step forecast uses the analytic mean-reversion of GARCH toward its
+    unconditional variance rather than simulating paths:
+    `E[sigma^2_{t+k}] = w/(1-a-b) + (a+b)^(k-1) (sigma^2_{t+1} - w/(1-a-b))`.
+    """
+    import numpy as np
+    from scipy.optimize import minimize
+
+    r = pd.Series(returns).dropna()
+    out = pd.Series(index=r.index, dtype=float)
+
+    def nll(params, x):
+        w, a, b = params
+        if w <= 0 or a < 0 or b < 0 or a + b >= 0.999:
+            return 1e10
+        var = np.empty(len(x))
+        var[0] = x.var()
+        for i in range(1, len(x)):
+            var[i] = w + a * x[i - 1] ** 2 + b * var[i - 1]
+        return 0.5 * np.sum(np.log(var) + x**2 / var)
+
+    for i in range(min_train, len(r)):
+        x = r.iloc[:i].to_numpy(float)
+        v0 = x.var()
+        res = minimize(nll, [v0 * 0.05, 0.08, 0.90], args=(x,), method="Nelder-Mead",
+                       options={"maxiter": 400, "xatol": 1e-8, "fatol": 1e-8})
+        w, a, b = res.x
+        if not (w > 0 and a >= 0 and b >= 0 and a + b < 0.999):
+            continue
+        var = v0
+        for j in range(1, len(x)):
+            var = w + a * x[j - 1] ** 2 + b * var
+        next_var = w + a * x[-1] ** 2 + b * var
+        uncond = w / (1 - a - b)
+        total = sum(uncond + (a + b) ** (k - 1) * (next_var - uncond)
+                    for k in range(1, horizon_days + 1))
+        out.iloc[i] = total / horizon_days * 365          # annualise a daily variance
+    return out.rename(f"garch_{horizon_days}d")

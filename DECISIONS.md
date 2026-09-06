@@ -126,13 +126,13 @@ tested, what the numbers were, what was chosen, and what would reverse it.
 
 | # | Question | Stage | Status | Owner file |
 |---|---|---|---|---|
-| 1 | Correct way to attribute MEV cost to LPs | 4.2 | OPEN | `src/build/mev.py` |
+| 1 | Correct way to attribute MEV cost to LPs | 4.2 | **CLOSED** (4.2) | `src/build/mev.py` |
 | 2 | Which volatility estimator best matches empirical LVR | 3.2 | OPEN | `src/model/volatility.py` |
-| 3 | Does block-timestamp alignment materially change LVR | 1.3 | OPEN | `src/build/align.py` |
-| 4 | At what position size does approach B break down | 2.2 | OPEN | `src/build/fees.py` |
+| 3 | Does block-timestamp alignment materially change LVR | 1.3 | **CLOSED** (1.5) | `src/build/align.py` |
+| 4 | At what position size does approach B break down | 2.2 | **CLOSED** (8.4) | `src/theory/range_width.py` |
 | 5 | Optimal fee tier as a function of sigma | 5.2 | OPEN | `src/theory/fee_tier.py` |
-| 6 | Optimal range width — closed form or numerical | 8 | OPEN | `src/theory/range_width.py` |
-| 7 | Hedging error on a path-dependent v3 delta | 0.1 | OPEN | `src/build/hedge.py` |
+| 6 | Optimal range width — closed form or numerical | 8 | **CLOSED** (8.1-8.2) | `src/theory/range_width.py` |
+| 7 | Hedging error on a path-dependent v3 delta | 0.1 | **CLOSED** | `src/build/hedge.py` |
 
 ### Q1 — MEV attribution to LPs — OPEN
 
@@ -192,11 +192,35 @@ Maximise `E[fees(w)] - E[LVR(w)] - E[recentring_cost(w)]` in the half-width `w`
 under GBM. Closed form preferred, numerical acceptable. Validate the theoretical
 optimum against the empirical optimum from the sweep in `position.sweeps`.
 
-### Q7 — Hedge rebalance frequency — OPEN
+### Q7 — Hedge rebalance frequency — **CLOSED: hourly, not daily**
 
-v3 concentrated positions have path-dependent delta that changes as price moves
-through the range. Whether daily rebalancing leaves a hedging error large enough
-to matter is measurable, so measure it.
+Measured on ETH/USDC 30bp, January 2023, $100k at +/-10%. A perfect hedge would
+leave `LP value change + hedge P&L - funding - trading` equal to `fees - LVR`,
+which was near zero that month (fees $495, LVR $495). The residual *is* the
+hedging error.
+
+| Rebalance | n | hedge P&L | funding | trading | residual | mean error |
+|---|---|---|---|---|---|---|
+| Hourly | 743 | -$2,760 | -$58 | $66 | **-$392** | 0.070 ETH ($88) |
+| Daily | 31 | -$3,113 | -$67 | $44 | **-$715** | 0.748 ETH ($952) |
+| Weekly | 5 | -$7,633 | -$158 | $41 | **-$5,140** | 5.477 ETH ($7,445) |
+
+**The daily hedging error is larger than the entire quantity being measured.**
+Market-making return that month was roughly $0-500; the daily residual is -$715.
+Hedging daily would mean reporting a market-making return whose error bar
+exceeds its own magnitude — the delta-hedged variant would be noisier than the
+raw one it was chosen to improve on.
+
+Hourly halves the residual for about $22 more trading cost over the month
+(0.77% against 0.52% annualised). That is a cheap trade.
+
+**Decision: baseline moves from daily to hourly.** Daily and weekly stay in the
+sweep, and weekly is retained specifically to show what the naive choice costs.
+
+**What would reverse it.** If hourly rebalancing proves impractical at scale
+across 44 months x 3 pools, or if the residual is dominated by perp-spot basis
+rather than discretisation — the residual is still -$392 at hourly, and where
+that comes from has not yet been decomposed.
 
 ---
 

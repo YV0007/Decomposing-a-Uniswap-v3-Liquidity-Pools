@@ -95,8 +95,9 @@ position:
 hedge:
   variant: delta_hedged         # delta_hedged (primary) | raw
   instrument: binance_eth_perp  # binance_eth_perp | deribit_eth_perp
-  rebalance_freq: 1D            # baseline; alternatives swept
+  rebalance_freq: 1h            # REVISED from 1D — see DECISIONS.md Q7
   rebalance_sweeps: ["1h", "1D", "7D"]
+  taker_fee: 0.0004             # Binance USD-M taker
   hedge_ratio_source: v3_position_delta   # NOT 0.5 — from the v3 position formula
   funding: realised             # realised | assumed_zero (robustness only)
 

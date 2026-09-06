@@ -270,3 +270,44 @@ def simulate(pool_state: pd.DataFrame, position: Position, spec: PoolSpec) -> pd
     out = pd.DataFrame(rows)
     out["in_range"] = out["range_state"] == RangeState.IN_RANGE.value
     return out
+
+
+# --------------------------------------------------------------------------- #
+# Entry cohorts
+# --------------------------------------------------------------------------- #
+
+def cohort_entry_blocks(
+    blocks: pd.DataFrame, freq: str = "MS", ts_col: str = "block_timestamp"
+) -> list[int]:
+    """First traded block on or after each period boundary.
+
+    Monthly cohorts, per Stage 0.2. A single entry date makes the headline an
+    artefact of that date: a position opened on 1 January 2023 was run over by a
+    40% rally in its second week, and one opened three weeks later was not.
+    Averaging over independent entry points is what makes the number about the
+    pool rather than about the calendar.
+
+    "On or after" matters — taking the last block *before* a boundary would open
+    the position on information from the previous period.
+    """
+    if blocks.empty:
+        return []
+    ts = pd.to_datetime(blocks[ts_col].astype("int64"), unit="s", utc=True)
+    period = "M" if freq == "MS" else freq
+    frame = blocks.assign(_period=ts.dt.tz_convert(None).dt.to_period(period).to_numpy())
+    return [int(g["block_number"].iloc[0]) for _, g in frame.groupby("_period", sort=True)]
+
+
+def build_cohorts(
+    blocks: pd.DataFrame, spec: PoolSpec, notional_usd: Decimal, half_width: Decimal,
+    freq: str = "MS",
+) -> list[Position]:
+    """Open one position at each cohort entry point."""
+    out = []
+    for blk in cohort_entry_blocks(blocks, freq):
+        row = blocks[blocks["block_number"] == blk].iloc[0]
+        out.append(
+            open_position(spec, int(row["block_number"]), int(row["sqrt_price_x96"]),
+                          Decimal(str(row["price"])), notional_usd, half_width)
+        )
+    return out

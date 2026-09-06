@@ -161,6 +161,30 @@ def load_agg_trades_day(symbol: str, day: date, force: bool = False) -> pd.DataF
     return out.sort_values("timestamp_ms").reset_index(drop=True)
 
 
+def load_perp_klines_1m(symbol: str, year: int, month: int, force: bool = False) -> pd.DataFrame:
+    """One month of USD-M perpetual 1-minute klines.
+
+    The hedge instrument's own price series. Spot cannot stand in for it: the
+    perp trades at a basis to spot that is precisely what funding is paid to
+    close, so marking a perp hedge at spot would silently drop the carry the
+    delta-hedged variant is supposed to measure.
+
+    1-minute resolution is deliberate. The hedge rebalances daily at baseline
+    and hourly in the sweep, so minute bars are ample, and a month is 1.7 MB
+    against 60+ MB for second bars.
+    """
+    fn = f"{symbol}-1m-{year:04d}-{month:02d}.zip"
+    url = f"{BASE}/futures/um/monthly/klines/{symbol}/1m/{fn}"
+    df = _read_zipped_csv(_download(url, _cache_dir() / f"perp-{fn}", force), KLINE_COLUMNS)
+    return pd.DataFrame(
+        {
+            "minute": _normalise_epoch(df["open_time"]) // 1000,
+            "close": df["close"].astype(str),
+            "volume": df["volume"].astype(str),
+        }
+    ).sort_values("minute").reset_index(drop=True)
+
+
 def load_funding_rates(symbol: str, year: int, month: int, force: bool = False) -> pd.DataFrame:
     """Realised perpetual funding for the delta-hedged variant.
 
