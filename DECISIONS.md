@@ -857,10 +857,10 @@ Implemented-hedge returns (market-making less real perp funding and trading) are
 −14.06% and −6.34%.
 
 **The Stage 0 decision is vindicated by the confidence intervals.** The
-market-making interval is **6.2x tighter** than the unhedged one on both pools
-(12.3pp against 76.3pp on 5bp; 6.5pp against 69.2pp on 30bp). Leading with the
-unhedged number would have meant reporting a quantity whose error bar is six
-times the signal.
+market-making interval is far tighter than the unhedged one: **6.2x on the 5bp
+pool** (12.3pp against 76.3pp) and **10.6x on the 30bp pool** (6.5pp against
+69.2pp). Leading with the unhedged number would have meant reporting a quantity
+whose error bar is six to ten times the signal inside it.
 
 **And it sharpens the paper's message.** On the 30bp pool the unhedged return is
 −0.29% — essentially break-even — but only because a +2.02% directional gain
