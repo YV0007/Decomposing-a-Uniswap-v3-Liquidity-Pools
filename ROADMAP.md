@@ -1,6 +1,6 @@
 # LVR/MEV — Where We Are
 
-**Status as of 6 September 2026.** 15 commits · 220 tests · 5,554 lines of code · 8.58M swaps · 4.7 GB
+**Status as of 6 September 2026 — complete.** 28 commits · 252 tests · 6,337 lines of code · 2,011 lines of tests · 8.58M swaps · 5.0 GB · 23 tables · 12 figures
 
 **Headline result is in.** A re-centred ±10% LP position on ETH/USDC lost money
 over 43 months, significantly so on the 5bp pool. Details in Stage 5 below.
@@ -13,31 +13,23 @@ until the one before it has passed its gate.
 ## The chain at a glance
 
 ```
-  ✅ 0. Decisions          settled in writing before any code
-       ↓
-  ✅ 1. Data layer         swaps + CEX prices, aligned, gate passed
-       ↓
-  ✅ 2. Position & fees    what an LP holds and earns, gate passed
-       ↓
-  ✅ 3. LVR                what arbitrageurs take, gate passed
-       ↓
-  ✅ 4. MEV               sandwich detection + attribution decided
-       ↓
-  ✅ 5. Decomposition      fees − LVR − MEV − gas.  Full sample, 43 cohorts × 3 pools
-       ↓
-  🟡 H3. Theory test       σ²/8 vs observed.  Structure confirmed; regression not run
-       ↓
-  ⬜ 6. Forecasting        can net return be predicted?  Machinery built, model not
-       ↓
-  ⬜ 7. Strategy           allocate across pools, backtest with full costs
-       ↓
-  ⬜ 9. Deck & write-up    15 slides + appendix
-
-  ✅ 8. Range width        (parallel track) the original mathematics — DONE
-  ✅ D. Delta hedging      (cuts across 5–7) BUILT — hourly, not daily
+  ✅ 0. Decisions        settled in writing before any code
+  ✅ 1. Data layer       8.58M swaps, aligned, gate passed
+  ✅ 2. Position & fees  gate passed at +0.18% / −0.52%
+  ✅ 3. LVR              gate passed, all four checks
+  ✅ 4. MEV              classifier rebuilt; attribution decided
+  ✅ 5. Decomposition    43 cohorts × 3 pools, full sample
+  ✅ H3. Theory test     β = 0.810, R² = 0.618, level match 0.991
+  ✅ 6. Forecasting      H5 negative, H6 theory wins at p < 0.0001
+  ✅ 7. Strategy         signal works, activity does not
+  ✅ 8. Range width      closed form, validated to 0.02%
+  ✅ D. Delta hedging    hourly baseline; the headline was already hedged
+  ✅ R. Robustness       widths, subperiods, regimes, MEV rules, alignment
+  ✅ 9. Deck             DECK.md, 15 slides + appendix, numbers audited
 ```
 
-Legend: ✅ done and gated · 🟡 partly done · ⬜ not started
+**Everything in the plan is complete.** All seven open questions closed, all
+seven hypotheses answered — two of them negatively, and reported that way.
 
 ---
 
@@ -308,6 +300,33 @@ because the gates catching them is the main evidence the pipeline is sound.
 | H6 | Theory beats ML on LVR | ⬜ not started |
 | H7 | Economic significance | ⬜ not started |
 
+## What did not survive
+
+Two hypotheses failed, and a third conclusion had to be reversed. All three are
+reported as findings.
+
+**H4's premise is false.** Higher fee tiers do not suffer less LVR. Shown by
+derivation — the `f` cancels out of the local-time argument — and by
+measurement: a 20× fee range moves LVR per unit variance 6.7%, t = +0.30, with
+the *opposite* sign to the prediction. Combined with tick spacing being
+confounded with fee tier, and the 100bp pool having no viable position size,
+H4 as written is not supportable.
+
+**H5 is negative.** LightGBM on next week's net return is significantly *worse*
+than predicting the historical mean (p = 0.024). Its feature importances look
+economically sensible, which is exactly the trap.
+
+**H7 is negative.** The strategy beats passive LP significantly (p = 0.0066) and
+sits in cash 44% of weeks, but cannot make an unprofitable activity profitable.
+No configuration clears the deflated Sharpe bar.
+
+**And one conclusion I got wrong and reversed.** Q3 was closed early with "the
+alignment rule doesn't matter", on one month, measured on the price gap. On the
+full sample, measured on LVR, a 12-second-staler reference understates LVR by
+18%. LVR is quadratic in the gap and accumulates along a path, so it is far more
+sensitive than the proxy I tested. A robustness check has to run on the quantity
+being reported.
+
 ## Honest summary
 
 **Solid.** The data layer, fees, LVR, the full-sample decomposition, and the
@@ -323,10 +342,15 @@ one.
 **Open questions: 5 of 7 closed.** Remaining: which volatility estimator best
 matches observed LVR (Q2), and optimal fee tier as a function of σ (Q5).
 
-**Next three steps, in order:**
-1. The H3 regression on the full series — the paper's core theoretical claim, and
-   the only remaining piece of the *measurement* half
-2. The forecast model and the theory-versus-ML horse race (H5, H6)
-3. The strategy backtest with full costs and a deflated Sharpe (H7)
+**Everything planned is done.** What a further pass would add, in order of
+value:
 
-Nothing is blocked. Every input those steps need is on disk.
+1. **A second asset pair.** Every conclusion rests on ETH/USDC, and really on
+   5bp versus 30bp. WBTC/ETH and USDC/USDT are configured and verified but not
+   analysed — that is the cheapest way to test whether any of this generalises.
+2. **Why 2023 differs.** The theory's slope is 0.372 in 2023 and 0.918–0.944
+   afterwards. MEV infrastructure and v3 liquidity distribution both changed
+   over the sample; attributing it would need work not done here.
+3. **A Dune key.** The only place one would help: bundle-level MEV
+   identification, which the Flashbots public relay cannot serve for 2023 and
+   which makes the same-address count a one-sided undercount.
