@@ -14,3 +14,4 @@ timestamp_utc,spec_hash,stage,component,params_json,metric_name,metric_value,not
 2026-09-06T14:50:29+00:00,30340d04f556,7,allocation_backtest,"{""engine"": ""theory_lvr+lgbm_fees"", ""scheme"": ""proportional"", ""threshold"": 0.0}",sharpe,-1.7177893406427471,
 2026-09-06T14:50:29+00:00,63c28c0922e1,7,allocation_backtest,"{""engine"": ""theory_lvr+lgbm_fees"", ""scheme"": ""equal"", ""threshold"": 0.0}",sharpe,-1.6611006245409408,
 2026-09-06T14:50:29+00:00,ed7e4b5a960e,7,allocation_backtest,"{""engine"": ""theory_lvr+lgbm_fees"", ""scheme"": ""proportional"", ""threshold"": 0.002}",sharpe,-1.352845386903445,
+2026-09-06T15:29:43+00:00,2464d270dbc2,R,mev_rule_sweep,"{""spans"": [4, 8, 24, 64, 1000000], ""tolerances"": [0.02, 0.05, 0.1, 0.25, 0.5, 1.0]}",n_rules,13,

@@ -73,11 +73,30 @@ def test_unbalanced_pair_is_rejected():
     assert len(classify_sandwiches_by_address(_frame(rows), SPEC)) == 0
 
 
-def test_legs_spanning_the_block_are_rejected():
+def test_legs_spanning_the_pool_sequence_are_rejected():
+    """Span is measured in the pool's OWN swaps, not raw log_index.
+
+    Raw log_index counts every event in the block including unrelated
+    contracts, so it is a poor proxy for adjacency: measured that way the
+    estimate never converges as the bound is loosened (0 to $8.7m across
+    span 2-64), while measured in pool position it saturates by span 8.
+    """
     rows = _textbook_sandwich()
-    rows[2]["log_index"] = 500
+    back = dict(rows[2], log_index=100)          # keep it last after sorting
+    many = [rows[0]] + [_swap(i + 2, OTHER, +10**8, -10**16) for i in range(30)] + [back]
+    assert len(classify_sandwiches_by_address(_frame(many), SPEC, max_leg_span=8)) == 0
+    assert len(classify_sandwiches_by_address(_frame(many), SPEC, max_leg_span=64)) == 1
+
+
+def test_log_index_span_measure_is_still_available():
+    """Kept so the robustness table can show why it is the wrong measure."""
+    rows = _textbook_sandwich()
     rows[1]["log_index"] = 250
-    assert len(classify_sandwiches_by_address(_frame(rows), SPEC, max_leg_span=24)) == 0
+    rows[2]["log_index"] = 500
+    assert len(classify_sandwiches_by_address(
+        _frame(rows), SPEC, max_leg_span=24, span_measure="log_index")) == 0
+    assert len(classify_sandwiches_by_address(
+        _frame(rows), SPEC, max_leg_span=24, span_measure="pool_position")) == 1
 
 
 def test_a_pair_with_no_victim_between_is_not_a_sandwich():

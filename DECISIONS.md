@@ -1158,6 +1158,76 @@ uniform beta of 0.81, and it is a testable statement rather than a fudge.
 
 ---
 
+## Robustness — MEV classification (Stage 4.3)
+
+### R.3 DEFECT FOUND AND FIXED — leg span was measured against the wrong ruler
+
+The classifier bounded the distance between a sandwich's two legs by their
+`log_index` difference. That counts **every event in the block**, including logs
+from unrelated contracts, so it is a poor proxy for "brackets the victim". The
+sweep exposed it immediately: under `log_index` the estimate never converges.
+
+| Max span | `log_index` | `pool_position` |
+|---|---|---|
+| 2 | 0 sandwiches, $0 | 4,420, $11.09m |
+| 3 | 0, $0 | 5,086, $12.52m |
+| 4 | 0, $0 | 5,319, $12.74m |
+| 8 | 285, $0.40m | 5,491, $12.80m |
+| 24 | 1,475, $4.59m | **5,515, $12.80m** |
+| 64 | 2,606, $8.74m | 5,515, $12.80m |
+
+A span of 4 finding **zero** sandwiches was the tell. Real searchers do bracket
+their victim immediately in the pool's own swap sequence; they just do not
+appear adjacent in a global log index that other contracts are also writing to.
+
+Counting only this pool's swaps between the legs, the estimate **saturates by a
+span of 8 and is exactly flat thereafter** — which is what a correctly specified
+parameter looks like. Default changed to `pool_position`; `log_index` is kept as
+an option so the robustness table can show why it is wrong.
+
+### R.4 Sensitivity within the defensible range
+
+| Reversal tolerance | n | attacker profit |
+|---|---|---|
+| 2% | 4,204 | $10.82m |
+| 5% | 4,735 | $11.26m |
+| **10% (baseline)** | **5,515** | **$12.80m** |
+| 25% | 8,439 | $23.20m |
+| 50% | 12,861 | $21.38m |
+| 100% | 35,636 | **−$29.86m** |
+
+Within the defensible range — reversal at or below 10%, span at or above 4 —
+the estimate sits between **$10.8m and $12.8m, a 1.18x spread**. That is a
+robust number.
+
+Outside it the classifier degrades visibly, and the failure is self-announcing:
+at 100% tolerance total attacker "profit" is **negative**, which no population
+of real sandwiches can be. Loose matching is admitting ordinary two-way flow.
+
+**Headline: ETH/USDC 5bp transferred roughly $12.8m to sandwich searchers over
+43 months**, about $3.6m a year from a single pool.
+
+### R.5 What this does and does not affect
+
+Attribution is `neutral` (DECISIONS 4.2), so the LP-side cost in the
+decomposition is zero under **every** rule tested. The MEV estimate matters for
+the intensity covariate in the forecast model and for the standalone claim about
+how much value searchers extract — not for the net-return table. So the one
+number in this project with real specification risk is also the one the headline
+does not rest on.
+
+### R.6 Performance — the classifier was 47x slower than necessary
+
+Profiling to make the sweep affordable found that `to_dict("records")` was being
+called once per block: 125,418 calls costing 134 of 138 seconds, while the
+pair-matching logic it wrapped was free. One conversion for the whole frame,
+then grouping in pure Python, cut a month from 37.7s to 0.80s with identical
+output. Worth recording because the first optimisation attempted — indexing
+candidate pairs by sender — was aimed at the wrong thing and changed nothing;
+profiling rather than guessing found it in one step.
+
+---
+
 ## Log of reversals
 
 Anything decided above and later changed goes here with the date and the

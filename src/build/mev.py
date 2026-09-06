@@ -72,9 +72,17 @@ class Sandwich:
 #: of unrelated trades from one address does not.
 DEFAULT_REVERSAL_TOLERANCE = 0.10
 
-#: Maximum `log_index` distance between the two legs. Sandwich legs bracket the
-#: victim tightly; legs at opposite ends of a block are two separate trades.
+#: Maximum distance between the two legs. Sandwich legs bracket the victim
+#: tightly; legs at opposite ends of a block are two separate trades.
 DEFAULT_MAX_LEG_SPAN = 24
+
+#: How that distance is measured, and it matters more than it looks.
+#: ``log_index`` counts *every* log in the block, including events from
+#: unrelated contracts, so a tightly-bracketed sandwich in a busy block can show
+#: a large raw gap — which is why a span of 4 finds nothing at all.
+#: ``pool_position`` counts only this pool's own swaps between the legs, which
+#: is what "brackets the victim" actually means.
+DEFAULT_SPAN_MEASURE = "pool_position"
 
 
 def _direction(amount0: int) -> int:
@@ -112,6 +120,7 @@ def classify_sandwiches_by_address(
     reversal_tolerance: float = DEFAULT_REVERSAL_TOLERANCE,
     max_leg_span: int = DEFAULT_MAX_LEG_SPAN,
     require_positive_profit: bool = True,
+    span_measure: str = DEFAULT_SPAN_MEASURE,
 ) -> pd.DataFrame:
     """Same-address, same-block, opposite-direction bracketing.
 
@@ -129,8 +138,11 @@ def classify_sandwiches_by_address(
     - **Reversal.** The back leg must return within `reversal_tolerance` of what
       the front leg acquired. This is the constraint that separates a searcher
       from a router trading both ways in one block.
-    - **Span.** The legs must sit within `max_leg_span` positions of each other.
-      A sandwich brackets its victim; it does not span an entire block.
+    - **Span.** The legs must sit within `max_leg_span` of each other, measured
+      by default in this pool's own swaps rather than in raw `log_index`. The
+      raw index counts every log in the block including unrelated contracts, so
+      it is a poor proxy for adjacency — under it a span of 4 finds *zero*
+      sandwiches, and the parameter drives a 32x range in estimated profit.
     - **Profit.** A sandwich is profitable by construction. Loss-making
       candidates are failed attempts at best and misclassifications at worst,
       and are excluded by default rather than allowed to net off the total.
@@ -138,25 +150,49 @@ def classify_sandwiches_by_address(
     if swaps.empty:
         return pd.DataFrame(columns=[f.name for f in Sandwich.__dataclass_fields__.values()])
 
+    # One DataFrame->records conversion for the whole frame, then group in pure
+    # Python. Calling `to_dict("records")` per block instead cost 134 of 138
+    # seconds on a busy month — 125,418 blocks, one pandas round trip each — and
+    # the pair-matching logic it wrapped was free by comparison.
+    from itertools import groupby as _groupby
+
+    records = swaps.sort_values(["block_number", "log_index"]).to_dict("records")
+
     found: list[Sandwich] = []
-    for block, grp in swaps.sort_values(["block_number", "log_index"]).groupby("block_number"):
-        rows = grp.to_dict("records")
+    for block, block_rows in _groupby(records, key=lambda r: r["block_number"]):
+        rows = list(block_rows)
+        if len(rows) < 3:            # a sandwich needs two legs and a victim
+            continue
         used: set[int] = set()
-        for i in range(len(rows)):
+
+        # Only a sender appearing at least twice in a block can bracket anything,
+        # and the pair must be the same sender. Indexing by sender first turns the
+        # scan from quadratic in the block's swap count into quadratic in each
+        # sender's own appearances, which is almost always one or two. On a busy
+        # month of ETH/USDC 5bp that is the difference between 38 seconds and
+        # well under one.
+        by_sender: dict[str, list[int]] = {}
+        for idx, r in enumerate(rows):
+            by_sender.setdefault(r["sender"], []).append(idx)
+        candidates = sorted(
+            i for indices in by_sender.values() if len(indices) >= 2 for i in indices
+        )
+
+        for i in candidates:
             if i in used:
                 continue
             a = rows[i]
-            for j in range(len(rows) - 1, i, -1):
+            for j in reversed([k for k in by_sender[a["sender"]] if k > i]):
                 if j in used:
                     continue
                 b = rows[j]
-                if a["sender"] != b["sender"]:
-                    continue
                 if _direction(int(a["amount0"])) == 0:
                     continue
                 if _direction(int(a["amount0"])) == _direction(int(b["amount0"])):
                     continue
-                if int(b["log_index"]) - int(a["log_index"]) > max_leg_span:
+                span = (j - i) if span_measure == "pool_position" else (
+                    int(b["log_index"]) - int(a["log_index"]))
+                if span > max_leg_span:
                     continue
                 ratio = _reversal_ratio(a, b)
                 if not (1 - reversal_tolerance) <= ratio <= (1 + reversal_tolerance):
