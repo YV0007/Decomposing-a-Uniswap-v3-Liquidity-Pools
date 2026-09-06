@@ -101,9 +101,33 @@ def test_lookahead_rule_registry_is_honest():
     assert AlignmentRule.ONE_SLOT_EARLIER not in LOOKAHEAD_RULES
 
 
-@pytest.mark.xfail(raises=NotImplementedError, reason="Stage 6.1 — feature matrix not built yet")
-def test_feature_matrix_has_no_lookahead():
-    """Stage 6 GATE. Must pass before any model result is believed."""
+def test_feature_matrix_gate_is_wired_and_fires():
+    """Stage 6 GATE. Must pass before any model result is believed.
+
+    Checked both ways round on a realistic weekly panel: a clean matrix passes,
+    and a matrix carrying the target fails. A gate that cannot fail is not
+    evidence, so both directions are asserted. Fuller coverage in
+    `tests/test_infra.py`.
+    """
+    import numpy as np
+
     from src.model.features import assert_no_lookahead
 
-    assert_no_lookahead(pd.DataFrame(), pd.Series(dtype=float), pd.Series(dtype="datetime64[ns]"))
+    rng = np.random.default_rng(11)
+    n = 150
+    idx = pd.date_range("2023-01-01", periods=n, freq="W", tz="UTC")
+    target = pd.Series(rng.normal(scale=0.02, size=n), index=idx)
+
+    clean = pd.DataFrame(
+        {
+            "realized_vol_7d": np.abs(rng.normal(0.5, 0.1, n)),
+            "fee_tier_bps": 30,
+            "gas_price_median_7d": np.abs(rng.normal(25, 6, n)),
+        },
+        index=idx,
+    )
+    assert assert_no_lookahead(clean, target)["passed"]
+
+    leaking = clean.assign(oops=target + rng.normal(scale=0.001, size=n))
+    with pytest.raises(AssertionError, match="no-lookahead gate FAILED"):
+        assert_no_lookahead(leaking, target)
