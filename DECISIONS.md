@@ -127,7 +127,7 @@ tested, what the numbers were, what was chosen, and what would reverse it.
 | # | Question | Stage | Status | Owner file |
 |---|---|---|---|---|
 | 1 | Correct way to attribute MEV cost to LPs | 4.2 | **CLOSED** (4.2) | `src/build/mev.py` |
-| 2 | Which volatility estimator best matches empirical LVR | 3.2 | OPEN | `src/model/volatility.py` |
+| 2 | Which volatility estimator best matches empirical LVR | 3.2 | **CLOSED** | `src/model/volatility.py` |
 | 3 | Does block-timestamp alignment materially change LVR | 1.3 | **CLOSED** (1.5) | `src/build/align.py` |
 | 4 | At what position size does approach B break down | 2.2 | **CLOSED** (8.4) | `src/theory/range_width.py` |
 | 5 | Optimal fee tier as a function of sigma | 5.2 | OPEN | `src/theory/fee_tier.py` |
@@ -158,13 +158,42 @@ closed — the literature is thin and the choice needs to be argued, not asserte
 Config currently sets `mev.attribution_method: flow_toxicity` as a placeholder
 so the pipeline runs; the value is provisional until this entry is closed.
 
-### Q2 — Volatility estimator for analytical LVR — OPEN
+### Q2 — Volatility estimator — **CLOSED: keep 5-minute RV**
 
-Baseline is realized variance from 5-minute log returns over a trailing 24h.
-Microstructure noise argues against 1-minute; jumps argue for bipower variation,
-since the sigma^2/8 result is derived under a diffusion and jumps are not
-arbitraged the same way. Test all four against empirical LVR; the one that
-matches best is itself a small finding.
+Analytical LVR is linear in variance, so an alternative estimator rescales it
+exactly and the horse race is cheap. All four run against 2,697 pool-days.
+
+| Estimator | beta | R² | ratio of totals | \|beta − 1\| |
+|---|---|---|---|---|
+| Bipower (jump-robust) | **0.840** | 0.594 | 1.085 | **0.160** |
+| RV 5-min (baseline) | 0.798 | 0.609 | **1.007** | 0.202 |
+| RV 1-min | 0.720 | **0.693** | 0.987 | 0.281 |
+| Garman-Klass | 0.604 | 0.466 | 1.268 | 0.396 |
+
+**No estimator wins on every criterion**, which is the honest answer rather than
+an inconvenience:
+
+- **Bipower** gets the slope closest to one. Its ratio of 1.085 says empirical
+  LVR *exceeds* what the continuous part of variance alone predicts, by 8.5% —
+  so jumps do transfer value to arbitrageurs, they are not simply noise.
+- **1-minute RV** tracks the variation best (R² 0.693), which is what more
+  observations buys, but has the worst slope in the RV family — consistent with
+  microstructure noise inflating the variance so that empirical LVR per unit of
+  analytical falls.
+- **5-minute RV** has the best level match by a wide margin (1.007 against
+  1.085 and 1.268) and an R² within 1.4% of the best.
+- **Garman-Klass** is worst on everything. Range estimators assume no gaps, and
+  a 24h crypto tape resampled to minutes has plenty.
+
+**Decision: keep 5-minute RV as the baseline.** The level match is what the
+decomposition depends on — the LVR column is a dollar amount, not a slope — and
+5-minute RV is essentially unbiased there while bipower runs 8.5% light and
+Garman-Klass 27% heavy. Bipower is reported alongside in the H3 table because
+its better slope is the evidence for the jump interpretation.
+
+**What would reverse it.** If the paper's emphasis moved from levels to
+sensitivity — forecasting LVR *changes* rather than measuring LVR *amounts* —
+bipower's slope advantage would matter more than 5-minute RV's level advantage.
 
 ### Q3 — Block timestamp alignment — OPEN
 
@@ -1077,6 +1106,55 @@ layer, and the two benchmarks now differ as they must (+8.2% vs +10.8%).
 **Fee model overfitted on seven features.** Out-of-sample R² was −0.037 in the
 backtest against +0.084 in the standalone diagnostic. 352 pool-weeks does not
 support seven features. Reduced to four, chosen on the prediction task.
+
+---
+
+## Robustness — subperiods and regimes
+
+### R.1 The theory's slope is unstable across years; its level is not
+
+H3 by calendar year:
+
+| Period | n | beta | R² | p(beta=1) | ratio of totals |
+|---|---|---|---|---|---|
+| 2023 | 729 | **0.372** | 0.346 | 0.0000 | 0.941 |
+| 2024 | 732 | 0.918 | 0.677 | 0.388 | 1.004 |
+| 2025 | 729 | 0.763 | 0.550 | 0.052 | 0.993 |
+| 2026 | 423 | 0.944 | 0.756 | 0.160 | 1.016 |
+| **Full sample** | 2,613 | 0.810 | 0.618 | 0.0068 | 0.991 |
+
+**The full-sample rejection of beta = 1 is driven by 2023.** In 2024 and 2026
+the null cannot be rejected at all, and 2025 sits at the boundary. Meanwhile the
+**level match is stable at 0.94-1.02 in every single year** — the theory always
+gets the size of the transfer right, and only the slope wanders.
+
+This materially softens the H3 headline. The right statement is not "the closed
+form's sensitivity is wrong" but "its sensitivity was wrong in 2023 and has been
+close to right since". Why 2023 differs is not established here; MEV
+infrastructure and v3 liquidity distribution both changed substantially over the
+sample, and attributing it would need work this project has not done.
+
+### R.2 The deviation is concentrated in high volatility
+
+Terciles of daily volatility:
+
+| Regime | n | beta | R² | ratio |
+|---|---|---|---|---|
+| Calm | 872 | **0.963** | 0.392 | 1.147 |
+| Middle | 871 | **0.965** | 0.150 | 1.056 |
+| Volatile | 870 | **0.753** | 0.485 | 0.944 |
+
+In calm and middle markets beta is within 4% of one. The entire deviation sits
+in the volatile tercile.
+
+That is exactly the frictional story in H3.2, now localised: `sigma^2/8` assumes
+arbitrage is continuous and costless, and that assumption is close enough to
+true when prices move slowly. When they move fast, gaps open faster than
+arbitrageurs close them and part of every large move is never captured — so
+realised extraction falls below the frictionless bound and the slope flattens.
+
+**The theory holds where its assumptions hold.** That is a better result than a
+uniform beta of 0.81, and it is a testable statement rather than a fudge.
 
 ---
 
