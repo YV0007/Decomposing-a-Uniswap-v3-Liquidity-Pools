@@ -845,13 +845,28 @@ the model failing, not a finding, and the bound is what makes it physical.
 range exit, hourly hedge. Annualised, averaged across cohorts, with block
 bootstrap confidence intervals.
 
-### 5.5 Headline result
+### 5.5 Headline result *(labels corrected — see R.7)*
 
-| Pool | fees | LVR | gas | **net (raw)** | 95% CI | funding | **net (hedged)** | 95% CI | months > 0 |
+| Pool | fees | LVR | gas | **market-making** | 95% CI | rebalanced | total (unhedged) | 95% CI | months > 0 |
 |---|---|---|---|---|---|---|---|---|---|
-| ETH/USDC 5bp | +88.84% | -96.77% | -1.17% | **-9.10%** | [-15.6%, -3.3%] | -3.10% | **-14.06%** | [-22.0%, -7.0%] | 26% |
-| ETH/USDC 30bp | +96.72% | -97.90% | -1.14% | **-2.31%** | [-5.2%, +1.3%] | -3.04% | **-6.34%** | [-9.4%, -3.3%] | 21% |
+| ETH/USDC 5bp | +88.84% | −96.77% | −1.17% | **−9.10%** | [−15.6%, −3.3%] | +0.75% | −8.35% | [−46.3%, +30.0%] | 26% |
+| ETH/USDC 30bp | +96.72% | −97.90% | −1.14% | **−2.31%** | [−5.2%, +1.3%] | +2.02% | −0.29% | [−36.6%, +32.6%] | 21% |
 | ETH/USDC 100bp | — | — | — | *withheld* | — | — | *withheld* | — | — |
+
+Implemented-hedge returns (market-making less real perp funding and trading) are
+−14.06% and −6.34%.
+
+**The Stage 0 decision is vindicated by the confidence intervals.** The
+market-making interval is **6.2x tighter** than the unhedged one on both pools
+(12.3pp against 76.3pp on 5bp; 6.5pp against 69.2pp on 30bp). Leading with the
+unhedged number would have meant reporting a quantity whose error bar is six
+times the signal.
+
+**And it sharpens the paper's message.** On the 30bp pool the unhedged return is
+−0.29% — essentially break-even — but only because a +2.02% directional gain
+almost exactly offset a −2.31% market-making loss. *LPs who made money made it
+from holding ETH, not from providing liquidity.* That is the claim the
+decomposition exists to make, and it is invisible without separating the two.
 
 **A re-centred +/-10% position on ETH/USDC lost money over the sample.** On the
 5bp pool the loss is statistically significant both raw and hedged. On the 30bp
