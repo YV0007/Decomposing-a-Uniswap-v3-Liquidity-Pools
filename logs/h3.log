@@ -1,0 +1,192 @@
+=== building daily LVR series ===
+  ETH_USDC_5bp 2023-01
+  ETH_USDC_5bp 2023-02
+  ETH_USDC_5bp 2023-03
+  ETH_USDC_5bp 2023-04
+  ETH_USDC_5bp 2023-05
+  ETH_USDC_5bp 2023-06
+  ETH_USDC_5bp 2023-07
+  ETH_USDC_5bp 2023-08
+  ETH_USDC_5bp 2023-09
+  ETH_USDC_5bp 2023-10
+  ETH_USDC_5bp 2023-11
+  ETH_USDC_5bp 2023-12
+  ETH_USDC_5bp 2024-01
+  ETH_USDC_5bp 2024-02
+  ETH_USDC_5bp 2024-03
+  ETH_USDC_5bp 2024-04
+  ETH_USDC_5bp 2024-05
+  ETH_USDC_5bp 2024-06
+  ETH_USDC_5bp 2024-07
+  ETH_USDC_5bp 2024-08
+  ETH_USDC_5bp 2024-09
+  ETH_USDC_5bp 2024-10
+  ETH_USDC_5bp 2024-11
+  ETH_USDC_5bp 2024-12
+  ETH_USDC_5bp 2025-01
+  ETH_USDC_5bp 2025-02
+  ETH_USDC_5bp 2025-03
+  ETH_USDC_5bp 2025-04
+  ETH_USDC_5bp 2025-05
+  ETH_USDC_5bp 2025-06
+  ETH_USDC_5bp 2025-07
+  ETH_USDC_5bp 2025-08
+  ETH_USDC_5bp 2025-09
+  ETH_USDC_5bp 2025-10
+  ETH_USDC_5bp 2025-11
+  ETH_USDC_5bp 2025-12
+  ETH_USDC_5bp 2026-01
+  ETH_USDC_5bp 2026-02
+  ETH_USDC_5bp 2026-03
+  ETH_USDC_5bp 2026-04
+  ETH_USDC_5bp 2026-05
+  ETH_USDC_5bp 2026-06
+  ETH_USDC_5bp 2026-07
+  ETH_USDC_30bp 2023-01
+  ETH_USDC_30bp 2023-02
+  ETH_USDC_30bp 2023-03
+  ETH_USDC_30bp 2023-04
+  ETH_USDC_30bp 2023-05
+  ETH_USDC_30bp 2023-06
+  ETH_USDC_30bp 2023-07
+  ETH_USDC_30bp 2023-08
+  ETH_USDC_30bp 2023-09
+  ETH_USDC_30bp 2023-10
+  ETH_USDC_30bp 2023-11
+  ETH_USDC_30bp 2023-12
+  ETH_USDC_30bp 2024-01
+  ETH_USDC_30bp 2024-02
+  ETH_USDC_30bp 2024-03
+  ETH_USDC_30bp 2024-04
+  ETH_USDC_30bp 2024-05
+  ETH_USDC_30bp 2024-06
+  ETH_USDC_30bp 2024-07
+  ETH_USDC_30bp 2024-08
+  ETH_USDC_30bp 2024-09
+  ETH_USDC_30bp 2024-10
+  ETH_USDC_30bp 2024-11
+  ETH_USDC_30bp 2024-12
+  ETH_USDC_30bp 2025-01
+  ETH_USDC_30bp 2025-02
+  ETH_USDC_30bp 2025-03
+  ETH_USDC_30bp 2025-04
+  ETH_USDC_30bp 2025-05
+  ETH_USDC_30bp 2025-06
+  ETH_USDC_30bp 2025-07
+  ETH_USDC_30bp 2025-08
+  ETH_USDC_30bp 2025-09
+  ETH_USDC_30bp 2025-10
+  ETH_USDC_30bp 2025-11
+  ETH_USDC_30bp 2025-12
+  ETH_USDC_30bp 2026-01
+  ETH_USDC_30bp 2026-02
+  ETH_USDC_30bp 2026-03
+  ETH_USDC_30bp 2026-04
+  ETH_USDC_30bp 2026-05
+  ETH_USDC_30bp 2026-06
+  ETH_USDC_30bp 2026-07
+  ETH_USDC_100bp 2023-01
+  ETH_USDC_100bp 2023-02
+  ETH_USDC_100bp 2023-03
+  ETH_USDC_100bp 2023-04
+  ETH_USDC_100bp 2023-05
+  ETH_USDC_100bp 2023-06
+  ETH_USDC_100bp 2023-07
+  ETH_USDC_100bp 2023-08
+  ETH_USDC_100bp 2023-09
+  ETH_USDC_100bp 2023-10
+  ETH_USDC_100bp 2023-11
+  ETH_USDC_100bp 2023-12
+  ETH_USDC_100bp 2024-01
+  ETH_USDC_100bp 2024-02
+  ETH_USDC_100bp 2024-03
+  ETH_USDC_100bp 2024-04
+  ETH_USDC_100bp 2024-05
+  ETH_USDC_100bp 2024-06
+  ETH_USDC_100bp 2024-07
+  ETH_USDC_100bp 2024-08
+  ETH_USDC_100bp 2024-09
+  ETH_USDC_100bp 2024-10
+  ETH_USDC_100bp 2024-11
+  ETH_USDC_100bp 2024-12
+  ETH_USDC_100bp 2025-01
+  ETH_USDC_100bp 2025-02
+  ETH_USDC_100bp 2025-03
+  ETH_USDC_100bp 2025-04
+  ETH_USDC_100bp 2025-05
+  ETH_USDC_100bp 2025-06
+  ETH_USDC_100bp 2025-07
+  ETH_USDC_100bp 2025-08
+  ETH_USDC_100bp 2025-09
+  ETH_USDC_100bp 2025-10
+  ETH_USDC_100bp 2025-11
+  ETH_USDC_100bp 2025-12
+  ETH_USDC_100bp 2026-01
+  ETH_USDC_100bp 2026-02
+  ETH_USDC_100bp 2026-03
+  ETH_USDC_100bp 2026-04
+  ETH_USDC_100bp 2026-05
+  ETH_USDC_100bp 2026-06
+  ETH_USDC_100bp 2026-07
+
+3,842 pool-days across 3 pools
+
+
+--- POOLED (5bp + 30bp)  (n = 2,613 days, NW lags 8) ---
+  beta   +0.8099   se 0.0703   95% CI [+0.672, +0.948]
+  alpha  +48.5685   se 17.2292   t +2.82
+  R^2    0.6178
+  H0: beta = 1  ->  p = 0.0068  REJECTED
+  ratio of totals: 0.9914
+
+--- ETH_USDC_100bp  [excluded from headline: no viable size]  (n = 1,214 days, NW lags 6) ---
+  beta   +1.0119   se 0.1836   95% CI [+0.652, +1.372]
+  alpha  +63.5269   se 32.0411   t +1.98
+  R^2    0.5038
+  H0: beta = 1  ->  p = 0.9482  CANNOT REJECT — theory holds
+  ratio of totals: 1.3351
+
+--- ETH_USDC_30bp  (n = 1,306 days, NW lags 7) ---
+  beta   +0.8384   se 0.1102   95% CI [+0.622, +1.054]
+  alpha  +45.5468   se 26.4737   t +1.72
+  R^2    0.6195
+  H0: beta = 1  ->  p = 0.1425  CANNOT REJECT — theory holds
+  ratio of totals: 1.0111
+
+--- ETH_USDC_5bp  (n = 1,307 days, NW lags 7) ---
+  beta   +0.7836   se 0.0888   95% CI [+0.610, +0.958]
+  alpha  +51.2171   se 22.3137   t +2.30
+  R^2    0.6178
+  H0: beta = 1  ->  p = 0.0148  REJECTED
+  ratio of totals: 0.9722
+
+--- where does the theory break? residuals by regime ---
+
+  by volatility:
+              mean_resid  mean_abs  emp_over_ana
+sigma_annual                                    
+Q1               -22.537    35.981         1.186
+Q2                -9.351    48.892         1.072
+Q3                11.492    73.128         1.057
+Q4                20.430   194.545         0.923
+Traceback (most recent call last):
+  File "/Users/macbook/Desktop/LVR:MEV/scripts/h3_regression.py", line 124, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/Users/macbook/Desktop/LVR:MEV/scripts/h3_regression.py", line 99, in main
+    q = pd.qcut(d[col], 4, labels=["Q1", "Q2", "Q3", "Q4"], duplicates="drop")
+  File "/opt/anaconda3/lib/python3.13/site-packages/pandas/core/reshape/tile.py", line 340, in qcut
+    fac, bins = _bins_to_cuts(
+                ~~~~~~~~~~~~~^
+        x_idx,
+        ^^^^^^
+    ...<4 lines>...
+        duplicates=duplicates,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/pandas/core/reshape/tile.py", line 493, in _bins_to_cuts
+    raise ValueError(
+        "Bin labels must be one fewer than the number of bin edges"
+    )
+ValueError: Bin labels must be one fewer than the number of bin edges
