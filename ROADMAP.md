@@ -1,6 +1,9 @@
 # LVR/MEV — Where We Are
 
-**Status as of 6 September 2026.** 12 commits · 217 tests passing · 8.58M swaps · 44 months of perp + DVOL · 4.3 GB on disk
+**Status as of 6 September 2026.** 15 commits · 220 tests · 5,554 lines of code · 8.58M swaps · 4.7 GB
+
+**Headline result is in.** A re-centred ±10% LP position on ETH/USDC lost money
+over 43 months, significantly so on the 5bp pool. Details in Stage 5 below.
 
 Read top to bottom. Each stage feeds the next, and a stage cannot be trusted
 until the one before it has passed its gate.
@@ -20,7 +23,9 @@ until the one before it has passed its gate.
        ↓
   ✅ 4. MEV               sandwich detection + attribution decided
        ↓
-  🟡 5. Decomposition      fees − LVR − MEV − gas.  Built; run on 1 month only
+  ✅ 5. Decomposition      fees − LVR − MEV − gas.  Full sample, 43 cohorts × 3 pools
+       ↓
+  🟡 H3. Theory test       σ²/8 vs observed.  Structure confirmed; regression not run
        ↓
   ⬜ 6. Forecasting        can net return be predicted?  Machinery built, model not
        ↓
@@ -138,10 +143,16 @@ LVR" would have made H4 untestable without anyone noticing.
 
 **Gate passed** on all four checks.
 
-**Remaining.** The formal H3 regression — empirical on analytical, with
-Newey-West errors — hasn't been run yet. The machinery is built and tested; it
-needs the full-sample series to regress. Also the volatility-estimator horse race
-(open question 2): which estimator best matches observed LVR.
+**Remaining — and this is the next step.** The formal H3 regression, empirical
+LVR on analytical with Newey-West errors, has not been run. The prediction is
+β = 1, α = 0. All three series exist for all 43 months and the regression
+machinery is built and tested; it needs assembling, not building.
+
+Stage 8 already confirms the *structure* — fees and LVR scale identically with
+range width, and the closed form matches measured LVR to 3.4% — so this is the
+formal test of a claim already supported informally.
+
+Also open: which volatility estimator best matches observed LVR (Q2).
 
 ---
 
@@ -165,33 +176,38 @@ so the count is a one-sided undercount, and that's a stated limitation.
 
 ---
 
-## Stage 5 — Decomposition 🟡
+## Stage 5 — Decomposition ✅
 
-*The headline table: advertised yield versus what an LP actually keeps.*
+*The headline table: what an LP actually keeps.*
 
-**Built and run for January 2023.** The pipeline runs end to end across all three
-pools. It also produces the *bridge* — why the advertised number overstates
-reality — which turned out to qualify our own thesis:
+**Done across the full sample.** 43 monthly cohorts per pool, 2023-01 to
+2026-07, $100k at ±10%, re-centred on exit, hourly hedge, bootstrap intervals.
 
-| | 5bp | 30bp | 100bp |
-|---|---|---|---|
-| Advertised APR | 40.41% | 15.48% | 12.28% |
-| …of which range management | −29.46% | −11.27% | −8.85% |
-| …of which LVR + gas | −5.80% | −6.26% | −5.88% |
-| **Realised net** | **+0.67%** | **−0.55%** | **+0.92%** |
+| Pool | fees | LVR | gas | **net (raw)** | 95% CI | **net (hedged)** | 95% CI | months > 0 |
+|---|---|---|---|---|---|---|---|---|
+| ETH/USDC 5bp | +88.84% | −96.77% | −1.17% | **−9.10%** | [−15.6%, −3.3%] | **−14.06%** | [−22.0%, −7.0%] | 26% |
+| ETH/USDC 30bp | +96.72% | −97.90% | −1.14% | **−2.31%** | [−5.2%, +1.3%] | **−6.34%** | [−9.4%, −3.3%] | 21% |
+| ETH/USDC 100bp | — | — | — | *withheld* | — | *withheld* | — | — |
 
-Range management is 70–78% of the gap; adverse selection is 15–52%. Saying
-"advertised 40% is really 0.7% because of LVR" would overstate the result about
-fivefold. LVR is the *irreducible* part — an LP can manage range cost away and
-cannot manage LVR away.
+**The position lost money.** Significant on 5bp both ways. On 30bp the raw
+interval spans zero but the hedged one does not — stripping the directional beta
+is what makes the loss visible, which is why Stage 0 chose the hedged variant.
 
-**Remaining.**
-- Run across all 44 months, not one
-- The delta-hedged variant (see the warning above)
-- Confidence intervals on every figure
-- Compare fee tiers at fixed *realised* width — the tiers have different tick
-  spacings, so they can't hold the same range, which is a confound in H4
-- Monthly cohorts instead of a single entry date
+The fee/LVR ratio is 0.918 and 0.988: LPs earn very nearly, but not quite,
+enough to cover adverse selection.
+
+**The 100bp row is withheld** because no position size works there. At $1,000 it
+is a price-taker and gas destroys it (−94.8%); at $100k it holds 113% of the
+pool's active liquidity and is not a price-taker at all. The viable window is
+empty — which is itself the finding, and explains 655 swaps a month.
+
+Also produced the *bridge* from advertised APR to realised net (January 2023),
+which qualifies our own thesis: range management is 70–78% of the gap and
+adverse selection 15–52%. LVR is the *irreducible* part — an LP can manage range
+cost away and cannot manage LVR away.
+
+**Remaining.** Robustness sweeps across the full sample: range width,
+re-centring rule, hedge frequency, alternative MEV rules, subperiods.
 
 ---
 
@@ -266,24 +282,51 @@ what made it.
 
 ---
 
+## Defects found and fixed
+
+Six, all of the kind that produce plausible numbers rather than errors. Listed
+because the gates catching them is the main evidence the pipeline is sound.
+
+| # | What | How it showed |
+|---|---|---|
+| 1 | int24 ticks read at declared width; ABI sign-extends | tick −2 decoded as a 78-digit number; invisible on ETH/USDC, universal on USDC/USDT |
+| 2 | pandas inferred int64 for amount columns from the data | a quiet month would silently overflow above 9.22 WETH |
+| 3 | Fees lost at the range boundary | −1.88% vs the contract; localised to one crossing swap |
+| 4 | Sandwich classifier mostly false positives | 45% of "sandwiches" lost money; top 1% carried 105% of profit |
+| 5 | Fee share ignored the position's own liquidity | flipped the 100bp headline from +34.65% to −43.10% |
+| 6 | HAR trained on labels reaching past the forecast origin | caught by my own test; the purging problem inside the forecast |
+
+## Hypotheses
+
+| | Claim | State |
+|---|---|---|
+| H1 | The decomposition is computable | ✅ all gates passed |
+| H2 | Advertised yields overstate returns | ✅ confirmed, and qualified — range management dominates, LVR is the irreducible part |
+| H3 | σ²/8 holds | 🟡 structure confirmed; formal regression outstanding |
+| H4 | Fee tier is the dominant determinant | ⚠️ weakened — tick spacing is confounded with fee tier, and the 100bp arm is unusable. Really 5bp vs 30bp |
+| H5 | Net return is forecastable | ⬜ not started |
+| H6 | Theory beats ML on LVR | ⬜ not started |
+| H7 | Economic significance | ⬜ not started |
+
 ## Honest summary
 
-**Solid.** The data layer, the measurement of fees and LVR, and the range-width
-mathematics. Each passed a gate that could have failed, and three real defects
-were caught by those gates rather than by luck.
+**Solid.** The data layer, fees, LVR, the full-sample decomposition, and the
+range-width mathematics. Every gate could have failed and six real defects were
+caught by them.
 
-**Thin.** Everything empirical rests on one month. January 2023 was a 40%
-uptrend, which is the regime least favourable to a fee band. Whether that month's
-conclusions generalise is genuinely unknown, and the full-sample run is what
-settles it.
+**Weakened.** H4. Uniswap bundles tick spacing with fee tier, and the 100bp pool
+has no viable position size, so the three-way natural experiment is a two-way
+one.
+
+**Untouched.** Forecasting, the strategy backtest, and the deck.
 
 **Open questions: 5 of 7 closed.** Remaining: which volatility estimator best
-matches observed LVR (Q2), and optimal fee tier as a function of volatility (Q5).
+matches observed LVR (Q2), and optimal fee tier as a function of σ (Q5).
 
 **Next three steps, in order:**
-1. Run Stage 5 across all 44 months, hedged and raw, with confidence intervals
-2. Run the H3 regression on the full series — the paper's core theoretical claim
-3. Build the forecast model and the theory-versus-ML horse race
+1. The H3 regression on the full series — the paper's core theoretical claim, and
+   the only remaining piece of the *measurement* half
+2. The forecast model and the theory-versus-ML horse race (H5, H6)
+3. The strategy backtest with full costs and a deflated Sharpe (H7)
 
-Nothing is blocked. The derived layer finishes in the background, and every
-input those three steps need is now on disk.
+Nothing is blocked. Every input those steps need is on disk.
