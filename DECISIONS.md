@@ -913,6 +913,91 @@ friction is a larger share of what remains. Suggestive rather than established
 
 ---
 
+## Stage 6 — H5 and H6
+
+Weekly panel, 366 pool-weeks across the 5bp and 30bp pools, 2023-01 to 2026-07.
+Purged 5-fold CV, purge 7 days, embargo 7 days, verified leak-free. Every model
+scored on the same 352 observations.
+
+### H5 — net LP return is NOT forecastable ❌
+
+| Model | RMSE | OOS R² | directional |
+|---|---|---|---|
+| mean baseline | 0.00531 | -0.003 | 0.500 |
+| LightGBM | 0.00563 | **-0.128** | 0.489 |
+
+Diebold-Mariano favours the **baseline**, p = 0.024. LightGBM is significantly
+*worse* than predicting the historical mean.
+
+This is a clean negative result and it is reported as one. Twelve features and
+366 pool-weeks against a target with a standard deviation of 0.77% per week:
+there is not enough signal, and a gradient-boosted model on a sample that small
+finds structure that does not survive the fold boundary. The feature importances
+are economically sensible — vol-of-vol, position value, trade count lead — which
+is exactly the trap: plausible importances on a model with negative
+out-of-sample R² mean nothing.
+
+### H6 — the closed form beats gradient boosting ⭐⭐
+
+| Model | RMSE | OOS R² | directional accuracy |
+|---|---|---|---|
+| **σ²/8 + HAR-RV** | **1,347.90** | **+0.126** | **0.742** |
+| mean baseline | 1,510.49 | -0.097 | 0.500 |
+| LightGBM | 1,610.67 | -0.247 | 0.565 |
+| σ²/8 + persistence | 1,668.10 | -0.338 | 0.724 |
+
+**Diebold-Mariano, theory against LightGBM: p < 0.0001.** Not a tie — a
+decisive win.
+
+The analytical arm is the **only model with positive out-of-sample R²**. It is
+11% better than the mean baseline on RMSE and 19% better than LightGBM, and it
+calls direction correctly 74% of the time against the black box's 57%.
+
+It also has **one parameter, fixed by derivation**. LightGBM has hundreds fitted
+on 366 observations. That asymmetry is the explanation, not an accident: on a
+sample this small the model that cannot overfit wins, and the reason it cannot
+overfit is that its structure came from economics rather than from the data.
+
+**The volatility model earns its place.** σ²/8 with a HAR-RV forecast (1,348)
+beats σ²/8 with persistence (1,668) by 19%. Predicting variance is doing real
+work, not decorating the closed form.
+
+**A nuance worth keeping.** The persistence arm has 72% directional accuracy but
+the *worst* RMSE. It knows when LVR will be high or low and gets the level
+wrong. Direction and magnitude are separable here, and a strategy that only
+needs the sign could use a model that a RMSE table would reject.
+
+### H6.1 Why this does not contradict H3
+
+H3 found R² = 0.62; H6 finds 0.13. The difference is measurement versus
+forecasting. H3 regressed *contemporaneous* empirical LVR on *contemporaneous*
+analytical LVR — given the volatility that actually occurred, the closed form
+explains most of the adverse selection. H6 must first predict next week's
+volatility, and weekly variance is close to unforecastable at this horizon.
+
+**The closed form is an excellent measurement tool and a modest forecasting
+one** — and still the best forecasting tool available here, which is the point.
+
+### H6.2 DEFECT FOUND AND FIXED — the theory arm was handicapped
+
+The first run had the analytical arm at RMSE 4,795 against a 1,489 baseline, a
+catastrophic loss. It was a bug, not a result.
+
+The scaling `analytical_now * (rv_forecast / rv_now)` was dividing by
+`realized_vol_7d`, which the panel deliberately lags one week for use as a
+feature. Weekly variance ranges over a factor of thirty, so dividing by the
+wrong week inflated predictions by up to 33x. Rebuilding `rv_now` unlagged from
+the daily series moved the theory arm from worst to first.
+
+**Lesson worth keeping.** A feature matrix and a model input are different
+objects with different timing requirements. The lag that makes a variable a
+legitimate *feature* made it the wrong *denominator*, and the failure looked
+exactly like a substantive result — the theory losing to ML, which is the
+outcome the plan explicitly warned would be the less interesting one. Had the
+prior been the other way round it might not have been questioned.
+
+---
+
 ## Log of reversals
 
 Anything decided above and later changed goes here with the date and the
