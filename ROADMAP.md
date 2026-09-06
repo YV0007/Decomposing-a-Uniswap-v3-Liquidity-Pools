@@ -1,6 +1,6 @@
 # LVR/MEV — Where We Are
 
-**Status as of 6 September 2026.** 9 commits · 201 tests passing · 8.58M swaps fetched · 4.1 GB on disk
+**Status as of 6 September 2026.** 12 commits · 217 tests passing · 8.58M swaps · 44 months of perp + DVOL · 4.3 GB on disk
 
 Read top to bottom. Each stage feeds the next, and a stage cannot be trusted
 until the one before it has passed its gate.
@@ -29,26 +29,47 @@ until the one before it has passed its gate.
   ⬜ 9. Deck & write-up    15 slides + appendix
 
   ✅ 8. Range width        (parallel track) the original mathematics — DONE
-  ⬜ D. Delta hedging      (cuts across 5–7) decided as PRIMARY, NOT YET BUILT ⚠️
+  ✅ D. Delta hedging      (cuts across 5–7) BUILT — hourly, not daily
 ```
 
 Legend: ✅ done and gated · 🟡 partly done · ⬜ not started
 
 ---
 
-## ⚠️ The one thing that is behind
+## Infrastructure — all built ✅
 
-**Delta hedging is not built.** Stage 0 decided the *delta-hedged* variant is the
-paper's headline and raw LP is the robustness check. Everything produced so far
-is the raw variant. `src/build/hedge.py` is still a skeleton.
+Everything needed before the analysis stages can run now exists.
 
-This matters because raw LP return is dominated by whether ETH went up, which
-swamps the market-making economics the paper is about. Until it is built, every
-number in Stage 5 is the robustness column, not the headline.
+**Data collected.** Perpetual 1-minute prices and realised funding for all 44
+months (spot cannot stand in for the perp — the basis is exactly what funding
+pays to close). Deribit DVOL hourly for all 44 months, the implied-volatility
+feature. Both free, no keys.
 
-It needs: position delta (✅ already built), perp funding data (✅ already
-fetched), a rebalance schedule, and hedge P&L. Perhaps a day's work. It should
-come before the Stage 5 full-sample run, not after.
+**Delta hedging built**, which was the flagged gap, and measuring it settled a
+standing question. A perfect hedge leaves LP value change plus hedge P&L equal
+to fees minus LVR — near zero in January 2023 — so the residual *is* the hedging
+error:
+
+| Rebalance | residual | mean unhedged exposure |
+|---|---|---|
+| Hourly | −$392 | $88 |
+| Daily | −$715 | $952 |
+| Weekly | −$5,140 | $7,445 |
+
+The daily error exceeds the entire market-making return being measured, so
+hedging daily would have made the "cleaner" variant noisier than the raw one.
+**Baseline moved from daily to hourly** for about $22 more trading cost.
+
+**Derived data layer.** One cached table per pool-month — price, tick,
+liquidity, aligned CEX reference, volatility — so the remaining stages load
+instead of recompute. Currently building in the background (~2 hours).
+
+**Also built:** HAR-RV / EWMA / GARCH volatility forecasts, monthly entry
+cohorts, the feature matrix and its no-lookahead gate, and the figure module.
+
+One test caught a real leak in my own code: HAR was training on labels whose
+window extended past the forecast origin — the same purging problem, inside the
+forecast. Fixed; it still finds signal (corr 0.66) on a persistent process.
 
 ---
 
@@ -101,8 +122,7 @@ Uniswap's own arithmetic exactly.
 
 **Gate passed** at +0.18% / −0.52% against a 2% tolerance.
 
-**Remaining.** Monthly entry cohorts (`build_cohorts`) is still a stub. Needed so
-the headline isn't an artefact of one entry date.
+**Remaining.** Nothing. Monthly entry cohorts are now built.
 
 ---
 
@@ -179,15 +199,17 @@ cannot manage LVR away.
 
 *Can next week's net return be predicted? And does theory beat machine learning?*
 
-**Machinery built and tested.** Purged, embargoed cross-validation (with a test
+**Machinery and features built and tested.** The feature matrix, its
+no-lookahead gate, and the volatility forecasts that form the theory arm of the
+horse race. Purged, embargoed cross-validation (with a test
 proving the purge actually closes a leak, rather than silently doing nothing);
 Newey-West standard errors; the deflated Sharpe ratio; a specification log that
 records every configuration as it is run, so the multiple-testing count is
 honest rather than reconstructed.
 
-**Not started.** The feature matrix, the LightGBM model, and the head-to-head
-between the σ²/8 closed form and the black box. This is the horse race where
-theory winning would be the stronger result.
+**Remaining.** The LightGBM model and the head-to-head between the σ²/8 closed
+form and the black box. This is the horse race where theory winning would be the
+stronger result.
 
 **Depends on** Stage 5 across the full sample — the target is net LP return, so
 there is nothing to predict until that exists.
@@ -237,8 +259,10 @@ is still a stub) — the natural companion result.
 
 ## Stage 9 — Deck and write-up ⬜
 
-**Not started.** 15 slides plus appendix. Figures need `utils/plotting.py`, which
-is a skeleton; every figure must be regenerable by script, not hand-edited.
+**Not started.** 15 slides plus appendix. The figure module is built — waterfall,
+H3 scatter, range-width sweep, hedge error and gap distribution — and every
+figure stamps its own git revision and config hash so it can be traced back to
+what made it.
 
 ---
 
@@ -253,10 +277,13 @@ uptrend, which is the regime least favourable to a fee band. Whether that month'
 conclusions generalise is genuinely unknown, and the full-sample run is what
 settles it.
 
-**Behind.** Delta hedging, which was decided as the headline variant and never
-built.
+**Open questions: 5 of 7 closed.** Remaining: which volatility estimator best
+matches observed LVR (Q2), and optimal fee tier as a function of volatility (Q5).
 
 **Next three steps, in order:**
-1. Build delta hedging — it is the declared headline and everything downstream inherits it
-2. Run Stage 5 across all 44 months with confidence intervals
-3. Run the H3 regression on the full series, which is the paper's core theoretical claim
+1. Run Stage 5 across all 44 months, hedged and raw, with confidence intervals
+2. Run the H3 regression on the full series — the paper's core theoretical claim
+3. Build the forecast model and the theory-versus-ML horse race
+
+Nothing is blocked. The derived layer finishes in the background, and every
+input those three steps need is now on disk.
