@@ -130,7 +130,7 @@ tested, what the numbers were, what was chosen, and what would reverse it.
 | 2 | Which volatility estimator best matches empirical LVR | 3.2 | **CLOSED** | `src/model/volatility.py` |
 | 3 | Does block-timestamp alignment materially change LVR | 1.3 | **CLOSED** (1.5) | `src/build/align.py` |
 | 4 | At what position size does approach B break down | 2.2 | **CLOSED** (8.4) | `src/theory/range_width.py` |
-| 5 | Optimal fee tier as a function of sigma | 5.2 | OPEN | `src/theory/fee_tier.py` |
+| 5 | Optimal fee tier as a function of sigma | 5.2 | **CLOSED** — premise was wrong | `src/theory/fee_tier.py` |
 | 6 | Optimal range width — closed form or numerical | 8 | **CLOSED** (8.1-8.2) | `src/theory/range_width.py` |
 | 7 | Hedging error on a path-dependent v3 delta | 0.1 | **CLOSED** | `src/build/hedge.py` |
 
@@ -209,11 +209,72 @@ Valid while the simulated position is small relative to the pool. The size at
 which it breaks is the capacity limit of any strategy built on this, so it needs
 a number, not a hand-wave.
 
-### Q5 — Optimal fee tier as a function of sigma — OPEN
+### Q5 — Optimal fee tier — **CLOSED, and the premise was wrong** ⭐
 
-Higher tiers earn less gross but suffer proportionally less LVR, because
-arbitrage only fires when the price gap exceeds the fee. Whether an interior
-optimum exists as a function of sigma is a clean theoretical question.
+The question assumed higher tiers "suffer proportionally less LVR, because
+arbitrage only fires when the price gap exceeds the fee". **They do not.** A fee
+band does not reduce gross LVR at all.
+
+**The derivation.** In log price, with `g = log(S/P)` the pool-to-external gap,
+the AMM invariant `y'(P) = -P x'(P)` gives `dV/dP = x'(P)(S - P)`, so for a v3
+position `dLVR = (L sqrt(P)/2) g dp`. An arbitrageur facing fee `f` trades until
+the gap reaches `f`, so integrating along one trade from gap `g`:
+
+    LVR per arbitrage event = (L sqrt(P)/4) (g² − f²)
+
+The gap is a driftless walk reflected at `±f`. Local time at a reflecting
+boundary accumulates at `sigma²/(2f)` across both boundaries, and each unit
+transfers `(L sqrt(P)/2) f`. So
+
+    LVR rate = (L sqrt(P)/2) · f · sigma²/(2f) = L sqrt(P) sigma² / 4
+
+**The `f` cancels.** A wider band makes arbitrage rarer and each event
+proportionally larger, and the two effects offset exactly.
+
+**Confirmed numerically**, and it is not a discretisation artefact — the ratio
+of banded to frictionless LVR converges to one at every step size tested:
+
+| Steps per year | fee 0.05% | fee 0.30% | fee 1.00% |
+|---|---|---|---|
+| 35,040 (15-min) | 1.009 | 1.008 | 1.006 |
+| 105,120 (5-min) | 1.002 | 1.000 | 0.984 |
+| 525,600 (1-min) | 1.001 | 0.995 | 0.989 |
+| 3,153,600 (10-sec) | 1.000 | 0.997 | 0.988 |
+
+**Confirmed empirically**, on 3,842 pool-days across a 20x range of fee tiers.
+Regressing normalised empirical LVR on variance:
+
+| Pool | fee | slope | se | R² |
+|---|---|---|---|---|
+| ETH/USDC 5bp | 5bp | 0.00553 | 0.00060 | 0.620 |
+| ETH/USDC 30bp | 30bp | 0.00576 | 0.00073 | 0.624 |
+| ETH/USDC 100bp | 100bp | 0.00590 | 0.00108 | 0.462 |
+
+The 100bp-minus-5bp difference is **+0.00037, t = +0.30** — indistinguishable
+from zero, and with the *opposite* sign to the prediction.
+
+**Answer to Q5: there is no LVR-based optimal fee tier, because fee tiers do not
+change LVR.** The tier choice matters only through fee income — rate times
+volume — which turns on the volume elasticity, an empirical quantity rather than
+a theorem. `optimal_fee_tier` therefore takes that elasticity as an explicit
+parameter and the answer tracks it, which is the honest form of the result.
+
+### Q5.1 What this does to H4
+
+H4's prediction had two clauses. The first — higher tiers earn less gross fee
+income — is a volume question and stands. The second — they suffer
+proportionally less LVR — is **false**, by derivation and by measurement.
+
+This retrospectively explains a Stage 5 number that should have prompted the
+question earlier: empirical LVR was 5.54%, 5.92% and 5.45% for the 5bp, 30bp and
+100bp pools in January 2023. Flat across a 20x fee range. The data said it
+before the theory did.
+
+Combined with the tick-spacing confound (3.4) and the 100bp pool having no
+viable size (5.7), **H4 as written is not supportable.** The defensible
+replacement is narrower and better founded: *fee tier does not affect LVR; it
+affects only fee income, so the tier ranking is an empirical question about
+volume, not a theoretical one about adverse selection.*
 
 ### Q6 — Optimal range width — OPEN
 

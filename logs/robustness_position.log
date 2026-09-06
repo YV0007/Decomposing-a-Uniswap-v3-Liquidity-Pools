@@ -150,3 +150,221 @@
   cache hit: perp-ETHUSDT-1m-2026-02.zip (1.8 MB)
   cache hit: ETHUSDT-fundingRate-2026-02.zip (0.0 MB)
   ETH_USDC_5bp 2026-02: 5 widths
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_24558867_24781025_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-03.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2026-03.zip (0.0 MB)
+  ETH_USDC_5bp 2026-03: 5 widths
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_24781026_24996366_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-04.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-04.zip (0.0 MB)
+  ETH_USDC_5bp 2026-04: 5 widths
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_24996367_25218796_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-05.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-05.zip (0.0 MB)
+  ETH_USDC_5bp 2026-05: 5 widths
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_25218797_25433937_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-06.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-06.zip (0.0 MB)
+  ETH_USDC_5bp 2026-06: 5 widths
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_25433938_25656291_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-07.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-07.zip (0.0 MB)
+  ETH_USDC_5bp 2026-07: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_16308189_16530246_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-01.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2023-01.zip (0.0 MB)
+  ETH_USDC_30bp 2023-01: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_16530247_16730070_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-02.zip (1.7 MB)
+  cache hit: ETHUSDT-fundingRate-2023-02.zip (0.0 MB)
+  ETH_USDC_30bp 2023-02: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_16730071_16950601_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-03.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2023-03.zip (0.0 MB)
+  ETH_USDC_30bp 2023-03: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_16950602_17162285_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-04.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-04.zip (0.0 MB)
+  ETH_USDC_30bp 2023-04: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_17162286_17382264_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-05.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2023-05.zip (0.0 MB)
+  ETH_USDC_30bp 2023-05: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_17382265_17595508_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-06.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-06.zip (0.0 MB)
+  ETH_USDC_30bp 2023-06: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_17595509_17816432_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-07.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-07.zip (0.0 MB)
+  ETH_USDC_30bp 2023-07: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_17816433_18037986_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-08.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-08.zip (0.0 MB)
+  ETH_USDC_30bp 2023-08: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_18037987_18251963_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-09.zip (1.7 MB)
+  cache hit: ETHUSDT-fundingRate-2023-09.zip (0.0 MB)
+  ETH_USDC_30bp 2023-09: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_18251964_18473541_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-10.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-10.zip (0.0 MB)
+  ETH_USDC_30bp 2023-10: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_18473542_18687849_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-11.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2023-11.zip (0.0 MB)
+  ETH_USDC_30bp 2023-11: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_18687850_18908893_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2023-12.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2023-12.zip (0.0 MB)
+  ETH_USDC_30bp 2023-12: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_18908894_19129887_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-01.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-01.zip (0.0 MB)
+  ETH_USDC_30bp 2024-01: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_19129888_19336605_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-02.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2024-02.zip (0.0 MB)
+  ETH_USDC_30bp 2024-02: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_19336606_19557287_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-03.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2024-03.zip (0.0 MB)
+  ETH_USDC_30bp 2024-03: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_19557288_19771558_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-04.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-04.zip (0.0 MB)
+  ETH_USDC_30bp 2024-04: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_19771559_19993248_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-05.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-05.zip (0.0 MB)
+  ETH_USDC_30bp 2024-05: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_19993249_20207947_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-06.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2024-06.zip (0.0 MB)
+  ETH_USDC_30bp 2024-06: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_20207948_20429971_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-07.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-07.zip (0.0 MB)
+  ETH_USDC_30bp 2024-07: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_20429972_20651992_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-08.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-08.zip (0.0 MB)
+  ETH_USDC_30bp 2024-08: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_20651993_20866917_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-09.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-09.zip (0.0 MB)
+  ETH_USDC_30bp 2024-09: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_20866918_21089067_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-10.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-10.zip (0.0 MB)
+  ETH_USDC_30bp 2024-10: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_21089068_21303932_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-11.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2024-11.zip (0.0 MB)
+  ETH_USDC_30bp 2024-11: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_21303933_21525889_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2024-12.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2024-12.zip (0.0 MB)
+  ETH_USDC_30bp 2024-12: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_21525890_21747948_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-01.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-01.zip (0.0 MB)
+  ETH_USDC_30bp 2025-01: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_21747949_21948290_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-02.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2025-02.zip (0.0 MB)
+  ETH_USDC_30bp 2025-02: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_21948291_22170333_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-03.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-03.zip (0.0 MB)
+  ETH_USDC_30bp 2025-03: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_22170334_22385292_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-04.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-04.zip (0.0 MB)
+  ETH_USDC_30bp 2025-04: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_22385293_22606141_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-05.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-05.zip (0.0 MB)
+  ETH_USDC_30bp 2025-05: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_22606142_22820672_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-06.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-06.zip (0.0 MB)
+  ETH_USDC_30bp 2025-06: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_22820673_23042512_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-07.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-07.zip (0.0 MB)
+  ETH_USDC_30bp 2025-07: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_23042513_23264564_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-08.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-08.zip (0.0 MB)
+  ETH_USDC_30bp 2025-08: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_23264565_23479242_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-09.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-09.zip (0.0 MB)
+  ETH_USDC_30bp 2025-09: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_23479243_23700765_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-10.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2025-10.zip (0.0 MB)
+  ETH_USDC_30bp 2025-10: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_23700766_23914919_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-11.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-11.zip (0.0 MB)
+  ETH_USDC_30bp 2025-11: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_23914920_24136051_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2025-12.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2025-12.zip (0.0 MB)
+  ETH_USDC_30bp 2025-12: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_24136052_24358291_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-01.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-01.zip (0.0 MB)
+  ETH_USDC_30bp 2026-01: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_24358292_24558866_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-02.zip (1.8 MB)
+  cache hit: ETHUSDT-fundingRate-2026-02.zip (0.0 MB)
+  ETH_USDC_30bp 2026-02: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_24558867_24781025_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-03.zip (2.0 MB)
+  cache hit: ETHUSDT-fundingRate-2026-03.zip (0.0 MB)
+  ETH_USDC_30bp 2026-03: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_24781026_24996366_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-04.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-04.zip (0.0 MB)
+  ETH_USDC_30bp 2026-04: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_24996367_25218796_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-05.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-05.zip (0.0 MB)
+  ETH_USDC_30bp 2026-05: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_25218797_25433937_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-06.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-06.zip (0.0 MB)
+  ETH_USDC_30bp 2026-06: 5 widths
+  cache hit: 0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8_25433938_25656291_v3.parquet
+  cache hit: perp-ETHUSDT-1m-2026-07.zip (1.9 MB)
+  cache hit: ETHUSDT-fundingRate-2026-07.zip (0.0 MB)
+  ETH_USDC_30bp 2026-07: 5 widths
+
+=== range width x pool, full sample (net raw, annualised) ===
+
+pool        ETH_USDC_30bp  ETH_USDC_5bp  realised_delta  mean_recentres
+half_width                                                             
+0.02              -33.22%       -64.36%          +2.20%       +6031.40%
+0.05               -7.83%       -20.13%          +5.19%       +1260.47%
+0.10               -2.31%        -9.10%         +10.19%        +326.74%
+0.25               -0.66%        -3.65%         +25.71%         +36.05%
+0.50               -0.31%        -1.76%         +55.11%          +6.98%
+
+=== hedge frequency (net hedged, +/-10% only) ===
+
+                             1h           1D           7D
+mean net hedged         -0.1020      -0.0445      -0.0324
+mean hedge error $    1930.8368    8517.3208   15038.0367
+
+=== confidence intervals on net, by width (pooled) ===
+
+  +/-2%  mean -48.79%  CI [-70.06%, -30.83%]  excludes zero
+  +/-5%  mean -13.98%  CI [-22.00%, -7.25%]  excludes zero
+  +/-10%  mean  -5.71%  CI [-10.00%, -2.20%]  excludes zero
+  +/-25%  mean  -2.16%  CI [-4.01%, -0.60%]  excludes zero
+  +/-50%  mean  -1.04%  CI [-1.91%, -0.28%]  excludes zero
+
+wrote outputs/tables/robustness_position.csv (430 rows)
