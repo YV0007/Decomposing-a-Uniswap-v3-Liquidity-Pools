@@ -1,0 +1,45 @@
+  ETH_USDC_5bp: 43 months
+  ETH_USDC_30bp: 43 months
+  ETH_USDC_100bp: 43 months
+  WBTC_ETH_30bp 2023-05: InvalidOperation [<class 'decimal.InvalidOperation'>]
+  WBTC_ETH_30bp 2026-02: InvalidOperation [<class 'decimal.InvalidOperation'>]
+  WBTC_ETH_30bp: 41 months
+  USDC_USDT_1bp: no derived months, skipping
+
+5,091 pool-days across 4 pools
+
+============================================================================================
+VOLATILITY RANGE — the point of adding these pools
+============================================================================================
+                days  median_sigma        p5       p95
+pool                                                  
+WBTC_ETH_30bp   1249        0.2836    0.1263    0.5970
+ETH_USDC_5bp    1308        0.5226    0.2579    1.0269
+ETH_USDC_30bp   1308        0.5239    0.2602    1.0333
+ETH_USDC_100bp  1226        0.5311    0.2751    1.0354
+
+  spread in median volatility: 2x  (28.36% to 53.11%)
+  in VARIANCE, which is what LVR scales with: 4x
+
+============================================================================================
+H3 PER POOL — does the closed form hold outside ETH/USDC?
+============================================================================================
+          pool  fee_bps  median_sigma    n      beta        se        r2  p_beta_eq_1     ratio
+ WBTC_ETH_30bp       30        0.2835 1246    0.9530    0.0990    0.6281       0.6349    1.0255
+  ETH_USDC_5bp        5        0.5226 1307    0.7836    0.0888    0.6178       0.0148    0.9722
+ ETH_USDC_30bp       30        0.5239 1306    0.8384    0.1102    0.6195       0.1425    1.0111
+ETH_USDC_100bp      100        0.5304 1214    1.0119    0.1836    0.5038       0.9482    1.3351
+
+============================================================================================
+LVR PER UNIT VARIANCE — the fee-tier claim, now across four tiers
+============================================================================================
+          pool  fee_bps    n       slope          se          r2
+  ETH_USDC_5bp        5 1308     0.00553     0.00060     0.62015
+ ETH_USDC_30bp       30 1308     0.00576     0.00073     0.62383
+ WBTC_ETH_30bp       30 1249     0.00657     0.00062     0.63013
+ETH_USDC_100bp      100 1226     0.00590     0.00108     0.46196
+
+  fee tiers spanned: 5bp to 100bp (20x)
+  slope range: 0.00553 to 0.00657 (1.19x)
+
+wrote cross_section_h3.csv, cross_section_lvr_slopes.csv, cross_section_volatility.csv

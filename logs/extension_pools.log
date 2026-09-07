@@ -171,3 +171,861 @@ fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 18908894-191298
   blocks 18908894-18958893  +  889 logs  (total     889)   22.6%
   blocks 18958894-19008893  + 2991 logs  (total    3880)   45.3%
   blocks 19008894-19058893  +  600 logs  (total    4480)   67.9%
+  blocks 19058894-19108893  + 1165 logs  (total    5645)   90.5%
+  blocks 19108894-19129887  +  360 logs  (total    6005)  100.0%
+  wrote 6005 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_18908894_19129887_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 19129888-19336605
+  blocks 19129888-19179887  +  462 logs  (total     462)   24.2%
+  blocks 19179888-19229887  + 1083 logs  (total    1545)   48.4%
+  blocks 19229888-19279887  + 1297 logs  (total    2842)   72.6%
+  blocks 19279888-19329887  + 1443 logs  (total    4285)   96.8%
+  blocks 19329888-19336605  +  337 logs  (total    4622)  100.0%
+  wrote 4622 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_19129888_19336605_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 19336606-19557287
+  blocks 19336606-19386605  + 1765 logs  (total    1765)   22.7%
+  blocks 19386606-19436605  + 1114 logs  (total    2879)   45.3%
+  blocks 19436606-19486605  + 2048 logs  (total    4927)   68.0%
+  blocks 19486606-19536605  +  752 logs  (total    5679)   90.6%
+  blocks 19536606-19557287  +  271 logs  (total    5950)  100.0%
+  wrote 5950 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_19336606_19557287_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 19557288-19771558
+  blocks 19557288-19607287  +  981 logs  (total     981)   23.3%
+  blocks 19607288-19657287  + 1269 logs  (total    2250)   46.7%
+  blocks 19657288-19707287  + 1200 logs  (total    3450)   70.0%
+  blocks 19707288-19757287  +  930 logs  (total    4380)   93.3%
+  blocks 19757288-19771558  +  441 logs  (total    4821)  100.0%
+  wrote 4821 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_19557288_19771558_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 19771559-19993248
+  blocks 19771559-19821558  + 1267 logs  (total    1267)   22.6%
+  blocks 19821559-19871558  + 1284 logs  (total    2551)   45.1%
+  blocks 19871559-19921558  + 2587 logs  (total    5138)   67.7%
+  blocks 19921559-19971558  + 2838 logs  (total    7976)   90.2%
+  blocks 19971559-19993248  +  439 logs  (total    8415)  100.0%
+  wrote 8415 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_19771559_19993248_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 19993249-20207947
+  blocks 19993249-20043248  +  919 logs  (total     919)   23.3%
+  blocks 20043249-20093248  +  821 logs  (total    1740)   46.6%
+  blocks 20093249-20143248  + 1404 logs  (total    3144)   69.9%
+  blocks 20143249-20193248  + 1253 logs  (total    4397)   93.2%
+  blocks 20193249-20207947  +  212 logs  (total    4609)  100.0%
+  wrote 4609 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_19993249_20207947_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 20207948-20429971
+  blocks 20207948-20257947  + 1347 logs  (total    1347)   22.5%
+  blocks 20257948-20307947  + 1282 logs  (total    2629)   45.0%
+  blocks 20307948-20357947  + 1037 logs  (total    3666)   67.6%
+  blocks 20357948-20407947  + 1951 logs  (total    5617)   90.1%
+  blocks 20407948-20429971  +  760 logs  (total    6377)  100.0%
+  wrote 6377 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_20207948_20429971_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 20429972-20651992
+  blocks 20429972-20479971  + 2244 logs  (total    2244)   22.5%
+  blocks 20479972-20529971  + 1710 logs  (total    3954)   45.0%
+  blocks 20529972-20579971  +  869 logs  (total    4823)   67.6%
+  blocks 20579972-20629971  +  845 logs  (total    5668)   90.1%
+  blocks 20629972-20651992  +  460 logs  (total    6128)  100.0%
+  wrote 6128 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_20429972_20651992_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 20651993-20866917
+  blocks 20651993-20701992  +  926 logs  (total     926)   23.3%
+  blocks 20701993-20751992  +  823 logs  (total    1749)   46.5%
+  blocks 20751993-20801992  +  764 logs  (total    2513)   69.8%
+  blocks 20801993-20851992  +  552 logs  (total    3065)   93.1%
+  blocks 20851993-20866917  +  172 logs  (total    3237)  100.0%
+  wrote 3237 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_20651993_20866917_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 20866918-21089067
+  blocks 20866918-20916917  +  605 logs  (total     605)   22.5%
+  blocks 20916918-20966917  +  410 logs  (total    1015)   45.0%
+  blocks 20966918-21016917  +  510 logs  (total    1525)   67.5%
+  blocks 21016918-21066917  +  688 logs  (total    2213)   90.0%
+  blocks 21066918-21089067  +  432 logs  (total    2645)  100.0%
+  wrote 2645 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_20866918_21089067_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 21089068-21303932
+  blocks 21089068-21139067  +  936 logs  (total     936)   23.3%
+  blocks 21139068-21189067  + 1505 logs  (total    2441)   46.5%
+  blocks 21189068-21239067  + 1508 logs  (total    3949)   69.8%
+  blocks 21239068-21289067  + 1827 logs  (total    5776)   93.1%
+  blocks 21289068-21303932  +  407 logs  (total    6183)  100.0%
+  wrote 6183 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_21089068_21303932_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 21303933-21525889
+  blocks 21303933-21353932  + 1337 logs  (total    1337)   22.5%
+  blocks 21353933-21403932  + 1037 logs  (total    2374)   45.1%
+  blocks 21403933-21453932  + 1122 logs  (total    3496)   67.6%
+  blocks 21453933-21503932  +  994 logs  (total    4490)   90.1%
+  blocks 21503933-21525889  +  305 logs  (total    4795)  100.0%
+  wrote 4795 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_21303933_21525889_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 21525890-21747948
+  blocks 21525890-21575889  +  785 logs  (total     785)   22.5%
+  blocks 21575890-21625889  + 1138 logs  (total    1923)   45.0%
+  blocks 21625890-21675889  + 1431 logs  (total    3354)   67.5%
+  blocks 21675890-21725889  +  782 logs  (total    4136)   90.1%
+  blocks 21725890-21747948  +  564 logs  (total    4700)  100.0%
+  wrote 4700 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_21525890_21747948_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 21747949-21948290
+  blocks 21747949-21797948  + 2600 logs  (total    2600)   25.0%
+  blocks 21797949-21847948  + 1168 logs  (total    3768)   49.9%
+  blocks 21847949-21897948  + 1228 logs  (total    4996)   74.9%
+  blocks 21897949-21947948  + 2049 logs  (total    7045)   99.8%
+  blocks 21947949-21948290  +   10 logs  (total    7055)  100.0%
+  wrote 7055 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_21747949_21948290_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 21948291-22170333
+  blocks 21948291-21998290  + 2060 logs  (total    2060)   22.5%
+  blocks 21998291-22048290  + 2134 logs  (total    4194)   45.0%
+  blocks 22048291-22098290  + 1468 logs  (total    5662)   67.6%
+  blocks 22098291-22148290  + 2463 logs  (total    8125)   90.1%
+  blocks 22148291-22170333  +  989 logs  (total    9114)  100.0%
+  wrote 9114 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_21948291_22170333_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 22170334-22385292
+  blocks 22170334-22220333  + 2935 logs  (total    2935)   23.3%
+  blocks 22220334-22270333  + 3279 logs  (total    6214)   46.5%
+  blocks 22270334-22320333  + 1619 logs  (total    7833)   69.8%
+  blocks 22320334-22370333  + 1589 logs  (total    9422)   93.0%
+  blocks 22370334-22385292  +  403 logs  (total    9825)  100.0%
+  wrote 9825 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_22170334_22385292_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 22385293-22606141
+  blocks 22385293-22435292  +  695 logs  (total     695)   22.6%
+  blocks 22435293-22485292  + 2233 logs  (total    2928)   45.3%
+  blocks 22485293-22535292  + 1864 logs  (total    4792)   67.9%
+  blocks 22535293-22585292  + 1105 logs  (total    5897)   90.6%
+  blocks 22585293-22606141  +  972 logs  (total    6869)  100.0%
+  wrote 6869 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_22385293_22606141_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 22606142-22820672
+  blocks 22606142-22656141  + 1654 logs  (total    1654)   23.3%
+  blocks 22656142-22706141  + 1920 logs  (total    3574)   46.6%
+  blocks 22706142-22756141  + 1755 logs  (total    5329)   69.9%
+  blocks 22756142-22806141  + 1735 logs  (total    7064)   93.2%
+  blocks 22806142-22820672  +  401 logs  (total    7465)  100.0%
+  wrote 7465 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_22606142_22820672_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 22820673-23042512
+  blocks 22820673-22870672  + 1046 logs  (total    1046)   22.5%
+  blocks 22870673-22920672  +  961 logs  (total    2007)   45.1%
+  blocks 22920673-22970672  + 1737 logs  (total    3744)   67.6%
+  blocks 22970673-23020672  + 1777 logs  (total    5521)   90.2%
+  blocks 23020673-23042512  +  482 logs  (total    6003)  100.0%
+  wrote 6003 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_22820673_23042512_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 23042513-23264564
+  blocks 23042513-23092512  + 1889 logs  (total    1889)   22.5%
+  blocks 23092513-23142512  + 2393 logs  (total    4282)   45.0%
+  blocks 23142513-23192512  + 1969 logs  (total    6251)   67.6%
+  blocks 23192513-23242512  + 3114 logs  (total    9365)   90.1%
+  blocks 23242513-23264564  +  940 logs  (total   10305)  100.0%
+  wrote 10305 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_23042513_23264564_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 23264565-23479242
+  blocks 23264565-23314564  + 1852 logs  (total    1852)   23.3%
+  blocks 23314565-23364564  + 1361 logs  (total    3213)   46.6%
+  blocks 23364565-23414564  + 1278 logs  (total    4491)   69.9%
+  blocks 23414565-23464564  + 1840 logs  (total    6331)   93.2%
+  blocks 23464565-23479242  +  381 logs  (total    6712)  100.0%
+  wrote 6712 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_23264565_23479242_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 23479243-23700765
+  blocks 23479243-23529242  + 2112 logs  (total    2112)   22.6%
+  blocks 23529243-23579242  + 2880 logs  (total    4992)   45.1%
+  blocks 23579243-23629242  + 2576 logs  (total    7568)   67.7%
+  blocks 23629243-23679242  + 1629 logs  (total    9197)   90.3%
+  blocks 23679243-23700765  +  835 logs  (total   10032)  100.0%
+  wrote 10032 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_23479243_23700765_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 23700766-23914919
+  blocks 23700766-23750765  + 1935 logs  (total    1935)   23.3%
+  blocks 23750766-23800765  + 2431 logs  (total    4366)   46.7%
+  blocks 23800766-23850765  + 3324 logs  (total    7690)   70.0%
+  blocks 23850766-23900765  + 2170 logs  (total    9860)   93.4%
+  blocks 23900766-23914919  +  232 logs  (total   10092)  100.0%
+  wrote 10092 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_23700766_23914919_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 23914920-24136051
+  blocks 23914920-23964919  + 2447 logs  (total    2447)   22.6%
+  blocks 23964920-24014919  + 1792 logs  (total    4239)   45.2%
+  blocks 24014920-24064919  + 2260 logs  (total    6499)   67.8%
+  blocks 24064920-24114919  + 1535 logs  (total    8034)   90.4%
+  blocks 24114920-24136051  +  690 logs  (total    8724)  100.0%
+  wrote 8724 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_23914920_24136051_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 24136052-24358291
+  blocks 24136052-24186051  + 1477 logs  (total    1477)   22.5%
+  blocks 24186052-24236051  + 1383 logs  (total    2860)   45.0%
+  blocks 24236052-24286051  + 1729 logs  (total    4589)   67.5%
+  blocks 24286052-24336051  + 2039 logs  (total    6628)   90.0%
+  blocks 24336052-24358291  + 1534 logs  (total    8162)  100.0%
+  wrote 8162 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_24136052_24358291_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 24358292-24558866
+  blocks 24358292-24408291  + 4368 logs  (total    4368)   24.9%
+  blocks 24408292-24458291  + 1959 logs  (total    6327)   49.9%
+  blocks 24458292-24508291  + 1894 logs  (total    8221)   74.8%
+  blocks 24508292-24558291  + 2317 logs  (total   10538)   99.7%
+  blocks 24558292-24558866  +   20 logs  (total   10558)  100.0%
+  wrote 10558 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_24358292_24558866_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 24558867-24781025
+  blocks 24558867-24608866  + 1816 logs  (total    1816)   22.5%
+  blocks 24608867-24658866  + 1524 logs  (total    3340)   45.0%
+  blocks 24658867-24708866  + 1349 logs  (total    4689)   67.5%
+  blocks 24708867-24758866  + 1121 logs  (total    5810)   90.0%
+  blocks 24758867-24781025  +  555 logs  (total    6365)  100.0%
+  wrote 6365 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_24558867_24781025_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 24781026-24996366
+  blocks 24781026-24831025  +  883 logs  (total     883)   23.2%
+  blocks 24831026-24881025  +  822 logs  (total    1705)   46.4%
+  blocks 24881026-24931025  +  643 logs  (total    2348)   69.7%
+  blocks 24931026-24981025  +  478 logs  (total    2826)   92.9%
+  blocks 24981026-24996366  +  136 logs  (total    2962)  100.0%
+  wrote 2962 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_24781026_24996366_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 24996367-25218796
+  blocks 24996367-25046366  +  425 logs  (total     425)   22.5%
+  blocks 25046367-25096366  +  455 logs  (total     880)   45.0%
+  blocks 25096367-25146366  +  749 logs  (total    1629)   67.4%
+  blocks 25146367-25196366  +  730 logs  (total    2359)   89.9%
+  blocks 25196367-25218796  +  159 logs  (total    2518)  100.0%
+  wrote 2518 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_24996367_25218796_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 25218797-25433937
+  blocks 25218797-25268796  + 2141 logs  (total    2141)   23.2%
+  blocks 25268797-25318796  +  929 logs  (total    3070)   46.5%
+  blocks 25318797-25368796  +  920 logs  (total    3990)   69.7%
+  blocks 25368797-25418796  +  889 logs  (total    4879)   93.0%
+  blocks 25418797-25433937  +  353 logs  (total    5232)  100.0%
+  wrote 5232 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_25218797_25433937_v3.parquet
+fetching swaps 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed blocks 25433938-25656291
+  blocks 25433938-25483937  + 1169 logs  (total    1169)   22.5%
+  blocks 25483938-25533937  +  763 logs  (total    1932)   45.0%
+  blocks 25533938-25583937  +  822 logs  (total    2754)   67.5%
+  blocks 25583938-25633937  +  668 logs  (total    3422)   89.9%
+  blocks 25633938-25656291  +  315 logs  (total    3737)  100.0%
+  wrote 3737 swaps -> 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_25433938_25656291_v3.parquet
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_16308189_16530246_v3.parquet
+  downloading ETHBTC-1s-2022-12.zip ...
+    -> 27.8 MB
+  cache hit: ETHBTC-1s-2023-01.zip (32.6 MB)
+  cache hit: ETHUSDT-1s-2023-01.zip (62.0 MB)
+  WBTC_ETH_30bp 2023-01: 7,815 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_16530247_16730070_v3.parquet
+  cache hit: ETHBTC-1s-2023-01.zip (32.6 MB)
+  cache hit: ETHBTC-1s-2023-02.zip (31.9 MB)
+  cache hit: ETHUSDT-1s-2023-02.zip (61.2 MB)
+  WBTC_ETH_30bp 2023-02: 5,275 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_16730071_16950601_v3.parquet
+  cache hit: ETHBTC-1s-2023-02.zip (31.9 MB)
+  cache hit: ETHBTC-1s-2023-03.zip (37.5 MB)
+  cache hit: ETHUSDT-1s-2023-03.zip (73.2 MB)
+  WBTC_ETH_30bp 2023-03: 9,002 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_16950602_17162285_v3.parquet
+  cache hit: ETHBTC-1s-2023-03.zip (37.5 MB)
+  cache hit: ETHBTC-1s-2023-04.zip (32.2 MB)
+  cache hit: ETHUSDT-1s-2023-04.zip (66.8 MB)
+  WBTC_ETH_30bp 2023-04: 6,658 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_17162286_17382264_v3.parquet
+  cache hit: ETHBTC-1s-2023-04.zip (32.2 MB)
+  cache hit: ETHBTC-1s-2023-05.zip (28.8 MB)
+  cache hit: ETHUSDT-1s-2023-05.zip (61.8 MB)
+  WBTC_ETH_30bp 2023-05: 5,604 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_17382265_17595508_v3.parquet
+  cache hit: ETHBTC-1s-2023-05.zip (28.8 MB)
+  cache hit: ETHBTC-1s-2023-06.zip (22.9 MB)
+  cache hit: ETHUSDT-1s-2023-06.zip (57.3 MB)
+  WBTC_ETH_30bp 2023-06: 5,666 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_17595509_17816432_v3.parquet
+  cache hit: ETHBTC-1s-2023-06.zip (22.9 MB)
+  cache hit: ETHBTC-1s-2023-07.zip (22.0 MB)
+  cache hit: ETHUSDT-1s-2023-07.zip (52.9 MB)
+  WBTC_ETH_30bp 2023-07: 3,217 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_17816433_18037986_v3.parquet
+  cache hit: ETHBTC-1s-2023-07.zip (22.0 MB)
+  cache hit: ETHBTC-1s-2023-08.zip (21.7 MB)
+  cache hit: ETHUSDT-1s-2023-08.zip (50.2 MB)
+  WBTC_ETH_30bp 2023-08: 3,119 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_18037987_18251963_v3.parquet
+  cache hit: ETHBTC-1s-2023-08.zip (21.7 MB)
+  cache hit: ETHBTC-1s-2023-09.zip (20.4 MB)
+  cache hit: ETHUSDT-1s-2023-09.zip (48.7 MB)
+  WBTC_ETH_30bp 2023-09: 1,795 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_18251964_18473541_v3.parquet
+  cache hit: ETHBTC-1s-2023-09.zip (20.4 MB)
+  cache hit: ETHBTC-1s-2023-10.zip (23.1 MB)
+  cache hit: ETHUSDT-1s-2023-10.zip (57.6 MB)
+  WBTC_ETH_30bp 2023-10: 3,289 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_18473542_18687849_v3.parquet
+  cache hit: ETHBTC-1s-2023-10.zip (23.1 MB)
+  cache hit: ETHBTC-1s-2023-11.zip (24.5 MB)
+  cache hit: ETHUSDT-1s-2023-11.zip (66.0 MB)
+  WBTC_ETH_30bp 2023-11: 3,382 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_18687850_18908893_v3.parquet
+  cache hit: ETHBTC-1s-2023-11.zip (24.5 MB)
+  cache hit: ETHBTC-1s-2023-12.zip (25.1 MB)
+  cache hit: ETHUSDT-1s-2023-12.zip (71.3 MB)
+  WBTC_ETH_30bp 2023-12: 3,852 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_18908894_19129887_v3.parquet
+  cache hit: ETHBTC-1s-2023-12.zip (25.1 MB)
+  cache hit: ETHBTC-1s-2024-01.zip (26.2 MB)
+  cache hit: ETHUSDT-1s-2024-01.zip (72.1 MB)
+  WBTC_ETH_30bp 2024-01: 5,587 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_19129888_19336605_v3.parquet
+  cache hit: ETHBTC-1s-2024-01.zip (26.2 MB)
+  cache hit: ETHBTC-1s-2024-02.zip (23.3 MB)
+  cache hit: ETHUSDT-1s-2024-02.zip (68.0 MB)
+  WBTC_ETH_30bp 2024-02: 4,330 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_19336606_19557287_v3.parquet
+  cache hit: ETHBTC-1s-2024-02.zip (23.3 MB)
+  cache hit: ETHBTC-1s-2024-03.zip (28.5 MB)
+  cache hit: ETHUSDT-1s-2024-03.zip (83.8 MB)
+  WBTC_ETH_30bp 2024-03: 5,537 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_19557288_19771558_v3.parquet
+  cache hit: ETHBTC-1s-2024-03.zip (28.5 MB)
+  cache hit: ETHBTC-1s-2024-04.zip (24.8 MB)
+  cache hit: ETHUSDT-1s-2024-04.zip (73.3 MB)
+  WBTC_ETH_30bp 2024-04: 4,568 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_19771559_19993248_v3.parquet
+  cache hit: ETHBTC-1s-2024-04.zip (24.8 MB)
+  cache hit: ETHBTC-1s-2024-05.zip (25.1 MB)
+  cache hit: ETHUSDT-1s-2024-05.zip (69.8 MB)
+  WBTC_ETH_30bp 2024-05: 7,643 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_19993249_20207947_v3.parquet
+  cache hit: ETHBTC-1s-2024-05.zip (25.1 MB)
+  cache hit: ETHBTC-1s-2024-06.zip (22.0 MB)
+  cache hit: ETHUSDT-1s-2024-06.zip (62.1 MB)
+  WBTC_ETH_30bp 2024-06: 4,072 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_20207948_20429971_v3.parquet
+  cache hit: ETHBTC-1s-2024-06.zip (22.0 MB)
+  cache hit: ETHBTC-1s-2024-07.zip (23.8 MB)
+  cache hit: ETHUSDT-1s-2024-07.zip (66.4 MB)
+  WBTC_ETH_30bp 2024-07: 5,540 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_20429972_20651992_v3.parquet
+  cache hit: ETHBTC-1s-2024-07.zip (23.8 MB)
+  cache hit: ETHBTC-1s-2024-08.zip (24.8 MB)
+  cache hit: ETHUSDT-1s-2024-08.zip (69.7 MB)
+  WBTC_ETH_30bp 2024-08: 5,434 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_20651993_20866917_v3.parquet
+  cache hit: ETHBTC-1s-2024-08.zip (24.8 MB)
+  cache hit: ETHBTC-1s-2024-09.zip (22.1 MB)
+  cache hit: ETHUSDT-1s-2024-09.zip (62.3 MB)
+  WBTC_ETH_30bp 2024-09: 3,102 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_20866918_21089067_v3.parquet
+  cache hit: ETHBTC-1s-2024-09.zip (22.1 MB)
+  cache hit: ETHBTC-1s-2024-10.zip (22.2 MB)
+  cache hit: ETHUSDT-1s-2024-10.zip (65.7 MB)
+  WBTC_ETH_30bp 2024-10: 2,554 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_21089068_21303932_v3.parquet
+  cache hit: ETHBTC-1s-2024-10.zip (22.2 MB)
+  cache hit: ETHBTC-1s-2024-11.zip (27.0 MB)
+  cache hit: ETHUSDT-1s-2024-11.zip (80.9 MB)
+  WBTC_ETH_30bp 2024-11: 5,900 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_21303933_21525889_v3.parquet
+  cache hit: ETHBTC-1s-2024-11.zip (27.0 MB)
+  cache hit: ETHBTC-1s-2024-12.zip (26.7 MB)
+  cache hit: ETHUSDT-1s-2024-12.zip (82.9 MB)
+  WBTC_ETH_30bp 2024-12: 4,639 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_21525890_21747948_v3.parquet
+  cache hit: ETHBTC-1s-2024-12.zip (26.7 MB)
+  cache hit: ETHBTC-1s-2025-01.zip (24.2 MB)
+  cache hit: ETHUSDT-1s-2025-01.zip (77.7 MB)
+  WBTC_ETH_30bp 2025-01: 4,534 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_21747949_21948290_v3.parquet
+  cache hit: ETHBTC-1s-2025-01.zip (24.2 MB)
+  cache hit: ETHBTC-1s-2025-02.zip (22.8 MB)
+  cache hit: ETHUSDT-1s-2025-02.zip (73.0 MB)
+  WBTC_ETH_30bp 2025-02: 6,546 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_21948291_22170333_v3.parquet
+  cache hit: ETHBTC-1s-2025-02.zip (22.8 MB)
+  cache hit: ETHBTC-1s-2025-03.zip (22.1 MB)
+  cache hit: ETHUSDT-1s-2025-03.zip (76.0 MB)
+  WBTC_ETH_30bp 2025-03: 8,604 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_22170334_22385292_v3.parquet
+  cache hit: ETHBTC-1s-2025-03.zip (22.1 MB)
+  cache hit: ETHBTC-1s-2025-04.zip (20.3 MB)
+  cache hit: ETHUSDT-1s-2025-04.zip (71.3 MB)
+  WBTC_ETH_30bp 2025-04: 8,984 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_22385293_22606141_v3.parquet
+  cache hit: ETHBTC-1s-2025-04.zip (20.3 MB)
+  cache hit: ETHBTC-1s-2025-05.zip (22.5 MB)
+  cache hit: ETHUSDT-1s-2025-05.zip (78.2 MB)
+  WBTC_ETH_30bp 2025-05: 6,538 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_22606142_22820672_v3.parquet
+  cache hit: ETHBTC-1s-2025-05.zip (22.5 MB)
+  cache hit: ETHBTC-1s-2025-06.zip (20.5 MB)
+  cache hit: ETHUSDT-1s-2025-06.zip (69.3 MB)
+  WBTC_ETH_30bp 2025-06: 7,035 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_22820673_23042512_v3.parquet
+  cache hit: ETHBTC-1s-2025-06.zip (20.5 MB)
+  cache hit: ETHBTC-1s-2025-07.zip (22.3 MB)
+  cache hit: ETHUSDT-1s-2025-07.zip (76.6 MB)
+  WBTC_ETH_30bp 2025-07: 5,678 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_23042513_23264564_v3.parquet
+  cache hit: ETHBTC-1s-2025-07.zip (22.3 MB)
+  cache hit: ETHBTC-1s-2025-08.zip (24.8 MB)
+  cache hit: ETHUSDT-1s-2025-08.zip (80.3 MB)
+  WBTC_ETH_30bp 2025-08: 9,336 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_23264565_23479242_v3.parquet
+  cache hit: ETHBTC-1s-2025-08.zip (24.8 MB)
+  cache hit: ETHBTC-1s-2025-09.zip (20.5 MB)
+  cache hit: ETHUSDT-1s-2025-09.zip (67.8 MB)
+  WBTC_ETH_30bp 2025-09: 6,023 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_23479243_23700765_v3.parquet
+  cache hit: ETHBTC-1s-2025-09.zip (20.5 MB)
+  cache hit: ETHBTC-1s-2025-10.zip (22.7 MB)
+  cache hit: ETHUSDT-1s-2025-10.zip (75.9 MB)
+  WBTC_ETH_30bp 2025-10: 8,787 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_23700766_23914919_v3.parquet
+  cache hit: ETHBTC-1s-2025-10.zip (22.7 MB)
+  cache hit: ETHBTC-1s-2025-11.zip (21.7 MB)
+  cache hit: ETHUSDT-1s-2025-11.zip (72.8 MB)
+  WBTC_ETH_30bp 2025-11: 9,052 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_23914920_24136051_v3.parquet
+  cache hit: ETHBTC-1s-2025-11.zip (21.7 MB)
+  cache hit: ETHBTC-1s-2025-12.zip (20.4 MB)
+  cache hit: ETHUSDT-1s-2025-12.zip (64.9 MB)
+  WBTC_ETH_30bp 2025-12: 7,590 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_24136052_24358291_v3.parquet
+  cache hit: ETHBTC-1s-2025-12.zip (20.4 MB)
+  cache hit: ETHBTC-1s-2026-01.zip (19.9 MB)
+  cache hit: ETHUSDT-1s-2026-01.zip (63.3 MB)
+  WBTC_ETH_30bp 2026-01: 7,180 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_24358292_24558866_v3.parquet
+  cache hit: ETHBTC-1s-2026-01.zip (19.9 MB)
+  cache hit: ETHBTC-1s-2026-02.zip (19.4 MB)
+  cache hit: ETHUSDT-1s-2026-02.zip (66.2 MB)
+  WBTC_ETH_30bp 2026-02: 9,236 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_24558867_24781025_v3.parquet
+  cache hit: ETHBTC-1s-2026-02.zip (19.4 MB)
+  cache hit: ETHBTC-1s-2026-03.zip (19.7 MB)
+  cache hit: ETHUSDT-1s-2026-03.zip (65.4 MB)
+  WBTC_ETH_30bp 2026-03: 5,854 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_24781026_24996366_v3.parquet
+  cache hit: ETHBTC-1s-2026-03.zip (19.7 MB)
+  cache hit: ETHBTC-1s-2026-04.zip (18.5 MB)
+  cache hit: ETHUSDT-1s-2026-04.zip (59.2 MB)
+  WBTC_ETH_30bp 2026-04: 2,789 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_24996367_25218796_v3.parquet
+  cache hit: ETHBTC-1s-2026-04.zip (18.5 MB)
+  cache hit: ETHBTC-1s-2026-05.zip (18.3 MB)
+  cache hit: ETHUSDT-1s-2026-05.zip (57.7 MB)
+  WBTC_ETH_30bp 2026-05: 2,399 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_25218797_25433937_v3.parquet
+  cache hit: ETHBTC-1s-2026-05.zip (18.3 MB)
+  cache hit: ETHBTC-1s-2026-06.zip (19.2 MB)
+  cache hit: ETHUSDT-1s-2026-06.zip (62.4 MB)
+  WBTC_ETH_30bp 2026-06: 4,846 blocks, vol coverage 100.0%
+  cache hit: 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed_25433938_25656291_v3.parquet
+  cache hit: ETHBTC-1s-2026-06.zip (19.2 MB)
+  cache hit: ETHBTC-1s-2026-07.zip (18.8 MB)
+  cache hit: ETHUSDT-1s-2026-07.zip (61.5 MB)
+  WBTC_ETH_30bp 2026-07: 3,547 blocks, vol coverage 100.0%
+  WBTC_ETH_30bp: 43 months built, 0 failed
+
+=== USDC_USDT_1bp: CEX reference USDCUSDT ===
+  downloading USDCUSDT-1s-2023-01.zip ...
+  klines USDCUSDT 2023-01: HTTPError
+  downloading USDCUSDT-1s-2023-02.zip ...
+  klines USDCUSDT 2023-02: HTTPError
+  downloading USDCUSDT-1s-2023-03.zip ...
+    -> 26.0 MB
+  downloading USDCUSDT-1s-2023-04.zip ...
+    -> 30.3 MB
+  downloading USDCUSDT-1s-2023-05.zip ...
+    -> 29.8 MB
+  downloading USDCUSDT-1s-2023-06.zip ...
+    -> 29.2 MB
+  downloading USDCUSDT-1s-2023-07.zip ...
+    -> 28.9 MB
+  downloading USDCUSDT-1s-2023-08.zip ...
+    -> 29.5 MB
+  downloading USDCUSDT-1s-2023-09.zip ...
+    -> 27.7 MB
+  downloading USDCUSDT-1s-2023-10.zip ...
+    -> 32.5 MB
+  downloading USDCUSDT-1s-2023-11.zip ...
+    -> 39.3 MB
+  downloading USDCUSDT-1s-2023-12.zip ...
+    -> 40.6 MB
+  downloading USDCUSDT-1s-2024-01.zip ...
+    -> 41.1 MB
+  downloading USDCUSDT-1s-2024-02.zip ...
+    -> 39.6 MB
+  downloading USDCUSDT-1s-2024-03.zip ...
+    -> 50.6 MB
+  downloading USDCUSDT-1s-2024-04.zip ...
+    -> 43.2 MB
+  downloading USDCUSDT-1s-2024-05.zip ...
+    -> 42.6 MB
+  downloading USDCUSDT-1s-2024-06.zip ...
+    -> 42.0 MB
+  downloading USDCUSDT-1s-2024-07.zip ...
+    -> 43.7 MB
+  downloading USDCUSDT-1s-2024-08.zip ...
+    -> 43.8 MB
+  downloading USDCUSDT-1s-2024-09.zip ...
+    -> 38.5 MB
+  downloading USDCUSDT-1s-2024-10.zip ...
+    -> 41.9 MB
+  downloading USDCUSDT-1s-2024-11.zip ...
+    -> 51.5 MB
+  downloading USDCUSDT-1s-2024-12.zip ...
+    -> 54.8 MB
+  downloading USDCUSDT-1s-2025-01.zip ...
+    -> 53.4 MB
+  downloading USDCUSDT-1s-2025-02.zip ...
+    -> 47.6 MB
+  downloading USDCUSDT-1s-2025-03.zip ...
+    -> 51.1 MB
+  downloading USDCUSDT-1s-2025-04.zip ...
+    -> 49.4 MB
+  downloading USDCUSDT-1s-2025-05.zip ...
+    -> 54.4 MB
+  downloading USDCUSDT-1s-2025-06.zip ...
+    -> 46.4 MB
+  downloading USDCUSDT-1s-2025-07.zip ...
+    -> 52.4 MB
+  downloading USDCUSDT-1s-2025-08.zip ...
+    -> 57.0 MB
+  downloading USDCUSDT-1s-2025-09.zip ...
+    -> 58.6 MB
+  downloading USDCUSDT-1s-2025-10.zip ...
+    -> 62.0 MB
+  downloading USDCUSDT-1s-2025-11.zip ...
+    -> 56.5 MB
+  downloading USDCUSDT-1s-2025-12.zip ...
+    -> 54.6 MB
+  downloading USDCUSDT-1s-2026-01.zip ...
+    -> 55.5 MB
+  downloading USDCUSDT-1s-2026-02.zip ...
+    -> 51.0 MB
+  downloading USDCUSDT-1s-2026-03.zip ...
+    -> 52.9 MB
+  downloading USDCUSDT-1s-2026-04.zip ...
+    -> 53.8 MB
+  downloading USDCUSDT-1s-2026-05.zip ...
+    -> 57.4 MB
+  downloading USDCUSDT-1s-2026-06.zip ...
+    -> 59.9 MB
+  downloading USDCUSDT-1s-2026-07.zip ...
+    -> 57.8 MB
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 16308189-16530246
+  blocks 16308189-16358188  + 5618 logs  (total    5618)   22.5%
+  blocks 16358189-16408188  + 8518 logs  (total   14136)   45.0%
+  blocks 16408189-16458188  + 7204 logs  (total   21340)   67.5%
+  blocks 16458189-16508188  + 6560 logs  (total   27900)   90.1%
+  blocks 16508189-16530246  + 2898 logs  (total   30798)  100.0%
+  wrote 30798 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_16308189_16530246_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 16530247-16730070
+  blocks 16530247-16580246  + 7385 logs  (total    7385)   25.0%
+  blocks 16580247-16630246  + 9284 logs  (total   16669)   50.0%
+  blocks 16630247-16680246  + 8901 logs  (total   25570)   75.1%
+  blocks 16680247-16730070  + 6812 logs  (total   32382)  100.0%
+  wrote 32382 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_16530247_16730070_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 16730071-16950601
+  blocks 16730071-16780070  + 6743 logs  (total    6743)   22.7%
+  blocks 16780071-16830070  +24058 logs  (total   30801)   45.3%
+  blocks 16830071-16880070  +14142 logs  (total   44943)   68.0%
+  blocks 16880071-16930070  +11752 logs  (total   56695)   90.7%
+  blocks 16930071-16950601  + 3065 logs  (total   59760)  100.0%
+  wrote 59760 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_16730071_16950601_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 16950602-17162285
+  blocks 16950602-17000601  + 7564 logs  (total    7564)   23.6%
+  blocks 17000602-17050601  + 7789 logs  (total   15353)   47.2%
+  blocks 17050602-17100601  + 6061 logs  (total   21414)   70.9%
+  blocks 17100602-17150601  + 4629 logs  (total   26043)   94.5%
+  blocks 17150602-17162285  +  900 logs  (total   26943)  100.0%
+  wrote 26943 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_16950602_17162285_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 17162286-17382264
+  blocks 17162286-17212285  + 4310 logs  (total    4310)   22.7%
+  blocks 17212286-17262285  + 4123 logs  (total    8433)   45.5%
+  blocks 17262286-17312285  + 3725 logs  (total   12158)   68.2%
+  blocks 17312286-17362285  + 4153 logs  (total   16311)   90.9%
+  blocks 17362286-17382264  + 1517 logs  (total   17828)  100.0%
+  wrote 17828 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_17162286_17382264_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 17382265-17595508
+  blocks 17382265-17432264  + 3770 logs  (total    3770)   23.4%
+  blocks 17432265-17482264  + 4538 logs  (total    8308)   46.9%
+  blocks 17482265-17532264  + 6641 logs  (total   14949)   70.3%
+  blocks 17532265-17582264  + 4367 logs  (total   19316)   93.8%
+  blocks 17582265-17595508  + 1145 logs  (total   20461)  100.0%
+  wrote 20461 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_17382265_17595508_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 17595509-17816432
+  blocks 17595509-17645508  + 4360 logs  (total    4360)   22.6%
+  blocks 17645509-17695508  + 4809 logs  (total    9169)   45.3%
+  blocks 17695509-17745508  + 4872 logs  (total   14041)   67.9%
+  blocks 17745509-17795508  + 3897 logs  (total   17938)   90.5%
+  blocks 17795509-17816432  + 1579 logs  (total   19517)  100.0%
+  wrote 19517 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_17595509_17816432_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 17816433-18037986
+  blocks 17816433-17866432  + 4703 logs  (total    4703)   22.6%
+  blocks 17866433-17916432  + 3748 logs  (total    8451)   45.1%
+  blocks 17916433-17966432  + 4299 logs  (total   12750)   67.7%
+  blocks 17966433-18016432  + 3265 logs  (total   16015)   90.3%
+  blocks 18016433-18037986  + 1479 logs  (total   17494)  100.0%
+  wrote 17494 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_17816433_18037986_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 18037987-18251963
+  blocks 18037987-18087986  + 3095 logs  (total    3095)   23.4%
+  blocks 18087987-18137986  + 3439 logs  (total    6534)   46.7%
+  blocks 18137987-18187986  + 2941 logs  (total    9475)   70.1%
+  blocks 18187987-18237986  + 4046 logs  (total   13521)   93.5%
+  blocks 18237987-18251963  +  890 logs  (total   14411)  100.0%
+  wrote 14411 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_18037987_18251963_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 18251964-18473541
+  blocks 18251964-18301963  + 3739 logs  (total    3739)   22.6%
+  blocks 18301964-18351963  + 4102 logs  (total    7841)   45.1%
+  blocks 18351964-18401963  + 3866 logs  (total   11707)   67.7%
+  blocks 18401964-18451963  + 4104 logs  (total   15811)   90.3%
+  blocks 18451964-18473541  + 1406 logs  (total   17217)  100.0%
+  wrote 17217 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_18251964_18473541_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 18473542-18687849
+  blocks 18473542-18523541  + 3678 logs  (total    3678)   23.3%
+  blocks 18523542-18573541  + 3750 logs  (total    7428)   46.7%
+  blocks 18573542-18623541  + 4187 logs  (total   11615)   70.0%
+  blocks 18623542-18673541  + 4082 logs  (total   15697)   93.3%
+  blocks 18673542-18687849  + 1226 logs  (total   16923)  100.0%
+  wrote 16923 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_18473542_18687849_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 18687850-18908893
+  blocks 18687850-18737849  + 4932 logs  (total    4932)   22.6%
+  blocks 18737850-18787849  + 4797 logs  (total    9729)   45.2%
+  blocks 18787850-18837849  + 4967 logs  (total   14696)   67.9%
+  blocks 18837850-18887849  + 5633 logs  (total   20329)   90.5%
+  blocks 18887850-18908893  + 2065 logs  (total   22394)  100.0%
+  wrote 22394 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_18687850_18908893_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 18908894-19129887
+  blocks 18908894-18958893  + 5484 logs  (total    5484)   22.6%
+  blocks 18958894-19008893  + 6143 logs  (total   11627)   45.3%
+  blocks 19008894-19058893  + 5686 logs  (total   17313)   67.9%
+  blocks 19058894-19108893  + 8954 logs  (total   26267)   90.5%
+  blocks 19108894-19129887  + 2940 logs  (total   29207)  100.0%
+  wrote 29207 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_18908894_19129887_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 19129888-19336605
+  blocks 19129888-19179887  + 5759 logs  (total    5759)   24.2%
+  blocks 19179888-19229887  + 6935 logs  (total   12694)   48.4%
+  blocks 19229888-19279887  + 8477 logs  (total   21171)   72.6%
+  blocks 19279888-19329887  + 6287 logs  (total   27458)   96.8%
+  blocks 19329888-19336605  +  993 logs  (total   28451)  100.0%
+  wrote 28451 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_19129888_19336605_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 19336606-19557287
+  blocks 19336606-19386605  + 6956 logs  (total    6956)   22.7%
+  blocks 19386606-19436605  + 5999 logs  (total   12955)   45.3%
+  blocks 19436606-19486605  + 8953 logs  (total   21908)   68.0%
+  blocks 19486606-19536605  + 6848 logs  (total   28756)   90.6%
+  blocks 19536606-19557287  + 2727 logs  (total   31483)  100.0%
+  wrote 31483 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_19336606_19557287_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 19557288-19771558
+  blocks 19557288-19607287  + 7623 logs  (total    7623)   23.3%
+  blocks 19607288-19657287  + 8552 logs  (total   16175)   46.7%
+  blocks 19657288-19707287  + 7455 logs  (total   23630)   70.0%
+  blocks 19707288-19757287  + 6982 logs  (total   30612)   93.3%
+  blocks 19757288-19771558  + 2417 logs  (total   33029)  100.0%
+  wrote 33029 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_19557288_19771558_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 19771559-19993248
+  blocks 19771559-19821558  + 7912 logs  (total    7912)   22.6%
+  blocks 19821559-19871558  + 7189 logs  (total   15101)   45.1%
+  blocks 19871559-19921558  + 8681 logs  (total   23782)   67.7%
+  blocks 19921559-19971558  + 7086 logs  (total   30868)   90.2%
+  blocks 19971559-19993248  + 3197 logs  (total   34065)  100.0%
+  wrote 34065 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_19771559_19993248_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 19993249-20207947
+  blocks 19993249-20043248  + 6075 logs  (total    6075)   23.3%
+  blocks 20043249-20093248  + 7148 logs  (total   13223)   46.6%
+  blocks 20093249-20143248  + 6700 logs  (total   19923)   69.9%
+  blocks 20143249-20193248  + 7856 logs  (total   27779)   93.2%
+  blocks 20193249-20207947  + 2092 logs  (total   29871)  100.0%
+  wrote 29871 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_19993249_20207947_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 20207948-20429971
+  blocks 20207948-20257947  + 7922 logs  (total    7922)   22.5%
+  blocks 20257948-20307947  + 6621 logs  (total   14543)   45.0%
+  blocks 20307948-20357947  + 7534 logs  (total   22077)   67.6%
+  blocks 20357948-20407947  + 8367 logs  (total   30444)   90.1%
+  blocks 20407948-20429971  + 3580 logs  (total   34024)  100.0%
+  wrote 34024 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_20207948_20429971_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 20429972-20651992
+  blocks 20429972-20479971  +14655 logs  (total   14655)   22.5%
+  blocks 20479972-20529971  + 7354 logs  (total   22009)   45.0%
+  blocks 20529972-20579971  + 6772 logs  (total   28781)   67.6%
+  blocks 20579972-20629971  + 7715 logs  (total   36496)   90.1%
+  blocks 20629972-20651992  + 2888 logs  (total   39384)  100.0%
+  wrote 39384 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_20429972_20651992_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 20651993-20866917
+  blocks 20651993-20701992  + 7521 logs  (total    7521)   23.3%
+  blocks 20701993-20751992  + 6675 logs  (total   14196)   46.5%
+  blocks 20751993-20801992  + 5879 logs  (total   20075)   69.8%
+  blocks 20801993-20851992  + 5030 logs  (total   25105)   93.1%
+  blocks 20851993-20866917  + 1656 logs  (total   26761)  100.0%
+  wrote 26761 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_20651993_20866917_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 20866918-21089067
+  blocks 20866918-20916917  + 5880 logs  (total    5880)   22.5%
+  blocks 20916918-20966917  + 5648 logs  (total   11528)   45.0%
+  blocks 20966918-21016917  + 4732 logs  (total   16260)   67.5%
+  blocks 21016918-21066917  + 6317 logs  (total   22577)   90.0%
+  blocks 21066918-21089067  + 3040 logs  (total   25617)  100.0%
+  wrote 25617 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_20866918_21089067_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 21089068-21303932
+  blocks 21089068-21139067  + 7046 logs  (total    7046)   23.3%
+  blocks 21139068-21189067  + 7985 logs  (total   15031)   46.5%
+  blocks 21189068-21239067  + 8176 logs  (total   23207)   69.8%
+  blocks 21239068-21289067  + 9815 logs  (total   33022)   93.1%
+  blocks 21289068-21303932  + 2840 logs  (total   35862)  100.0%
+  wrote 35862 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_21089068_21303932_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 21303933-21525889
+  blocks 21303933-21353932  + 8999 logs  (total    8999)   22.5%
+  blocks 21353933-21403932  + 7867 logs  (total   16866)   45.1%
+  blocks 21403933-21453932  + 9380 logs  (total   26246)   67.6%
+  blocks 21453933-21503932  + 9241 logs  (total   35487)   90.1%
+  blocks 21503933-21525889  + 5824 logs  (total   41311)  100.0%
+  wrote 41311 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_21303933_21525889_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 21525890-21747948
+  blocks 21525890-21575889  + 7222 logs  (total    7222)   22.5%
+  blocks 21575890-21625889  + 8330 logs  (total   15552)   45.0%
+  blocks 21625890-21675889  + 9427 logs  (total   24979)   67.5%
+  blocks 21675890-21725889  + 9945 logs  (total   34924)   90.1%
+  blocks 21725890-21747948  + 4689 logs  (total   39613)  100.0%
+  wrote 39613 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_21525890_21747948_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 21747949-21948290
+  blocks 21747949-21797948  +14909 logs  (total   14909)   25.0%
+  blocks 21797949-21847948  +14181 logs  (total   29090)   49.9%
+  blocks 21847949-21897948  +11840 logs  (total   40930)   74.9%
+  blocks 21897949-21947948  +16639 logs  (total   57569)   99.8%
+  blocks 21947949-21948290  +   65 logs  (total   57634)  100.0%
+  wrote 57634 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_21747949_21948290_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 21948291-22170333
+  blocks 21948291-21998290  +14931 logs  (total   14931)   22.5%
+  blocks 21998291-22048290  +14058 logs  (total   28989)   45.0%
+  blocks 22048291-22098290  + 9964 logs  (total   38953)   67.6%
+  blocks 22098291-22148290  + 7162 logs  (total   46115)   90.1%
+  blocks 22148291-22170333  + 3483 logs  (total   49598)  100.0%
+  wrote 49598 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_21948291_22170333_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 22170334-22385292
+  blocks 22170334-22220333  +11049 logs  (total   11049)   23.3%
+  blocks 22220334-22270333  +17901 logs  (total   28950)   46.5%
+  blocks 22270334-22320333  + 9937 logs  (total   38887)   69.8%
+  blocks 22320334-22370333  +19568 logs  (total   58455)   93.0%
+  blocks 22370334-22385292  + 4947 logs  (total   63402)  100.0%
+  wrote 63402 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_22170334_22385292_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 22385293-22606141
+  blocks 22385293-22435292  +11192 logs  (total   11192)   22.6%
+  blocks 22435293-22485292  +10621 logs  (total   21813)   45.3%
+  blocks 22485293-22535292  + 8602 logs  (total   30415)   67.9%
+  blocks 22535293-22585292  +14789 logs  (total   45204)   90.6%
+  blocks 22585293-22606141  + 5009 logs  (total   50213)  100.0%
+  wrote 50213 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_22385293_22606141_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 22606142-22820672
+  blocks 22606142-22656141  + 7331 logs  (total    7331)   23.3%
+  blocks 22656142-22706141  + 7163 logs  (total   14494)   46.6%
+  blocks 22706142-22756141  + 6432 logs  (total   20926)   69.9%
+  blocks 22756142-22806141  + 7085 logs  (total   28011)   93.2%
+  blocks 22806142-22820672  + 2183 logs  (total   30194)  100.0%
+  wrote 30194 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_22606142_22820672_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 22820673-23042512
+  blocks 22820673-22870672  + 7647 logs  (total    7647)   22.5%
+  blocks 22870673-22920672  +14692 logs  (total   22339)   45.1%
+  blocks 22920673-22970672  + 9566 logs  (total   31905)   67.6%
+  blocks 22970673-23020672  +11537 logs  (total   43442)   90.2%
+  blocks 23020673-23042512  + 3947 logs  (total   47389)  100.0%
+  wrote 47389 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_22820673_23042512_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 23042513-23264564
+  blocks 23042513-23092512  +10525 logs  (total   10525)   22.5%
+  blocks 23092513-23142512  +12590 logs  (total   23115)   45.0%
+  blocks 23142513-23192512  +11284 logs  (total   34399)   67.6%
+  blocks 23192513-23242512  +17337 logs  (total   51736)   90.1%
+  blocks 23242513-23264564  + 3853 logs  (total   55589)  100.0%
+  wrote 55589 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_23042513_23264564_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 23264565-23479242
+  blocks 23264565-23314564  + 9004 logs  (total    9004)   23.3%
+  blocks 23314565-23364564  +10122 logs  (total   19126)   46.6%
+  blocks 23364565-23414564  +12251 logs  (total   31377)   69.9%
+  blocks 23414565-23464564  +12419 logs  (total   43796)   93.2%
+  blocks 23464565-23479242  + 4473 logs  (total   48269)  100.0%
+  wrote 48269 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_23264565_23479242_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 23479243-23700765
+  blocks 23479243-23529242  +11527 logs  (total   11527)   22.6%
+  blocks 23529243-23579242  +13929 logs  (total   25456)   45.1%
+  blocks 23579243-23629242  +11220 logs  (total   36676)   67.7%
+  blocks 23629243-23679242  +11880 logs  (total   48556)   90.3%
+  blocks 23679243-23700765  + 4994 logs  (total   53550)  100.0%
+  wrote 53550 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_23479243_23700765_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 23700766-23914919
+  blocks 23700766-23750765  +10467 logs  (total   10467)   23.3%
+  blocks 23750766-23800765  + 9724 logs  (total   20191)   46.7%
+  blocks 23800766-23850765  +18260 logs  (total   38451)   70.0%
+  blocks 23850766-23900765  + 9205 logs  (total   47656)   93.4%
+  blocks 23900766-23914919  + 1906 logs  (total   49562)  100.0%
+  wrote 49562 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_23700766_23914919_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 23914920-24136051
+  blocks 23914920-23964919  + 8805 logs  (total    8805)   22.6%
+  blocks 23964920-24014919  + 6402 logs  (total   15207)   45.2%
+  blocks 24014920-24064919  + 6817 logs  (total   22024)   67.8%
+  blocks 24064920-24114919  + 5363 logs  (total   27387)   90.4%
+  blocks 24114920-24136051  + 2731 logs  (total   30118)  100.0%
+  wrote 30118 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_23914920_24136051_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 24136052-24358291
+  blocks 24136052-24186051  + 5512 logs  (total    5512)   22.5%
+  blocks 24186052-24236051  + 5782 logs  (total   11294)   45.0%
+  blocks 24236052-24286051  + 8301 logs  (total   19595)   67.5%
+  blocks 24286052-24336051  + 7637 logs  (total   27232)   90.0%
+  blocks 24336052-24358291  + 4963 logs  (total   32195)  100.0%
+  wrote 32195 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_24136052_24358291_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 24358292-24558866
+  blocks 24358292-24408291  +14146 logs  (total   14146)   24.9%
+  blocks 24408292-24458291  + 8121 logs  (total   22267)   49.9%
+  blocks 24458292-24508291  + 6394 logs  (total   28661)   74.8%
+  blocks 24508292-24558291  + 8141 logs  (total   36802)   99.7%
+  blocks 24558292-24558866  +   69 logs  (total   36871)  100.0%
+  wrote 36871 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_24358292_24558866_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 24558867-24781025
+  blocks 24558867-24608866  + 7743 logs  (total    7743)   22.5%
+  blocks 24608867-24658866  + 7977 logs  (total   15720)   45.0%
+  blocks 24658867-24708866  + 7740 logs  (total   23460)   67.5%
+  blocks 24708867-24758866  + 8118 logs  (total   31578)   90.0%
+  blocks 24758867-24781025  + 2620 logs  (total   34198)  100.0%
+  wrote 34198 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_24558867_24781025_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 24781026-24996366
+  blocks 24781026-24831025  + 5966 logs  (total    5966)   23.2%
+  blocks 24831026-24881025  + 6712 logs  (total   12678)   46.4%
+  blocks 24881026-24931025  + 7917 logs  (total   20595)   69.7%
+  blocks 24931026-24981025  + 6578 logs  (total   27173)   92.9%
+  blocks 24981026-24996366  + 2201 logs  (total   29374)  100.0%
+  wrote 29374 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_24781026_24996366_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 24996367-25218796
+  blocks 24996367-25046366  + 9783 logs  (total    9783)   22.5%
+  blocks 25046367-25096366  + 9488 logs  (total   19271)   45.0%
+  blocks 25096367-25146366  + 7660 logs  (total   26931)   67.4%
+  blocks 25146367-25196366  + 8541 logs  (total   35472)   89.9%
+  blocks 25196367-25218796  + 3190 logs  (total   38662)  100.0%
+  wrote 38662 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_24996367_25218796_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 25218797-25433937
+  blocks 25218797-25268796  +13112 logs  (total   13112)   23.2%
+  blocks 25268797-25318796  + 7915 logs  (total   21027)   46.5%
+  blocks 25318797-25368796  + 7712 logs  (total   28739)   69.7%
+  blocks 25368797-25418796  + 7793 logs  (total   36532)   93.0%
+  blocks 25418797-25433937  + 3016 logs  (total   39548)  100.0%
+  wrote 39548 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_25218797_25433937_v3.parquet
+fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 25433938-25656291
+  blocks 25433938-25483937  + 8514 logs  (total    8514)   22.5%
+  blocks 25483938-25533937  + 8722 logs  (total   17236)   45.0%
+  blocks 25533938-25583937  + 7985 logs  (total   25221)   67.5%
+  blocks 25583938-25633937  + 7335 logs  (total   32556)   89.9%
+  blocks 25633938-25656291  + 4828 logs  (total   37384)  100.0%
+  wrote 37384 swaps -> 0x3416cf6c708da44db2624d63ea0aaef7113527c6_25433938_25656291_v3.parquet
+  cache hit: 0x3416cf6c708da44db2624d63ea0aaef7113527c6_16308189_16530246_v3.parquet
+  downloading USDCUSDT-1s-2022-12.zip ...
+  downloading USDCUSDT-1s-2023-01.zip ...
+  derived 2023-01: HTTPError HTTP Error 404: Not Found
+  cache hit: 0x3416cf6c708da44db2624d63ea0aaef7113527c6_16530247_16730070_v3.parquet
+  downloading USDCUSDT-1s-2023-01.zip ...
+  downloading USDCUSDT-1s-2023-02.zip ...
+  derived 2023-02: HTTPError HTTP Error 404: Not Found
+  cache hit: 0x3416cf6c708da44db2624d63ea0aaef7113527c6_16730071_16950601_v3.parquet
+  downloading USDCUSDT-1s-2023-02.zip ...
+  cache hit: USDCUSDT-1s-2023-03.zip (26.0 MB)
+  USDC_USDT_1bp 2023-03: 33,730 blocks, vol coverage 95.2%
+  cache hit: 0x3416cf6c708da44db2624d63ea0aaef7113527c6_16950602_17162285_v3.parquet
+  cache hit: USDCUSDT-1s-2023-03.zip (26.0 MB)
+  cache hit: USDCUSDT-1s-2023-04.zip (30.3 MB)
+  USDC_USDT_1bp 2023-04: 24,650 blocks, vol coverage 100.0%
+  cache hit: 0x3416cf6c708da44db2624d63ea0aaef7113527c6_17162286_17382264_v3.parquet
+  cache hit: USDCUSDT-1s-2023-04.zip (30.3 MB)
+  cache hit: USDCUSDT-1s-2023-05.zip (29.8 MB)
+  USDC_USDT_1bp 2023-05: 16,836 blocks, vol coverage 100.0%
+  cache hit: 0x3416cf6c708da44db2624d63ea0aaef7113527c6_17382265_17595508_v3.parquet
+  cache hit: USDCUSDT-1s-2023-05.zip (29.8 MB)
+  cache hit: USDCUSDT-1s-2023-06.zip (29.2 MB)
+  USDC_USDT_1bp 2023-06: 18,498 blocks, vol coverage 100.0%
+  cache hit: 0x3416cf6c708da44db2624d63ea0aaef7113527c6_17595509_17816432_v3.parquet
+  cache hit: USDCUSDT-1s-2023-06.zip (29.2 MB)
+  cache hit: USDCUSDT-1s-2023-07.zip (28.9 MB)
+  USDC_USDT_1bp 2023-07: 18,381 blocks, vol coverage 100.0%
+  cache hit: 0x3416cf6c708da44db2624d63ea0aaef7113527c6_17816433_18037986_v3.parquet
+  cache hit: USDCUSDT-1s-2023-07.zip (28.9 MB)
+  cache hit: USDCUSDT-1s-2023-08.zip (29.5 MB)
+  USDC_USDT_1bp 2023-08: 16,300 blocks, vol coverage 100.0%
+  cache hit: 0x3416cf6c708da44db2624d63ea0aaef7113527c6_18037987_18251963_v3.parquet
+  cache hit: USDCUSDT-1s-2023-08.zip (29.5 MB)
+  cache hit: USDCUSDT-1s-2023-09.zip (27.7 MB)
+  USDC_USDT_1bp 2023-09: 13,446 blocks, vol coverage 100.0%
+  cache hit: 0x3416cf6c708da44db2624d63ea0aaef7113527c6_18251964_18473541_v3.parquet
+  cache hit: USDCUSDT-1s-2023-09.zip (27.7 MB)
+  cache hit: USDCUSDT-1s-2023-10.zip (32.5 MB)
+  USDC_USDT_1bp 2023-10: 16,217 blocks, vol coverage 100.0%
