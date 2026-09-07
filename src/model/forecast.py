@@ -146,6 +146,53 @@ def fit_analytical_persistence(
     return _score("σ²/8 + persistence", pred, y, float(y.mean()))
 
 
+def fit_calibrated_lvr(
+    analytical: pd.Series, y: pd.Series, cv, pools: pd.Series | None = None,
+    name: str = "σ²/8 calibrated",
+) -> tuple[ForecastResult, pd.Series]:
+    """Analytical LVR, corrected for its known bias, fold by fold.
+
+    H3 established that the closed form is not an unbiased predictor of realised
+    LVR: the slope is 0.81 with a positive intercept, and the miss is worst where
+    the non-diffusive floor matters — 6.6x on a peg pool.
+
+    Using the raw analytical value as a *forecast* therefore inherits that bias,
+    and it does so in dollars, so the error is largest on exactly the pools with
+    the most LVR. In the four-pool allocation that under-predicted LVR by $325 a
+    week on ETH/USDC 30bp against $28 on USDC/USDT, which flattered the volatile
+    pools by around 17% a year and made the model rank them first.
+
+    The correction regresses realised LVR on the analytical prediction **within
+    each training fold** and applies the fitted line to the test fold, so no test
+    observation informs its own calibration. Fitted per pool when `pools` is
+    given, since the bias differs by pool.
+
+    Returns the scored result and the calibrated prediction series.
+    """
+    import numpy as np
+
+    pred = pd.Series(index=y.index, dtype=float)
+    for tr, te in _oos_frame(pd.DataFrame(index=y.index), y, cv):
+        if pools is None:
+            groups = [(None, np.arange(len(y)))]
+        else:
+            groups = [(g, np.flatnonzero((pools == g).to_numpy())) for g in pools.unique()]
+        for _, idx in groups:
+            tr_g = np.intersect1d(tr, idx)
+            te_g = np.intersect1d(te, idx)
+            if len(te_g) == 0:
+                continue
+            x_tr, y_tr = analytical.iloc[tr_g], y.iloc[tr_g]
+            m = x_tr.notna() & y_tr.notna()
+            if m.sum() < 20:
+                pred.iloc[te_g] = analytical.iloc[te_g]          # too few to fit
+                continue
+            A = np.column_stack([np.ones(int(m.sum())), x_tr[m].to_numpy(float)])
+            coef, *_ = np.linalg.lstsq(A, y_tr[m].to_numpy(float), rcond=None)
+            pred.iloc[te_g] = coef[0] + coef[1] * analytical.iloc[te_g].to_numpy(float)
+    return _score(name, pred, y, float(y.mean())), pred
+
+
 def horse_race(results: list[ForecastResult], common_sample: bool = True) -> pd.DataFrame:
     """Head-to-head on identical folds. Lower RMSE wins.
 

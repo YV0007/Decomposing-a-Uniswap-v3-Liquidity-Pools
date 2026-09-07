@@ -30,9 +30,11 @@ from src.strategy.backtest import (benchmark_best_pool_ex_post,
 from src.utils.config import REPO_ROOT
 from src.utils.speclog import count_specifications, log_specification
 
-PANEL = REPO_ROOT / "data" / "processed" / "weekly_panel.parquet"
-DAILY = REPO_ROOT / "data" / "processed" / "h3_daily.parquet"
-POOLS = ("ETH_USDC_5bp", "ETH_USDC_30bp")
+PANEL = REPO_ROOT / "data" / "processed" / "weekly_panel_all.parquet"
+DAILY = REPO_ROOT / "data" / "processed" / "cross_section_daily.parquet"
+#: ETH/USDC 100bp is excluded: a $100k position is 113% of its active liquidity,
+#: so it is not a price-taker and its returns are not measurements (DECISIONS 5.7).
+POOLS = ("ETH_USDC_5bp", "ETH_USDC_30bp", "WBTC_ETH_30bp", "USDC_USDT_1bp")
 NOTIONAL = 100_000.0
 GAS_WEEK = 22.39 / NOTIONAL          # one re-centre a week, as a fraction
 

@@ -19,16 +19,18 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import numpy as np
 import pandas as pd
 
-from src.model.forecast import fit_lightgbm
+from src.model.forecast import fit_calibrated_lvr, fit_lightgbm
 from src.model.purged_cv import PurgedKFold
 from src.model.volatility import har_rv_forecast
 from src.utils.config import REPO_ROOT
 from src.utils.speclog import count_specifications
 from src.utils.stats import deflated_sharpe_ratio
 
-PANEL = REPO_ROOT / "data" / "processed" / "weekly_panel.parquet"
-DAILY = REPO_ROOT / "data" / "processed" / "h3_daily.parquet"
-POOLS = ("ETH_USDC_5bp", "ETH_USDC_30bp")
+PANEL = REPO_ROOT / "data" / "processed" / "weekly_panel_all.parquet"
+DAILY = REPO_ROOT / "data" / "processed" / "cross_section_daily.parquet"
+#: ETH/USDC 100bp is excluded: a $100k position is 113% of its active liquidity,
+#: so it is not a price-taker and its returns are not measurements (DECISIONS 5.7).
+POOLS = ("ETH_USDC_5bp", "ETH_USDC_30bp", "WBTC_ETH_30bp", "USDC_USDT_1bp")
 NOTIONAL, GAS_WEEK, WK = 100_000.0, 22.39 / 100_000, 52
 FEE_FEATURES = ["fees_lag1", "fees_usd", "realized_vol_7d", "swaps_7d"]
 
@@ -77,8 +79,20 @@ def main() -> int:
     y = pd.Series(d["target_fees_next"].astype(float).to_numpy(), index=X.index)
     fees = fit_lightgbm(X, y, cv, name="fees")
     d["pred_fees"] = fees.predictions.reindex(X.index).to_numpy() / NOTIONAL
-    d["pred_lvr"] = (d["lvr_analytical_usd"].astype(float)
-                     * (d["rv_forecast"].astype(float) / d["rv_now"].astype(float))) / NOTIONAL
+    # Raw analytical LVR is a biased forecast (H3: slope 0.81, positive
+    # intercept), and the bias is largest in dollars on the pools with the most
+    # LVR. Calibrate it on training folds only.
+    d["target_lvr_next"] = d.groupby("pool")["lvr_usd"].shift(-1)
+    scaled = (d["lvr_analytical_usd"].astype(float)
+              * (d["rv_forecast"].astype(float) / d["rv_now"].astype(float)))
+    scaled.index = X.index
+    lvr_y = pd.Series(d["target_lvr_next"].astype(float).to_numpy(), index=X.index)
+    pools_s = pd.Series(d["pool"].to_numpy(), index=X.index)
+    ok = lvr_y.notna() & scaled.notna() & np.isfinite(scaled)
+    cal_res, cal = fit_calibrated_lvr(scaled.where(ok), lvr_y.where(ok), cv, pools_s)
+    print(f"  LVR forecast: raw analytical vs calibrated — calibrated OOS R² "
+          f"{cal_res.oos_r2:+.3f}\n")
+    d["pred_lvr"] = cal.reindex(X.index).to_numpy() / NOTIONAL
     d["pred_net"] = d["pred_fees"] - d["pred_lvr"] - GAS_WEEK
     d = d.replace([np.inf, -np.inf], np.nan).dropna(subset=["pred_net"])
 

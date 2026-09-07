@@ -14,8 +14,8 @@ from src.build.panel import build_weekly_panel, daily_fees
 from src.fetch.deribit import load_dvol
 from src.utils.config import REPO_ROOT, pools
 
-FEE_CACHE = REPO_ROOT / "data" / "processed" / "daily_fees.parquet"
-PANEL = REPO_ROOT / "data" / "processed" / "weekly_panel.parquet"
+FEE_CACHE = REPO_ROOT / "data" / "processed" / "daily_fees_all.parquet"
+PANEL = REPO_ROOT / "data" / "processed" / "weekly_panel_all.parquet"
 
 
 def main() -> int:
@@ -23,7 +23,7 @@ def main() -> int:
         fees = pd.read_parquet(FEE_CACHE)
     else:
         frames = []
-        for spec in pools("core"):
+        for spec in pools("all"):
             for y, m in available_months(spec):
                 try:
                     frames.append(daily_fees(spec, y, m))
@@ -34,7 +34,10 @@ def main() -> int:
         fees = pd.concat(frames, ignore_index=True)
         fees.to_parquet(FEE_CACHE, index=False)
 
-    lvr = pd.read_parquet(REPO_ROOT / "data" / "processed" / "h3_daily.parquet")
+    # The cross-section table covers all five pools; h3_daily only the core three.
+    xs = REPO_ROOT / "data" / "processed" / "cross_section_daily.parquet"
+    lvr = pd.read_parquet(xs if xs.exists()
+                          else REPO_ROOT / "data" / "processed" / "h3_daily.parquet")
     months = available_months(pools("core")[0])
     dv = load_dvol("ETH", months)
     dvol = pd.Series(dv["close"].astype(float).to_numpy(),

@@ -38,13 +38,21 @@ def daily_fees(
     k1 = f"{year + 1:04d}-01" if month == 12 else f"{year:04d}-{month + 1:02d}"
     d = load_derived(spec, [(year, month)]).reset_index(drop=True)
     sw = load_big_ints(fetch_swaps(spec.address, bounds[k0], bounds[k1] - 1))
+    # USD price of token1, needed for any pool without a stablecoin leg.
+    if "numeraire_usd" in d.columns:
+        numeraire = [Decimal(str(v)) for v in d["numeraire_usd"]]
+    elif spec.invert_price:
+        numeraire = [Decimal(str(v)) for v in d["price"]]
+    else:
+        numeraire = [Decimal(1)] * len(d)
 
     rows = []
     i, n = 0, len(d)
     while i < n:
         entry = d.iloc[i]
         pos = open_position(spec, int(entry.block_number), int(entry.sqrt_price_x96),
-                            Decimal(str(entry.price)), notional, half_width)
+                            Decimal(str(entry.price)), notional, half_width,
+                            numeraire_usd=numeraire[i])
         j = i + 1
         while j < n and range_state(pos, int(d.iloc[j].tick)) is RangeState.IN_RANGE:
             j += 1
@@ -57,10 +65,12 @@ def daily_fees(
             acc["day"] = pd.to_datetime(acc["block_timestamp"].astype("int64"),
                                         unit="s", utc=True).dt.floor("D")
             px = Decimal(str(d.iloc[end].price))
+            nm = numeraire[end]
             for day, g in acc.groupby("day", sort=True):
                 rows.append({
                     "pool": spec.id, "day": day,
-                    "fees_usd": float(fees_to_usd(int(g.fee0.sum()), int(g.fee1.sum()), spec, px)),
+                    "fees_usd": float(fees_to_usd(int(g.fee0.sum()), int(g.fee1.sum()),
+                                                  spec, px, numeraire_usd=nm)),
                     "swaps": len(g),
                 })
         if end >= n - 1:
