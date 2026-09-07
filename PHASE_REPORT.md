@@ -7,9 +7,8 @@ to it rested on one asset pair, ETH/USDC, and really on two of its three fee
 tiers. WBTC/ETH and USDC/USDT were configured and verified in Stage 1 and never
 analysed.
 
-*Numbers below are from the five-pool run with 41 of 43 WBTC/ETH months. A
-re-run including the last two is in flight; it will not move anything
-materially.*
+*Final numbers, all 43 WBTC/ETH months. The two months that initially failed on
+a numéraire gap (see below) moved every figure only in the third decimal.*
 
 ---
 
@@ -21,10 +20,10 @@ volatility** they open up:
 | Pool | pair | median annualised σ |
 |---|---|---|
 | USDC/USDT 1bp | a peg | **2.31%** |
-| WBTC/ETH 30bp | a cross of two correlated majors | **28.35%** |
+| WBTC/ETH 30bp | a cross of two correlated majors | **28.28%** |
 | ETH/USDC 5 / 30 / 100bp | a major against the dollar | **52–53%** |
 
-That is a **23× spread in volatility — 526× in variance**, which is what LVR
+That is a **23× spread in volatility — 528× in variance**, which is what LVR
 scales with. A theory that holds across that range is saying something; a theory
 verified on one asset is not.
 
@@ -35,13 +34,13 @@ verified on one asset is not.
 | Pool | median σ | β | R² | p(β=1) | level match |
 |---|---|---|---|---|---|
 | USDC/USDT 1bp | 2.31% | 0.634 | **0.002** | 0.0000 | **6.60** |
-| **WBTC/ETH 30bp** | 28.35% | **0.953** | **0.628** | **0.635** | **1.026** |
+| **WBTC/ETH 30bp** | 28.28% | **0.956** | **0.628** | **0.644** | **1.031** |
 | ETH/USDC 5bp | 52.26% | 0.784 | 0.618 | 0.015 | 0.972 |
 | ETH/USDC 30bp | 52.39% | 0.838 | 0.620 | 0.143 | 1.011 |
 | ETH/USDC 100bp | 53.04% | 1.012 | 0.504 | 0.948 | 1.335 |
 
-**On WBTC/ETH the null β = 1 cannot be rejected at all (p = 0.635)**, the level
-matches within 2.6%, and R² is 0.628 — marginally *better* than on ETH/USDC.
+**On WBTC/ETH the null β = 1 cannot be rejected at all (p = 0.644)**, the level
+matches within 3.1%, and R² is 0.628 — marginally *better* than on ETH/USDC.
 The theory was not fitted to this pool in any sense. It was applied.
 
 H3 is no longer a statement about ETH/USDC.
@@ -80,7 +79,7 @@ LVR per unit variance, four fee tiers, two asset pairs:
 |---|---|---|---|
 | ETH/USDC 5bp | 5bp | 0.00553 | 0.620 |
 | ETH/USDC 30bp | 30bp | 0.00576 | 0.624 |
-| WBTC/ETH 30bp | 30bp | 0.00657 | 0.630 |
+| WBTC/ETH 30bp | 30bp | 0.00660 | 0.630 |
 | ETH/USDC 100bp | 100bp | 0.00590 | 0.462 |
 
 Across a **20× fee range the slope moves 1.19×**, and the widest tier is not the
@@ -95,8 +94,8 @@ there.*
 
 ## Result 4 — the regime finding, confirmed twice independently
 
-WBTC/ETH runs at half ETH/USDC's volatility and has the β closest to 1 of any
-liquid pool in the sample.
+WBTC/ETH runs at half ETH/USDC's volatility (28.3% against 52–53%) and has the
+β closest to 1 of any liquid pool in the sample.
 
 That is the same pattern found *within* ETH/USDC by splitting on volatility
 terciles — β of 0.963 and 0.965 in calm and middle markets against 0.753 in the
