@@ -17,6 +17,7 @@ import matplotlib
 
 matplotlib.use("Agg")            # headless; scripts must not need a display
 import matplotlib.pyplot as plt  # noqa: E402
+import numpy as np               # noqa: E402
 import pandas as pd              # noqa: E402
 
 #: Consistent styling across the deck and the companion GEX paper.
@@ -186,6 +187,108 @@ def hedge_error_by_frequency(sweep: pd.DataFrame):
     ax.set_xlabel("rebalance frequency")
     for i, v in enumerate(sweep["mean_abs_error_usd"]):
         ax.text(i, v, f"${v:,.0f}", ha="center", va="bottom", fontsize=8)
+    return fig
+
+
+def profitability_vs_volatility(decomp: pd.DataFrame, vol: pd.DataFrame):
+    """The paper's central chart: net return against volatility, with the crossover.
+
+    Each pool is one point. Fee income and adverse selection are both drawn, so
+    the reader can see *why* the net crosses zero — LVR rises with the square of
+    volatility while fees do not, and the lines cross between them.
+    """
+    apply_style()
+    d = decomp.merge(vol, left_on="pool", right_index=True)
+    d = d[d.pool != "ETH_USDC_100bp"].sort_values("median_sigma")
+
+    fig, (a1, a2) = plt.subplots(2, 1, sharex=True, figsize=(7.0, 5.8),
+                                 gridspec_kw={"height_ratios": [1.4, 1]})
+    a1.plot(d.median_sigma, d.fees, "o--", color=INCOME_COLOUR, label="fees",
+            markersize=6, linewidth=1.2, alpha=0.85)
+    a1.plot(d.median_sigma, d.lvr, "o--", color=COST_COLOUR, label="LVR",
+            markersize=6, linewidth=1.2, alpha=0.85)
+    a1.set_ylabel("annualised, as a share of notional")
+    a1.yaxis.set_major_formatter(lambda v, _: f"{v:.0%}")
+    a1.legend(fontsize=8)
+    a1.set_title("LVR scales with σ²; fee income does not", fontsize=10)
+
+    a2.axhline(0, color="#888", linewidth=0.9)
+    colours = [INCOME_COLOUR if v > 0 else COST_COLOUR for v in d.net_market_making]
+    a2.scatter(d.median_sigma, d.net_market_making, s=70, color=colours, zorder=3)
+    # Dashed, because it is an interpolation between four measured pools and not
+    # a fitted curve. The crossing is bracketed between 28% and 52%, not located
+    # at the point where this line happens to meet zero.
+    a2.plot(d.median_sigma, d.net_market_making, "--", color=NET_COLOUR, linewidth=1,
+            alpha=0.5, zorder=2)
+    lo = d[d.net_market_making > 0].median_sigma.max()
+    hi = d[d.net_market_making < 0].median_sigma.min()
+    a2.axvspan(lo, hi, color="#bbbbbb", alpha=0.18, zorder=1)
+    a2.text((lo + hi) / 2, d.net_market_making.min() * 0.55,
+            "crossover\nbracketed here", ha="center", fontsize=7.5, color="#555555")
+    for _, r in d.iterrows():
+        a2.annotate(r["pool"].replace("_", " "), (r.median_sigma, r.net_market_making),
+                    textcoords="offset points", xytext=(6, 6), fontsize=7.5)
+    a2.set_xlabel("median annualised volatility")
+    a2.set_ylabel("net return")
+    a2.xaxis.set_major_formatter(lambda v, _: f"{v:.0%}")
+    a2.yaxis.set_major_formatter(lambda v, _: f"{v:+.0%}")
+    a2.set_title("Profitable below the crossover, loss-making above", fontsize=10)
+    fig.tight_layout()
+    return fig
+
+
+def h3_cross_section(cs: pd.DataFrame):
+    """H3 across every pool: where the closed form holds and where it stops."""
+    apply_style()
+    d = cs.sort_values("median_sigma")
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(8.6, 3.6))
+
+    a1.errorbar(d.median_sigma, d.beta, yerr=1.96 * d.se, fmt="o", capsize=4,
+                markersize=6, color=NET_COLOUR)
+    a1.axhline(1.0, color=COST_COLOUR, linestyle="--", linewidth=1.2, label="prediction β = 1")
+    a1.set_xscale("log")
+    a1.set_xlabel("median annualised volatility")
+    a1.set_ylabel("β")
+    a1.xaxis.set_major_formatter(lambda v, _: f"{v:.0%}")
+    a1.legend(fontsize=7.5)
+    a1.set_title("slope", fontsize=9)
+
+    a2.plot(d.median_sigma, d.r2, "o-", color=NET_COLOUR, markersize=6)
+    a2.set_xscale("log")
+    a2.set_xlabel("median annualised volatility")
+    a2.set_ylabel("R²")
+    a2.xaxis.set_major_formatter(lambda v, _: f"{v:.0%}")
+    a2.set_ylim(-0.03, 0.75)
+    a2.set_title("explanatory power collapses at the peg", fontsize=9)
+    fig.suptitle("σ²/8 has a measured domain of validity", fontsize=10)
+    fig.tight_layout()
+    return fig
+
+
+def allocation_ladder(regimes: pd.DataFrame):
+    """Four-pool allocation: the ceiling, the static rule, and the model."""
+    apply_style()
+    keep = regimes[~regimes.strategy.str.contains("FORCED — passive", na=False)].copy()
+    keep = keep.sort_values("ann_return")
+    fig, ax = plt.subplots(figsize=(7.6, 4.2))
+    colours = []
+    for name, v in zip(keep.strategy, keep.ann_return):
+        if "oracle" in name.lower():
+            colours.append("#888888")
+        else:
+            colours.append(INCOME_COLOUR if v > 0 else COST_COLOUR)
+    y = np.arange(len(keep))
+    ax.barh(y, keep.ann_return, color=colours, alpha=0.88)
+    ax.set_yticks(y)
+    ax.set_yticklabels([s.replace(" — ", ": ")[:46] for s in keep.strategy], fontsize=7.5)
+    ax.axvline(0, color="#888", linewidth=0.9)
+    ax.xaxis.set_major_formatter(lambda v, _: f"{v:+.0%}")
+    ax.set_xlabel("annualised return")
+    ax.set_title("A static rule beats the model; grey bars are perfect foresight",
+                 fontsize=10)
+    for i, v in enumerate(keep.ann_return):
+        ax.text(v, i, f"  {v:+.1%}", va="center", fontsize=7.5)
+    fig.tight_layout()
     return fig
 
 

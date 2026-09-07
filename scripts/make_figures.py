@@ -17,10 +17,12 @@ import numpy as np
 import pandas as pd
 
 from src.utils.config import REPO_ROOT
-from src.utils.plotting import (apply_style, COST_COLOUR, INCOME_COLOUR, NET_COLOUR,
+from src.utils.plotting import (allocation_ladder, apply_style, COST_COLOUR,
+                                h3_cross_section, INCOME_COLOUR, NET_COLOUR,
                                 TIER_COLOURS, decomposition_waterfall,
                                 gap_distribution, hedge_error_by_frequency,
-                                lvr_theory_vs_empirical, range_width_sweep,
+                                lvr_theory_vs_empirical,
+                                profitability_vs_volatility, range_width_sweep,
                                 save_figure)
 
 T = REPO_ROOT / "outputs" / "tables"
@@ -32,9 +34,32 @@ def read(name):
     return pd.read_csv(p) if p.exists() else None
 
 
+def fig_crossover():
+    """Slide 7 — the central chart: net return against volatility."""
+    dec = read("decomposition_fullsample_all.csv")
+    vol = read("cross_section_volatility.csv")
+    if dec is None or vol is None:
+        return None
+    return profitability_vs_volatility(dec, vol.set_index("pool"))
+
+
+def fig_h3_cross():
+    """Slide 8 — H3 across the whole cross-section."""
+    cs = read("cross_section_h3.csv")
+    return None if cs is None else h3_cross_section(cs)
+
+
+def fig_allocation():
+    """Slide 13 — the four-pool allocation ladder."""
+    r = read("allocation_regimes.csv")
+    return None if r is None else allocation_ladder(r)
+
+
 def fig_h3_scatter():
     """Slide 8 — H3. Analytical against empirical LVR, with the 45-degree line."""
-    d = pd.read_parquet(REPO_ROOT / "data" / "processed" / "h3_daily.parquet")
+    xs = REPO_ROOT / "data" / "processed" / "cross_section_daily.parquet"
+    d = pd.read_parquet(xs if xs.exists()
+                        else REPO_ROOT / "data" / "processed" / "h3_daily.parquet")
     d = d[d.pool.isin(("ETH_USDC_5bp", "ETH_USDC_30bp"))]
     d = d[(d.lvr_analytical_usd > 0) & d.lvr_empirical_usd.notna()]
     from src.utils.stats import newey_west_ols
@@ -70,7 +95,10 @@ def fig_h3_by_regime():
 def fig_fee_tier_lvr():
     """Slide 9 — LVR per unit variance is flat across a 20x fee range."""
     apply_style()
-    d = pd.read_parquet(REPO_ROOT / "data" / "processed" / "h3_daily.parquet")
+    xs = REPO_ROOT / "data" / "processed" / "cross_section_daily.parquet"
+    d = pd.read_parquet(xs if xs.exists()
+                        else REPO_ROOT / "data" / "processed" / "h3_daily.parquet")
+    d = d[d.pool != "USDC_USDT_1bp"]      # LVR there is not variance-driven
     from src.utils.stats import newey_west_ols
     fig, ax = plt.subplots()
     tiers, slopes, errs = [], [], []
@@ -173,7 +201,10 @@ def main() -> int:
     made.append(save_figure(fig, "h3_theory_vs_empirical", SCRIPT))
     print(f"  H3 scatter: beta {fit.beta:.3f}, R2 {fit.r_squared:.3f}")
 
-    for name, fn in (("h3_by_regime", fig_h3_by_regime),
+    for name, fn in (("crossover_profitability", fig_crossover),
+                     ("h3_cross_section", fig_h3_cross),
+                     ("allocation_ladder", fig_allocation),
+                     ("h3_by_regime", fig_h3_by_regime),
                      ("fee_tier_lvr_flat", fig_fee_tier_lvr),
                      ("range_width_full_sample", fig_range_width_full),
                      ("mev_span_sensitivity", fig_mev_sensitivity),
