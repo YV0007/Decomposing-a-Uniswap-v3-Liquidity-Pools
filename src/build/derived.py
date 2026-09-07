@@ -87,13 +87,28 @@ def numeraire_frame(spec: PoolSpec, year: int, month: int):
     WETH is priced from ETHUSDT. A stablecoin token1 is taken as $1 — an
     assumption, but one whose error is basis points and which only enters the
     dollar *scale* of a stable/stable pool, never its returns.
+
+    The previous month's tail is prepended, exactly as for the reference series.
+    Without it the first blocks of a month have nothing to look *back* at and
+    the numeraire is null there — which surfaced as a `decimal.InvalidOperation`
+    two months into the WBTC/ETH build, from a single NaN row. Back-filling
+    instead would be lookahead.
     """
     t1 = spec.token1.symbol
     if t1 in {"USDC", "USDT", "DAI"}:
         return None                      # $1; handled by the caller
-    if t1 == "WETH":
-        return load_klines_1s("ETHUSDT", year, month)
-    raise NotImplementedError(f"no USD numeraire configured for {t1}")
+    if t1 != "WETH":
+        raise NotImplementedError(f"no USD numeraire configured for {t1}")
+
+    frames = []
+    py, pm = prev_month(year, month)
+    try:
+        frames.append(load_klines_1s("ETHUSDT", py, pm).tail(2 * 24 * 3600))
+    except Exception:
+        pass
+    frames.append(load_klines_1s("ETHUSDT", year, month))
+    out = pd.concat(frames, ignore_index=True).sort_values("second")
+    return out.drop_duplicates(subset="second", keep="last").reset_index(drop=True)
 
 
 def prev_month(year: int, month: int) -> tuple[int, int]:
@@ -151,7 +166,17 @@ def build_pool_month(
             n[["cex_second_n", "numeraire_usd"]].sort_values("cex_second_n"),
             left_on="_key", right_on="cex_second_n", direction="backward",
         )
-        aligned["numeraire_usd"] = merged["numeraire_usd"].astype(float).to_numpy()
+        vals = merged["numeraire_usd"].astype(float)
+        # Forward-fill only: a gap in the kline series is covered by the last
+        # observed price, never by a later one.
+        vals = vals.ffill()
+        if vals.isna().any():
+            raise ValueError(
+                f"{spec.id} {k0}: numeraire null for {int(vals.isna().sum())} blocks "
+                f"even after prepending the previous month — no price exists before "
+                f"them, so those blocks cannot be valued in USD."
+            )
+        aligned["numeraire_usd"] = vals.to_numpy()
 
     out = aligned[
         ["block_number", "block_timestamp", "sqrt_price_x96", "tick", "liquidity",
