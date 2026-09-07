@@ -31,7 +31,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import pandas as pd
 
 from src.build.derived import available_months, load_derived, month_bounds
-from src.build.hedge import simulate_hedge_on_path
+from src.build.hedge import simulate_hedge_legs
 from src.build.recentre import simulate_recentred
 from src.fetch.binance_data import load_funding_rates, load_perp_klines_1m
 from src.fetch.rpc_client import fetch_swaps, load_big_ints
@@ -74,16 +74,28 @@ def run_cohort(spec, year: int, month: int, bounds: dict) -> dict | None:
     }
     r.check_identity()
 
+    legs = spec.hedge_map
+    if not legs:
+        # A stable/stable pool carries no USD price risk, so the market-making
+        # return already *is* the hedged return. Reporting a hedge here would be
+        # reporting the cost of a trade with nothing to offset.
+        row.update({"funding": 0.0, "hedge_trading_cost": 0.0, "hedge_pnl": 0.0,
+                    "hedge_error_usd": 0.0,
+                    "net_hedged_implemented": float(r.net_market_making),
+                    "hedge_note": "no USD price risk; nothing to hedge"})
+        return row
     try:
-        perp = load_perp_klines_1m("ETHUSDT", year, month)
-        fund = load_funding_rates("ETHUSDT", year, month)
-        h = simulate_hedge_on_path(r.delta_path, perp, fund, HEDGE_FREQ, base_usd=NOTIONAL)
+        perps = {sym: load_perp_klines_1m(sym, year, month) for sym in set(legs.values())}
+        funds = {sym: load_funding_rates(sym, year, month) for sym in set(legs.values())}
+        h = simulate_hedge_legs(r.delta_path, spec, perps, funds, HEDGE_FREQ,
+                                base_usd=NOTIONAL)
         row.update({
             "funding": float(h.funding), "hedge_trading_cost": float(h.trading_cost),
             "hedge_pnl": float(h.pnl),
             "hedge_error_usd": float(h.mean_abs_error_usd),
             "net_hedged_implemented": float(r.net_market_making) - float(h.funding)
                                       - float(h.trading_cost),
+            "hedge_note": f"{len(legs)}-leg",
         })
     except Exception as exc:
         row.update({"funding": None, "hedge_trading_cost": None, "hedge_pnl": None,
@@ -95,7 +107,7 @@ def run_cohort(spec, year: int, month: int, bounds: dict) -> dict | None:
 def main() -> int:
     bounds = month_bounds()
     rows = []
-    for spec in pools("core"):
+    for spec in pools("all"):
         months = available_months(spec)
         print(f"\n=== {spec.id}: {len(months)} cohorts ===", flush=True)
         for y, m in months:
@@ -114,7 +126,7 @@ def main() -> int:
     t = pd.DataFrame(rows)
     out = REPO_ROOT / "outputs" / "tables"
     out.mkdir(parents=True, exist_ok=True)
-    t.to_csv(out / "cohorts_fullsample.csv", index=False)
+    t.to_csv(out / "cohorts_fullsample_all.csv", index=False)
 
     log_specification(
         stage="5", component="decomposition_fullsample",
@@ -153,8 +165,8 @@ def main() -> int:
               "net_hedged_implemented", "share_of_months_positive"):
         show[c] = show[c].map(lambda v: f"{v:+.2%}" if pd.notna(v) else "n/a")
     print(show.to_string(index=False))
-    a.to_csv(out / "decomposition_fullsample.csv", index=False)
-    print(f"\nwrote outputs/tables/decomposition_fullsample.csv and cohorts_fullsample.csv")
+    a.to_csv(out / "decomposition_fullsample_all.csv", index=False)
+    print(f"\nwrote decomposition_fullsample_all.csv and cohorts_fullsample_all.csv")
     return 0
 
 

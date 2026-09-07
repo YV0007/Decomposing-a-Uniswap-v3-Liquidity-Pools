@@ -161,6 +161,19 @@ def simulate_recentred(
         raise ValueError("no aligned blocks to simulate")
 
     blocks = aligned.reset_index(drop=True)
+    # USD price of token1. Present on derived tables built after the extension
+    # pools were added; for the older ETH/USDC files the pool price *is* the
+    # numeraire, so it is recoverable exactly.
+    if "numeraire_usd" in blocks.columns:
+        numeraire = [Decimal(str(v)) for v in blocks["numeraire_usd"]]
+    elif spec.invert_price:
+        numeraire = [Decimal(str(v)) for v in blocks["price"]]
+    else:
+        numeraire = [Decimal(1)] * len(blocks)
+    # Value and LVR are computed in token1 units by the position functions, so a
+    # non-inverted pool needs scaling into dollars; an inverted one is already
+    # quoted in its stable leg.
+    unit = (lambda i: Decimal(1)) if spec.invert_price else (lambda i: numeraire[i])
     swaps_by_block = swaps.set_index("block_number", drop=False).sort_index()
 
     delta_rows: list[dict] = []
@@ -179,7 +192,8 @@ def simulate_recentred(
     while i < n:
         entry = blocks.iloc[i]
         pos = open_position(spec, int(entry.block_number), int(entry.sqrt_price_x96),
-                            Decimal(str(entry.price)), notional_usd, half_width)
+                            Decimal(str(entry.price)), notional_usd, half_width,
+                            numeraire_usd=numeraire[i])
         widths.append(_realised_log_half_width(pos, spec))
 
         # Walk forward to the first block outside the range.
@@ -200,7 +214,8 @@ def simulate_recentred(
         if len(seg_swaps):
             acc = accrue_fees_approach_b(seg_swaps, pos, spec, entry_tick=int(entry.tick))
             total_fees += fees_to_usd(int(acc.fee0.sum()), int(acc.fee1.sum()),
-                                      spec, Decimal(str(seg.iloc[-1].price)))
+                                      spec, Decimal(str(seg.iloc[-1].price)),
+                                      numeraire_usd=numeraire[seg_end])
 
         # LVR over the segment.
         prev_cex = None
@@ -209,18 +224,27 @@ def simulate_recentred(
                 continue
             c_now = Decimal(str(cex_p))
             if prev_cex is not None:
-                total_lvr_cex += lvr_from_cex_path(pos, spec, prev_cex, c_now)
+                total_lvr_cex += lvr_from_cex_path(pos, spec, prev_cex, c_now) * unit(i)
             prev_cex = c_now
         seg_years = Decimal(max(0, seg_seconds)) / Decimal(SECONDS_PER_YEAR)
         mid = seg.iloc[len(seg) // 2]
         if not pd.isna(vol.iloc[i + len(seg) // 2]):
             sigma = Decimal(str(vol.iloc[i + len(seg) // 2])).sqrt()
-            total_lvr_ana += analytical_lvr_rate(pos, spec, Decimal(str(mid.cex_price)), sigma) * seg_years
+            total_lvr_ana += (analytical_lvr_rate(pos, spec, Decimal(str(mid.cex_price)), sigma)
+                              * seg_years * unit(i))
+        from src.build.position import amounts_at
+
         for blk, ts, sq in zip(seg["block_number"], seg["block_timestamp"], seg["sqrt_price_x96"]):
+            a0, a1 = amounts_at(pos, int(sq))
             delta_rows.append({
                 "block_number": int(blk), "block_timestamp": int(ts),
                 "sqrt_price_x96": int(sq),
                 "risky_delta": risky_delta(pos, int(sq), spec),
+                # Both holdings, so a pool with USD price risk on *both* legs can
+                # be hedged leg by leg rather than with one instrument standing
+                # in for the wrong asset.
+                "amount0": Decimal(a0) / Decimal(10**spec.token0.decimals),
+                "amount1": Decimal(a1) / Decimal(10**spec.token1.decimals),
             })
         seg_liq = [int(v) for v in seg.get("liquidity", pd.Series(dtype=object)) ] if "liquidity" in seg else []
         liq_shares.extend(pos.liquidity / L for L in seg_liq if L > 0)
@@ -231,9 +255,9 @@ def simulate_recentred(
         from src.build.position import value_usd
 
         v_in = value_usd(pos, int(seg.iloc[0].sqrt_price_x96),
-                         Decimal(str(seg.iloc[0].price)), spec)
+                         Decimal(str(seg.iloc[0].price)), spec, numeraire[i])
         v_out = value_usd(pos, int(seg.iloc[-1].sqrt_price_x96),
-                          Decimal(str(seg.iloc[-1].price)), spec)
+                          Decimal(str(seg.iloc[-1].price)), spec, numeraire[seg_end])
         total_value_change += (v_out - v_in)
         values.append(notional_usd)
 

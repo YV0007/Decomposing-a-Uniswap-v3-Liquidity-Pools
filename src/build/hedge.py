@@ -111,6 +111,54 @@ def accrued_funding(
     return total
 
 
+def simulate_hedge_legs(
+    delta_path: pd.DataFrame, spec, perps: dict, fundings: dict,
+    freq_seconds: int = 3600, taker_fee: Decimal = DEFAULT_TAKER_FEE,
+    base_usd: Decimal = Decimal("100000"),
+) -> HedgeResult | None:
+    """Hedge every leg of a pool that carries USD price risk, each with its own perp.
+
+    A v3 position holds two assets, and `dV/d(price of asset i)` is simply the
+    amount of asset i held. Where both assets have USD price risk — WBTC/ETH —
+    a full hedge shorts both, and a single perp standing in for the pair is not
+    an approximation but a different trade: hedging a WBTC delta with an ETH
+    perp, or a USDC delta with one, produced a funding figure of -9,856%.
+
+    Returns None when the pool has nothing to hedge, which is the honest answer
+    for a stable/stable pool rather than a hedge of zero cost and zero effect.
+    """
+    legs = spec.hedge_map
+    if not legs:
+        return None
+
+    total = None
+    for token, symbol in legs.items():
+        if symbol not in perps or symbol not in fundings:
+            raise KeyError(f"{spec.id}: no perp data for {symbol} (leg {token})")
+        col = "amount0" if token == spec.token0.symbol else "amount1"
+        if col not in delta_path.columns:
+            raise KeyError(f"delta path lacks {col}; rebuild it with both holdings")
+        leg_path = delta_path[["block_timestamp", col]].rename(columns={col: "risky_delta"})
+        r = simulate_hedge_on_path(leg_path, perps[symbol], fundings[symbol],
+                                   freq_seconds, taker_fee, base_usd)
+        if total is None:
+            total = r
+        else:
+            total = HedgeResult(
+                n_rebalances=total.n_rebalances + r.n_rebalances,
+                funding_paid_usd=total.funding_paid_usd + r.funding_paid_usd,
+                hedge_pnl_usd=total.hedge_pnl_usd + r.hedge_pnl_usd,
+                trading_cost_usd=total.trading_cost_usd + r.trading_cost_usd,
+                mean_abs_hedge_error_eth=total.mean_abs_hedge_error_eth
+                                          + r.mean_abs_hedge_error_eth,
+                max_abs_hedge_error_eth=max(total.max_abs_hedge_error_eth,
+                                            r.max_abs_hedge_error_eth),
+                mean_abs_error_usd=total.mean_abs_error_usd + r.mean_abs_error_usd,
+                days=total.days, base_usd=total.base_usd,
+            )
+    return total
+
+
 def simulate_hedge_on_path(
     delta_path: pd.DataFrame, perp: pd.DataFrame, funding: pd.DataFrame,
     freq_seconds: int = 3600, taker_fee: Decimal = DEFAULT_TAKER_FEE,

@@ -270,11 +270,17 @@ def accrue_fees_approach_b(
     return pd.DataFrame(rows)
 
 
-def fees_to_usd(fees0: int, fees1: int, spec: PoolSpec, pool_price: Decimal) -> Decimal:
-    """Convert base-unit fee amounts to USD at the prevailing pool price."""
+def fees_to_usd(fees0: int, fees1: int, spec: PoolSpec, pool_price: Decimal,
+                numeraire_usd: Decimal | None = None) -> Decimal:
+    """Convert base-unit fee amounts to USD at the prevailing pool price.
+
+    `numeraire_usd` is required for a pool with no stablecoin leg; without it
+    the amounts would be denominated in token1 and silently compared against
+    dollar-denominated gas.
+    """
     from src.build.position import token_usd_prices
 
-    p0, p1 = token_usd_prices(spec, pool_price)
+    p0, p1 = token_usd_prices(spec, pool_price, numeraire_usd)
     return (
         Decimal(fees0) / Decimal(10**spec.token0.decimals) * p0
         + Decimal(fees1) / Decimal(10**spec.token1.decimals) * p1

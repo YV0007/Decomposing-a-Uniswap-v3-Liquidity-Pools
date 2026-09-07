@@ -44,6 +44,15 @@ class PoolSpec:
     #: universe was one asset pair and silently breaks the moment it is not.
     cex_symbol: str = "ETHUSDT"
     cex_invert: bool = False
+    #: Which token exposures a delta hedge must cover, and the perp for each.
+    #: Empty means the pool has no USD price risk to hedge (a stable/stable
+    #: pool); more than one entry means a single perp cannot do it. Hedging a
+    #: USDC delta with an ETH perp produced a funding figure of -9,856%.
+    hedge_legs: tuple = ()
+
+    @property
+    def hedge_map(self) -> dict:
+        return dict(self.hedge_legs)
 
     @property
     def fee_rate(self) -> Decimal:
@@ -80,6 +89,7 @@ def _pool_from_dict(d: dict[str, Any]) -> PoolSpec:
         verified_on_etherscan=d["verified_on_etherscan"],
         cex_symbol=d.get("cex_symbol", "ETHUSDT"),
         cex_invert=bool(d.get("cex_invert", False)),
+        hedge_legs=tuple(sorted((d.get("hedge_legs") or {}).items())),
     )
 
 
