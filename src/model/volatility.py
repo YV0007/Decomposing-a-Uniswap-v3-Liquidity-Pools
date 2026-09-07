@@ -114,6 +114,115 @@ def har_components(rv_daily: pd.Series) -> pd.DataFrame:
     )
 
 
+# --------------------------------------------------------------------------- #
+# Daily realised measures — the inputs the better HAR variants need
+# --------------------------------------------------------------------------- #
+
+def daily_realised_measures(prices: pd.Series, sample_minutes: int = 5) -> pd.DataFrame:
+    """Daily realised variance, bipower variation, quarticity and jump component.
+
+    HAR-RV treats every daily variance observation as equally informative. It is
+    not: a day's realised variance is itself estimated with error, and that error
+    grows with **realised quarticity**. HAR-Q uses `sqrt(RQ)` to discount noisy
+    observations, which is the single most-cited improvement on HAR.
+
+    Separately, `RV − BV` isolates the jump component. `sigma^2/8` is derived
+    under a diffusion, so if the continuous part forecasts LVR better than total
+    variance does, that is direct evidence about which part of price movement
+    arbitrageurs actually extract from.
+
+    Columns: `rv` (realised variance), `bv` (bipower, jump-robust), `rq`
+    (quarticity), `jump` (max(rv − bv, 0)), all daily and *not* annualised —
+    annualisation happens once, downstream.
+    """
+    r = np.log(prices).diff().dropna()
+    per_day = int(24 * 60 / sample_minutes)
+    mu1 = np.sqrt(2 / np.pi)
+
+    g = r.groupby(r.index.floor("D"))
+    rv = g.apply(lambda x: float((x**2).sum()))
+    bv = g.apply(lambda x: float((x.abs() * x.abs().shift(1)).sum()) / (mu1**2))
+    # Realised quarticity, Barndorff-Nielsen & Shephard: (n/3) * sum(r^4)
+    rq = g.apply(lambda x: float(len(x) / 3 * (x**4).sum()))
+    n = g.size()
+
+    out = pd.DataFrame({"rv": rv, "bv": bv, "rq": rq, "n_obs": n})
+    # Days with far too few observations are estimation noise, not low variance.
+    out = out[out["n_obs"] >= per_day // 2]
+    out["jump"] = (out["rv"] - out["bv"]).clip(lower=0.0)
+    out["bv"] = out["bv"].clip(lower=0.0)
+    return out
+
+
+def _har_design(measures: pd.DataFrame, kind: str) -> pd.DataFrame:
+    """Regressors for one HAR variant, all computed from data up to and including t."""
+    rv = measures["rv"]
+    X = pd.DataFrame({
+        "rv_d": rv,
+        "rv_w": rv.rolling(5, min_periods=3).mean(),
+        "rv_m": rv.rolling(22, min_periods=10).mean(),
+    })
+    if kind == "har":
+        return X
+    if kind == "harq":
+        # Interaction with sqrt(RQ): the daily term is discounted on days when
+        # the variance estimate itself is imprecise.
+        X["rv_d_q"] = X["rv_d"] * np.sqrt(measures["rq"].clip(lower=0))
+        return X
+    if kind == "harcj":
+        # Continuous and jump components enter separately.
+        bv = measures["bv"]
+        X = pd.DataFrame({
+            "c_d": bv,
+            "c_w": bv.rolling(5, min_periods=3).mean(),
+            "c_m": bv.rolling(22, min_periods=10).mean(),
+            "j_d": measures["jump"],
+            "j_w": measures["jump"].rolling(5, min_periods=3).mean(),
+        })
+        return X
+    raise ValueError(f"unknown HAR variant {kind!r}")
+
+
+def har_family_forecast(
+    measures: pd.DataFrame, kind: str = "har", horizon_days: int = 7,
+    min_train: int = 60, extra: pd.DataFrame | None = None,
+) -> pd.Series:
+    """Expanding-window forecast of mean variance over the next `horizon_days`.
+
+    Refit at every step on data strictly before the origin, and the horizon is
+    **purged** from the training set: a label stamped at `t'` covers
+    `(t', t' + horizon]`, so within `horizon` of the origin it is not yet
+    knowable. Training on it is the same leak purged cross-validation exists to
+    close, and it lives inside the forecast too.
+
+    `extra` adds exogenous regressors — implied volatility, for instance — with
+    the same lagging discipline.
+    """
+    X = _har_design(measures, kind)
+    if extra is not None:
+        X = X.join(extra, how="left")
+    rv = measures["rv"]
+    y = rv.shift(-1).rolling(horizon_days, min_periods=1).mean().shift(-(horizon_days - 1))
+
+    out = pd.Series(index=rv.index, dtype=float)
+    valid = X.dropna().index
+    for i, t in enumerate(valid):
+        if i < min_train + horizon_days:
+            continue
+        train = valid[: max(0, i - horizon_days)]
+        xtr, ytr = X.loc[train], y.loc[train]
+        m = ytr.notna() & xtr.notna().all(axis=1)
+        if int(m.sum()) < min_train:
+            continue
+        A = np.column_stack([np.ones(int(m.sum())), xtr[m].to_numpy(float)])
+        try:
+            coef, *_ = np.linalg.lstsq(A, ytr[m].to_numpy(float), rcond=None)
+        except np.linalg.LinAlgError:
+            continue
+        out.loc[t] = float(coef @ np.concatenate([[1.0], X.loc[t].to_numpy(float)]))
+    return out.clip(lower=0.0).rename(f"{kind}_{horizon_days}d")
+
+
 def har_rv_forecast(
     rv_daily: pd.Series, horizon_days: int = 7, min_train: int = 60
 ) -> pd.Series:

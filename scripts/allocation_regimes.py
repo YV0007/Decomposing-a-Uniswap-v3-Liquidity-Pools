@@ -21,7 +21,7 @@ import pandas as pd
 
 from src.model.forecast import fit_calibrated_lvr, fit_lightgbm
 from src.model.purged_cv import PurgedKFold
-from src.model.volatility import har_rv_forecast
+from src.model.volatility import har_family_forecast, har_rv_forecast
 from src.utils.config import REPO_ROOT
 from src.utils.speclog import count_specifications
 from src.utils.stats import deflated_sharpe_ratio
@@ -35,13 +35,38 @@ NOTIONAL, GAS_WEEK, WK = 100_000.0, 22.39 / 100_000, 52
 FEE_FEATURES = ["fees_lag1", "fees_usd", "realized_vol_7d", "swaps_7d"]
 
 
+VARIANT = "harq"   # HAR-Q won the volatility race on both QLIKE and RMSE
+
+
 def variance_series(pool: str) -> pd.DataFrame:
-    d = pd.read_parquet(DAILY)
-    d = d[d.pool == pool].copy()
-    d.index = pd.to_datetime(d["day"], utc=True)
-    rv = (d["sigma_annual"].astype(float) ** 2).sort_index()
-    out = pd.DataFrame({"rv_now": rv.resample("W").mean(),
-                        "rv_forecast": har_rv_forecast(rv, 7, 60).resample("W").last()})
+    """Current and forecast variance for a pool, from its own reference series.
+
+    Uses HAR-Q where realised measures exist for the pool's CEX symbol. HAR-Q
+    discounts the daily term by `sqrt(RQ)`, since a day's realised variance is
+    itself estimated with error — it beat HAR-RV on both QLIKE (0.970x) and RMSE
+    (0.975x) with R² rising from 0.114 to 0.157. Falls back to HAR-RV on the
+    derived table when the measures are missing.
+
+    Both columns come from the same source so the ratio that scales analytical
+    LVR is on a consistent footing.
+    """
+    from src.utils.config import pool as get_pool
+
+    spec = get_pool(pool)
+    mpath = REPO_ROOT / "data" / "processed" / f"realised_measures_{spec.cex_symbol}.parquet"
+    if mpath.exists():
+        ms = pd.read_parquet(mpath).sort_index()
+        ms.index = pd.to_datetime(ms.index, utc=True)
+        fc = har_family_forecast(ms, VARIANT, 7, 60)
+        out = pd.DataFrame({"rv_now": ms["rv"].resample("W").mean(),
+                            "rv_forecast": fc.resample("W").last()})
+    else:
+        d = pd.read_parquet(DAILY)
+        d = d[d.pool == pool].copy()
+        d.index = pd.to_datetime(d["day"], utc=True)
+        rv = (d["sigma_annual"].astype(float) ** 2).sort_index()
+        out = pd.DataFrame({"rv_now": rv.resample("W").mean(),
+                            "rv_forecast": har_rv_forecast(rv, 7, 60).resample("W").last()})
     out["pool"] = pool
     return out.reset_index().rename(columns={out.index.name or "index": "week", "day": "week"})
 
