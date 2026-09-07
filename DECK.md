@@ -324,10 +324,42 @@ jumps transfer real value.
 
 ---
 
+## 14b — Does it generalise? WBTC/ETH ⭐
+
+Everything to this point rested on ETH/USDC. WBTC/ETH is an independent test: a
+different pair, a different liquidity structure, **half the volatility**, and a
+reference that must be inverted before it can be compared.
+
+| Pool | median σ | β | 95% CI | R² | p(β=1) | level match |
+|---|---|---|---|---|---|---|
+| **WBTC/ETH 30bp** | **28.35%** | **0.953** | ±0.194 | **0.628** | **0.635** | **1.026** |
+| ETH/USDC 5bp | 52.26% | 0.784 | ±0.174 | 0.618 | 0.015 | 0.972 |
+| ETH/USDC 30bp | 52.39% | 0.838 | ±0.216 | 0.620 | 0.143 | 1.011 |
+
+**On WBTC/ETH the null β = 1 cannot be rejected at all**, the level matches
+within 2.6%, and R² is marginally *better* than on ETH/USDC. The theory was not
+fitted to this pool — it was applied.
+
+**And the cross-section confirms the regime story independently.** WBTC/ETH runs
+at half ETH/USDC's volatility and has the β closest to 1 in the sample — the
+same pattern found *within* ETH/USDC by splitting on volatility terciles. Two
+independent cuts, one across assets and one within one asset, agree that σ²/8
+degrades with volatility and nothing else.
+
+**Q5 survives too:** LVR per unit variance moves 1.19× across a 20× fee range
+and two asset pairs.
+
+*What this does not license: the economic conclusions are still ETH/USDC
+results. Only WBTC/ETH's LVR has been computed, not its decomposition.*
+
+---
+
 ## 15 — What we do not claim
 
-**Scope.** Mainnet only. ETH/USDC only — really 5bp versus 30bp, since the 100bp
-pool has no viable size. Simulated positions, not observed ones.
+**Scope.** Mainnet only. Simulated positions, not observed ones. The *theory*
+now stands on two asset pairs; the *economics* — that LPs lost money, that the
+strategy does not recover it — is still ETH/USDC, and really 5bp versus 30bp
+since the 100bp pool has no viable size.
 
 **H4 is not supportable as written**, and we say so rather than reporting a
 weak version of it.
@@ -339,8 +371,8 @@ so the decomposition does not rest on it.
 clears the deflated Sharpe bar.
 
 **What would falsify the central claim:** a pool where fees persistently exceed
-LVR by more than costs. We found none in 86 pool-years, but two pools on one
-asset is not a cross-section.
+LVR by more than costs. We found none in 86 pool-years. WBTC/ETH extends the
+*theoretical* claim to a second asset; the economic claim still rests on one.
 
 **Not established:** why 2023 behaves differently from later years; whether the
 result generalises beyond ETH/USDC; whether L2 economics differ.

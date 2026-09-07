@@ -1029,3 +1029,11 @@ fetching swaps 0x3416cf6c708da44db2624d63ea0aaef7113527c6 blocks 25433938-256562
   cache hit: USDCUSDT-1s-2023-09.zip (27.7 MB)
   cache hit: USDCUSDT-1s-2023-10.zip (32.5 MB)
   USDC_USDT_1bp 2023-10: 16,217 blocks, vol coverage 100.0%
+  cache hit: 0x3416cf6c708da44db2624d63ea0aaef7113527c6_18473542_18687849_v3.parquet
+  cache hit: USDCUSDT-1s-2023-10.zip (32.5 MB)
+  cache hit: USDCUSDT-1s-2023-11.zip (39.3 MB)
+  USDC_USDT_1bp 2023-11: 15,816 blocks, vol coverage 100.0%
+  cache hit: 0x3416cf6c708da44db2624d63ea0aaef7113527c6_18687850_18908893_v3.parquet
+  cache hit: USDCUSDT-1s-2023-11.zip (39.3 MB)
+  cache hit: USDCUSDT-1s-2023-12.zip (40.6 MB)
+  USDC_USDT_1bp 2023-12: 20,688 blocks, vol coverage 100.0%
