@@ -144,16 +144,65 @@ no prior price.
 
 ---
 
+## Result 5 — the decomposition, and the central claim falls ⭐⭐
+
+*Added after the initial report: the full decomposition was then run on all five
+pools, which is what the phase existed to make possible.*
+
+| Pool | median σ | fees | LVR | **fees/LVR** | **net** | 95% CI | months > 0 |
+|---|---|---|---|---|---|---|---|
+| **USDC/USDT 1bp** | **2.3%** | +10.3% | −1.6% | **6.49** | **+8.43%** | **[+5.0%, +11.6%]** | **83%** |
+| WBTC/ETH 30bp | 28.3% | +32.8% | −31.5% | 1.04 | +0.71% | [−1.6%, +3.4%] | 44% |
+| ETH/USDC 5bp | 52.3% | +88.8% | −96.8% | 0.92 | −9.10% | [−15.6%, −3.3%] | 26% |
+| ETH/USDC 30bp | 52.4% | +96.7% | −97.9% | 0.99 | −2.31% | [−5.2%, +1.3%] | 21% |
+
+**`corr(σ, net return) = −0.923`.** The project's stated falsification test —
+*a pool where fees persistently exceed LVR by more than costs* — was met.
+USDC/USDT is significantly profitable at a size where the LP holds ~0.00% of
+active liquidity, so it is not a capacity artefact.
+
+> **Liquidity provision pays where fee income covers adverse selection, and
+> volatility decides whether it does.** LVR scales with σ², fee income does not.
+
+The old claim was true of the pools measured and false as a general statement.
+**This is exactly the failure mode the phase was built to test**, and the phase
+found it.
+
+### And it reframed the strategy
+
+Re-running the allocation over four pools:
+
+| Strategy | ann. return | Sharpe | deflated Sharpe |
+|---|---|---|---|
+| Oracle — perfect foresight | **+14.6%** | **3.96** | passes |
+| **Static: always the lowest-σ pool** | **+6.4%** | **1.96** | 0.83 |
+| Our forecast | +0.1% | 0.03 | 0.06 |
+| Passive equal-weight | −1.4% | −0.68 | 0.00 |
+
+A static, theory-derived rule beats the model sixtyfold. **The actionable
+conclusion is a rule, not a model** — consistent with H5 and H6 throughout.
+
+## Two further defects the phase exposed
+
+**The hedge did not know what it was hedging.** It shorted an ETH perp against
+whatever `risky_delta` returned — the WBTC holding on one pool and the USDC
+holding on another — producing funding of **−9,856% of notional**. Pools now
+declare which legs carry USD price risk: two-leg for WBTC/ETH, none for the peg.
+
+**Raw σ²/8 used as a forecast inherits its bias.** Predicted LVR fell short of
+realised on every pool, and in dollars the shortfall scaled with LVR itself —
+$325 a week on ETH/USDC 30bp against $28 on the peg — which flattered the
+volatile pools by ~17% a year and made the model rank them first, picking the
+true best pool only 31% of the time. Calibrating within training folds only
+lifted the strategy from −0.7% to +0.1%.
+
 ## What this does and does not license
 
-**Does.** The measurement stack and the theoretical result now stand on two
-independent asset pairs plus a peg. H3 and Q5 are no longer ETH/USDC statements,
-and the closed form has a stated domain of validity with a measured lower bound.
+**Does.** The measurement stack, the theoretical result *and* the economic
+conclusion now stand on three asset pairs across a 23× volatility range. The
+central claim is no longer about ETH/USDC.
 
-**Does not.** The **economic** conclusions are still ETH/USDC results. That LPs
-lost money, that fees covered 92–99% of adverse selection, that the strategy
-beats passive provision without making it profitable — all of that rests on one
-asset pair. Only WBTC/ETH's **LVR** has been computed, not its decomposition.
-
-Running the full decomposition on WBTC/ETH is the obvious next step and is now
-cheap: the data, the derived layer and the valuation are all in place.
+**Does not.** Three points do not locate the crossover: we know only that it
+sits between 28% and 52% annualised. The static rule is the paper's actionable
+recommendation and scores 0.83 against a 0.95 deflated-Sharpe bar on a single
+peg pool over 177 weeks — suggestive, not established.
