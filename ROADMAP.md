@@ -1,6 +1,12 @@
 # LVR/MEV — Where We Are
 
-**Status as of 6 September 2026 — complete.** 28 commits · 252 tests · 6,337 lines of code · 2,011 lines of tests · 8.58M swaps · 5.0 GB · 23 tables · 12 figures
+**Status as of 7 September 2026.** 44 commits · 257 tests · 10.4M swaps · 5 pools ·
+3 asset pairs · 6.0 GB
+
+**The original plan is complete, and an extension phase overturned its central
+claim.** Liquidity provision is not uniformly loss-making: it pays where
+volatility is low enough that fees cover LVR, and USDC/USDT earns +8.43% a year
+with a confidence interval excluding zero. Details below.
 
 **Headline result is in.** A re-centred ±10% LP position on ETH/USDC lost money
 over 43 months, significantly so on the 5bp pool. Details in Stage 5 below.
@@ -300,6 +306,25 @@ because the gates catching them is the main evidence the pipeline is sound.
 | H6 | Theory beats ML on LVR | ⬜ not started |
 | H7 | Economic significance | ⬜ not started |
 
+## The central claim was falsified — by our own stated test
+
+Slide 15 of the deck said what would falsify it: *a pool where fees persistently
+exceed LVR by more than costs.* Extending beyond ETH/USDC found one.
+
+| Pool | median σ | fees/LVR | net | 95% CI |
+|---|---|---|---|---|
+| **USDC/USDT 1bp** | **2.3%** | **6.49** | **+8.43%** | **[+5.0%, +11.6%]** |
+| WBTC/ETH 30bp | 28.3% | 1.04 | +0.71% | [−1.6%, +3.4%] |
+| ETH/USDC 5bp | 52.3% | 0.92 | −9.10% | [−15.6%, −3.3%] |
+| ETH/USDC 30bp | 52.4% | 0.99 | −2.31% | [−5.2%, +1.3%] |
+
+`corr(σ, net) = −0.923`. The old claim was true of the pools measured and false
+as a general statement — it generalised from one volatile asset pair, which is
+exactly the weakness the extension existed to test.
+
+**The replacement is stronger and actionable:** provide where `fees/LVR > 1`,
+which since LVR scales with σ² means provide where volatility is low.
+
 ## What did not survive
 
 Two hypotheses failed, and a third conclusion had to be reversed. All three are
@@ -320,12 +345,21 @@ economically sensible, which is exactly the trap.
 sits in cash 44% of weeks, but cannot make an unprofitable activity profitable.
 No configuration clears the deflated Sharpe bar.
 
-**And one conclusion I got wrong and reversed.** Q3 was closed early with "the
-alignment rule doesn't matter", on one month, measured on the price gap. On the
-full sample, measured on LVR, a 12-second-staler reference understates LVR by
-18%. LVR is quadratic in the gap and accumulates along a path, so it is far more
-sensitive than the proxy I tested. A robustness check has to run on the quantity
-being reported.
+**H7 needs restating, not just recording as negative.** With perfect foresight
+over four pools the ceiling is **+14.6% at Sharpe 3.96**, which clears the
+deflated Sharpe bar. A profitable strategy exists; our forecast captures 9% of
+it and lands at +0.1%. And a **static rule with no forecasting at all** — always
+the lowest-volatility pool — earns **+6.4% at Sharpe 1.96**. The negative result
+is about forecast skill, not about the opportunity.
+
+**Four conclusions were reversed along the way**, each logged in `DECISIONS.md`:
+
+| Was | Now | Why |
+|---|---|---|
+| "the alignment rule doesn't matter" | it moves LVR 18% | tested on a proxy (the price gap), on one month |
+| "the profit isn't there to find" | ceiling +14.6%, Sharpe 3.96 | never computed a perfect-foresight bound |
+| "the option to sit out is the whole opportunity" (6.63pp) | worth 0.48pp over four pools | a property of the universe searched |
+| "LPs lose money" | volatility decides it | generalised from one asset pair |
 
 ## Honest summary
 
@@ -342,15 +376,21 @@ one.
 **Open questions: 5 of 7 closed.** Remaining: which volatility estimator best
 matches observed LVR (Q2), and optimal fee tier as a function of σ (Q5).
 
-**Everything planned is done.** What a further pass would add, in order of
-value:
+**Everything planned is done, plus an extension phase.** What remains, in order
+of value:
 
-1. **A second asset pair.** Every conclusion rests on ETH/USDC, and really on
-   5bp versus 30bp. WBTC/ETH and USDC/USDT are configured and verified but not
-   analysed — that is the cheapest way to test whether any of this generalises.
-2. **Why 2023 differs.** The theory's slope is 0.372 in 2023 and 0.918–0.944
-   afterwards. MEV infrastructure and v3 liquidity distribution both changed
-   over the sample; attributing it would need work not done here.
-3. **A Dune key.** The only place one would help: bundle-level MEV
-   identification, which the Flashbots public relay cannot serve for 2023 and
-   which makes the same-address count a one-sided undercount.
+1. **Locate the profitability crossover.** We know it sits between 28% and 52%
+   annualised — a wide bracket from three points. One more pair in that range
+   (DAI/USDC, or a second majors cross) would narrow it, and it is the single
+   highest-value new data.
+2. **Better weekly volatility forecasting.** The direct lever on H7: the model
+   captures 9% of a 15.9pp edge and the LVR arm is where the miss is.
+   Calibration already took it from 5% to 9%; HAR-Q, implied vol or
+   jump-adjusted estimators are the next attempts.
+3. **Strengthen the static rule.** It is the paper's actionable recommendation
+   and scores 0.83 against a 0.95 deflated-Sharpe bar, on one peg pool over 177
+   weeks. Suggestive, not established.
+4. **Why 2023 differs.** β = 0.372 against 0.918–0.944 later, with the level
+   match stable throughout. Unexplained.
+5. **A Dune key.** The only place one would help: bundle-level MEV
+   identification, which the Flashbots public relay cannot serve for 2023.
