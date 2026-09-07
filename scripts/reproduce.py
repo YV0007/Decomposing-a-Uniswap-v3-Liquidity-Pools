@@ -40,7 +40,13 @@ PIPELINE = [
     ("stage6_h5_h6.py", "H5 and H6 — forecasting and the horse race", True, False),
     ("stage7_backtest.py", "H7 — allocation strategy", True, False),
     ("stage8_range_width.py", "Stage 8 — optimal range width", True, False),
+    ("build_extension_pools.py", "fetch and build WBTC/ETH and USDC/USDT", True, False),
+    ("cross_section.py", "cross-section — does sigma^2/8 generalise?", True, False),
+    ("allocation_regimes.py", "allocation — flexible vs forced, four pools", True, False),
     ("robustness_subperiods_q2.py", "robustness — subperiods, regimes, Q2", True, False),
+    ("robustness_position.py", "robustness — range width, hedge frequency", True, False),
+    ("robustness_mev.py", "robustness — MEV classification rules", True, False),
+    ("robustness_alignment.py", "robustness — block/CEX alignment", True, False),
     ("make_figures.py", "regenerate every figure", False, False),
     ("audit_deck.py", "audit — every deck number against its table", False, True),
 ]

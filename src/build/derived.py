@@ -54,6 +54,25 @@ BOUNDS_PATH = REPO_ROOT / "data" / "raw" / "month_blocks.json"
 _BIG = ["sqrt_price_x96", "liquidity", "volume0", "volume1"]
 
 
+def daily_lvr_table() -> Path:
+    """The daily LVR table to read: the five-pool one if it has been built.
+
+    `cross_section_daily.parquet` is a superset of `h3_daily.parquet` — same
+    columns, three more pools. Scripts that restrict to their own pool set get
+    identical results from either, so preferring the superset means a
+    reproduction run regenerates what the deck quotes instead of the
+    three-pool numbers it superseded.
+    """
+    xs = PROCESSED / "cross_section_daily.parquet"
+    return xs if xs.exists() else PROCESSED / "h3_daily.parquet"
+
+
+def weekly_panel_table() -> Path:
+    """The weekly panel to read: the five-pool one if it has been built."""
+    a = PROCESSED / "weekly_panel_all.parquet"
+    return a if a.exists() else PROCESSED / "weekly_panel.parquet"
+
+
 def month_bounds() -> dict[str, int]:
     return json.loads(BOUNDS_PATH.read_text())
 

@@ -29,7 +29,9 @@ from src.utils.plotting import lvr_theory_vs_empirical, save_figure
 from src.utils.speclog import log_specification
 from src.utils.stats import newey_west_ols
 
-CACHE = REPO_ROOT / "data" / "processed" / "h3_daily.parquet"
+from src.build.derived import daily_lvr_table
+
+CACHE = daily_lvr_table()
 #: The 100bp pool has no viable position size (DECISIONS 5.7), so its LVR is not
 #: a measurement of anything. Kept in the data, excluded from the headline.
 HEADLINE_POOLS = ("ETH_USDC_5bp", "ETH_USDC_30bp")

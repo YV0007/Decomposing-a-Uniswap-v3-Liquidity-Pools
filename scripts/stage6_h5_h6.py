@@ -22,8 +22,10 @@ from src.model.volatility import har_rv_forecast
 from src.utils.config import REPO_ROOT
 from src.utils.speclog import log_specification
 
-PANEL = REPO_ROOT / "data" / "processed" / "weekly_panel.parquet"
-DAILY = REPO_ROOT / "data" / "processed" / "h3_daily.parquet"
+from src.build.derived import daily_lvr_table, weekly_panel_table
+
+PANEL = weekly_panel_table()
+DAILY = daily_lvr_table()
 HEADLINE_POOLS = ("ETH_USDC_5bp", "ETH_USDC_30bp")
 
 FEATURES = [
