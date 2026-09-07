@@ -31,6 +31,47 @@ def load(name):
 def claims() -> list[tuple[str, float, float, float]]:
     """(label, value quoted in the deck, value in the table, tolerance)."""
     out = []
+
+    # --- slide 7: the decomposition, all five pools ---------------------- #
+    a = load("decomposition_fullsample_all.csv").set_index("pool")
+    for pool, field, claimed in (
+        ("USDC_USDT_1bp", "net_market_making", 0.0843),
+        ("USDC_USDT_1bp", "fees", 0.1028),
+        ("USDC_USDT_1bp", "lvr", 0.0158),
+        ("USDC_USDT_1bp", "share_of_months_positive", 0.8293),
+        ("WBTC_ETH_30bp", "net_market_making", 0.0071),
+        ("WBTC_ETH_30bp", "fees", 0.3283),
+        ("WBTC_ETH_30bp", "lvr", 0.3152),
+    ):
+        out.append((f"Slide 7 {pool} {field}", claimed, float(a.loc[pool, field]), 5e-4))
+
+    # --- slide 8: H3 across the cross-section ---------------------------- #
+    x = load("cross_section_h3.csv").set_index("pool")
+    for pool, field, claimed in (
+        ("USDC_USDT_1bp", "r2", 0.002), ("USDC_USDT_1bp", "ratio", 6.60),
+        ("WBTC_ETH_30bp", "beta", 0.956), ("WBTC_ETH_30bp", "r2", 0.628),
+        ("WBTC_ETH_30bp", "p_beta_eq_1", 0.644),
+    ):
+        out.append((f"Slide 8 {pool} {field}", claimed, float(x.loc[pool, field]), 6e-3))
+
+    # --- slide 9: LVR per unit variance, four tiers ---------------------- #
+    sl = load("cross_section_lvr_slopes.csv").set_index("pool")
+    for pool, claimed in (("ETH_USDC_5bp", 0.00553), ("ETH_USDC_30bp", 0.00576),
+                          ("WBTC_ETH_30bp", 0.00660), ("ETH_USDC_100bp", 0.00590)):
+        out.append((f"Slide 9 {pool} slope", claimed, float(sl.loc[pool, "slope"]), 1e-5))
+
+    # --- slide 13: the four-pool allocation ------------------------------ #
+    r = load("allocation_regimes.csv").set_index("strategy")
+    for key, field, claimed in (
+        ("A. FLEXIBLE — oracle (best pool, cash if all negative)", "ann_return", 0.146),
+        ("A. FLEXIBLE — oracle (best pool, cash if all negative)", "sharpe", 3.96),
+        ("A. FLEXIBLE — forecast (our strategy)", "ann_return", 0.001),
+        ("B. FORCED — always USDC_USDT_1bp", "ann_return", 0.064),
+        ("B. FORCED — always USDC_USDT_1bp", "sharpe", 1.96),
+        ("B. FORCED — always ETH_USDC_5bp", "ann_return", -0.101),
+    ):
+        out.append((f"Slide 13 {key[:28]} {field}", claimed, float(r.loc[key, field]), 6e-3))
+
     d = load("decomposition_fullsample.csv").set_index("pool")
     for pool, field, claimed in (
         ("ETH_USDC_5bp", "net_market_making", -0.0910),
@@ -65,11 +106,8 @@ def claims() -> list[tuple[str, float, float, float]]:
         out.append((f"H6 {m} RMSE", v, float(h6.loc[m, "rmse"]), 0.05))
     out.append(("H6 theory OOS R2", 0.126, float(h6.loc["σ²/8 + HAR-RV", "oos_r2"]), 2e-3))
 
-    b = load("stage7_backtest.csv").set_index("strategy")
-    out += [("H7 strategy", -0.040, float(b.loc["strategy (net > 0.2%/wk)", "ann_return"]), 1e-3),
-            ("H7 passive LP", -0.064, float(b.loc["equal-weight LP", "ann_return"]), 1e-3),
-            ("H7 hold tokens", 0.082,
-             float(b.loc["hold 50/50 tokens (drifting)", "ann_return"]), 1e-3)]
+    # The two-pool H7 backtest is superseded by the four-pool allocation on
+    # slide 13, so its numbers are no longer deck claims and are not audited.
 
     pos = load("robustness_position.csv")
     col = "net_market_making" if "net_market_making" in pos.columns else "net_raw"
