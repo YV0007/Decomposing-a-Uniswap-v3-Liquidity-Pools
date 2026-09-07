@@ -1158,6 +1158,45 @@ for the best strategy configuration.
 including both token benchmarks. With 7 logged specifications and 176 weeks,
 nothing here is distinguishable from the best of a small search.
 
+### 7.8 CORRECTION — "the profit is not there to find" was too strong ⚠️
+
+I wrote that the strategy "cannot make an unprofitable activity profitable"
+and that "the profit isn't there to find". The second half is **wrong**, and
+testing it against a perfect-foresight ceiling shows why the distinction matters.
+
+**Two mandates, and they give opposite answers.**
+
+| Regime | ceiling (perfect foresight) | Sharpe | beats deflated Sharpe? | our forecast | passive |
+|---|---|---|---|---|---|
+| **A — may hold cash** | **+7.1%** | **2.38** | **yes (prob 1.00)** | −3.1% | −6.4% |
+| **B — must be invested weekly** | **+0.5%** | **0.14** | **no (prob 0.10)** | −5.1% | −6.4% |
+
+**The option to sit out is worth 6.63 percentage points**, and it is worth
+essentially all of the opportunity.
+
+- **Under a forced mandate the answer really is no.** Even with perfect
+  hindsight the ceiling is +0.5% at a Sharpe of 0.14, which does not clear the
+  deflated Sharpe bar. The two pools move together, so choosing *between* them
+  adds almost nothing. Selection is worthless here.
+- **Under a flexible mandate the answer is yes.** The ceiling is +7.1% at a
+  Sharpe of 2.38 with no drawdown, and it clears the bar decisively. **A
+  profitable strategy exists.** Ours captures 25% of the available edge and
+  still lands at −3.1%.
+
+**The shape of the opportunity explains both.** Liquidity provision on these
+pools is profitable in **30.7% of weeks, averaging +25% annualised**, and
+loss-making in the other 69%, averaging −9.2%. Sitting out the bad weeks is the
+entire game; picking the right pool during the good ones is a rounding error.
+
+**So H7's negative result is a statement about forecast skill, not about the
+opportunity.** The honest form: *a profitable timing strategy exists on this
+universe — perfect foresight earns 7.1% at a Sharpe of 2.38 — and our forecast
+recovers only a quarter of it, which is not enough to reach profitability.*
+
+That is a materially different and more useful claim than "there is nothing
+there", and it points at what would improve the work: better weekly volatility
+forecasting, since that is what drives the LVR side of the timing decision.
+
 ### 7.6 H7 verdict — economically insignificant, and that is the finding
 
 The plan permitted this outcome explicitly, and it is the honest one:
