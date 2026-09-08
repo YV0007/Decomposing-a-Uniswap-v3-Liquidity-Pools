@@ -1,0 +1,64 @@
+==============================================================================
+H5 — is next week's net LP return forecastable?
+==============================================================================
+
+  purged CV: 5 folds, min train 288, leaks 0  -> PASS
+  366 pool-weeks, 2 pools
+
+        model  n_oos       rmse        mae     oos_r2  directional_accuracy  rmse_vs_best
+mean baseline    366    0.00531    0.00273   -0.00321               0.50000       1.00000
+     LightGBM    366    0.00563    0.00361   -0.12830               0.48907       1.06051
+
+  Diebold-Mariano vs the mean baseline: stat -2.25, p 0.0243, favours mean baseline
+
+  H5 VERDICT: NOT forecastable — LightGBM does not beat the mean out of sample
+
+  feature importance (mean gain over folds):
+vol_of_vol_30d      244.8
+value_usd           235.6
+swaps_7d            194.6
+implied_vol         187.4
+realized_vol_30d    160.6
+net_lag1            158.6
+iv_rv_spread        151.4
+lvr_lag1            130.8
+
+==============================================================================
+H6 — theory vs ML on the LVR component
+==============================================================================
+
+  purged CV: 5 folds, min train 288, leaks 0  -> PASS
+  366 pool-weeks, 2 pools
+
+  variance-scaling ratio: median 0.996, p1 0.299, p99 3.170
+             model  n_oos       rmse        mae     oos_r2  directional_accuracy  rmse_vs_best
+     σ²/8 + HAR-RV    352  1347.8961   805.2745     0.1264                0.7415        1.0000
+     mean baseline    352  1510.4875  1038.3830    -0.0970                0.5000        1.1206
+          LightGBM    352  1610.6661  1106.7124    -0.2474                0.5653        1.1949
+σ²/8 + persistence    352  1668.0994   969.1363    -0.3379                0.7244        1.2376
+
+  Diebold-Mariano, theory vs LightGBM: stat -5.77, p 0.0000, favours σ²/8 + HAR-RV
+
+  H6 VERDICT: σ²/8 + HAR-RV wins on out-of-sample RMSE  — THEORY BEATS ML
+
+wrote outputs/tables/h5_forecast.csv and h6_horse_race.csv
+==================================================================================
+Stage 7 — allocation strategy, full costs
+==================================================================================
+
+694 pool-weeks, 2023-03-19 -> 2026-07-26
+engine: LVR from sigma^2/8 + HAR-RV; fees from LightGBM (OOS R^2 +0.335)
+ETH over the backtest: $1,781 -> $1,955 (+9.8%)
+
+=== Output 3: backtest, 10 specifications logged ===
+
+                                strategy ann_return volatility sharpe max_drawdown turnover share_invested deflated_sharpe_prob  beats_null
+               strategy (net > 0, prop.)      -2.4%      +2.5% -0.970        -7.6%    0.920         +98.9%                0.001       False
+               strategy (net > 0, equal)      -0.7%      +2.0% -0.361        -3.9%    0.566         +98.9%                0.013       False
+                strategy (net > 0.2%/wk)      -2.5%      +2.4% -1.067        -7.9%    0.784         +68.2%                0.000       False
+                         equal-weight LP      -1.9%      +2.0% -0.927        -6.6%    0.000        +100.0%                0.001       False
+best single pool ex-post (USDC_USDT_1bp)      +6.3%      +3.2%  1.956        -3.4%    0.000        +100.0%                0.829       False
+            hold 50/50 tokens (drifting)      +8.2%     +37.2%  0.220       -48.9%    0.000        +100.0%                0.121       False
+                 50/50 rebalanced weekly     +10.8%     +31.4%  0.346       -40.8%    0.000        +100.0%                0.176       False
+
+wrote outputs/tables/stage7_backtest.csv and allocation_signal.csv

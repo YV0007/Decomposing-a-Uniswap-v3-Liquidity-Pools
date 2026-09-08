@@ -30,7 +30,8 @@ PANEL = REPO_ROOT / "data" / "processed" / "weekly_panel_all.parquet"
 DAILY = REPO_ROOT / "data" / "processed" / "cross_section_daily.parquet"
 #: ETH/USDC 100bp is excluded: a $100k position is 113% of its active liquidity,
 #: so it is not a price-taker and its returns are not measurements (DECISIONS 5.7).
-POOLS = ("ETH_USDC_5bp", "ETH_USDC_30bp", "WBTC_ETH_30bp", "USDC_USDT_1bp")
+POOLS = ("ETH_USDC_5bp", "ETH_USDC_30bp", "WBTC_ETH_30bp", "WBTC_USDC_30bp",
+         "USDC_USDT_1bp")
 NOTIONAL, GAS_WEEK, WK = 100_000.0, 22.39 / 100_000, 52
 FEE_FEATURES = ["fees_lag1", "fees_usd", "realized_vol_7d", "swaps_7d"]
 

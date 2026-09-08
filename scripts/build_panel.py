@@ -10,7 +10,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import pandas as pd
 
 from src.build.derived import available_months
-from src.build.panel import build_weekly_panel, daily_fees
+from src.build.panel import (assert_every_pool_has_fees, build_weekly_panel,
+                            daily_fees, pools_missing_from_cache)
 from src.fetch.deribit import load_dvol
 from src.utils.config import REPO_ROOT, pools
 
@@ -19,11 +20,24 @@ PANEL = REPO_ROOT / "data" / "processed" / "weekly_panel_all.parquet"
 
 
 def main() -> int:
-    if FEE_CACHE.exists():
-        fees = pd.read_parquet(FEE_CACHE)
+    # The cache is keyed on nothing, so it must be checked against the *current*
+    # pool universe rather than merely existing. Adding a pool once left this
+    # file a universe behind; the new pool then merged to zero fees and showed a
+    # -57% annual return that no gate caught, because zero is a valid number.
+    # Only the missing pools are computed, so growing the universe is cheap.
+    cached = pd.read_parquet(FEE_CACHE) if FEE_CACHE.exists() else None
+    want = {spec.id for spec in pools("all")}
+    missing = pools_missing_from_cache(cached, want)
+    if cached is not None and not missing:
+        fees = cached
+        print(f"fee cache covers all {len(want)} pools")
     else:
-        frames = []
+        if missing:
+            print(f"fee cache missing {sorted(missing)}; building those")
+        frames = [cached] if cached is not None else []
         for spec in pools("all"):
+            if spec.id not in missing:
+                continue
             for y, m in available_months(spec):
                 try:
                     frames.append(daily_fees(spec, y, m))
@@ -33,6 +47,10 @@ def main() -> int:
                           f"{str(exc)[:60]}", flush=True)
         fees = pd.concat(frames, ignore_index=True)
         fees.to_parquet(FEE_CACHE, index=False)
+
+    # A pool that reaches the panel with no fee rows at all is a silent
+    # catastrophe, not a data gap: net return collapses to -LVR.
+    assert_every_pool_has_fees(fees, want)
 
     # The cross-section table covers all five pools; h3_daily only the core three.
     xs = REPO_ROOT / "data" / "processed" / "cross_section_daily.parquet"

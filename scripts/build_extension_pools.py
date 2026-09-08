@@ -24,7 +24,7 @@ from src.fetch.binance_data import load_klines_1s
 from src.fetch.rpc_client import RPCClient, fetch_swaps
 from src.utils.config import pool
 
-POOLS = ("WBTC_ETH_30bp", "USDC_USDT_1bp")
+POOLS = ("WBTC_USDC_30bp",)
 START, END = (2023, 1), (2026, 7)
 
 

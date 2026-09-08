@@ -83,6 +83,20 @@ universe:
       # dV/d(BTC price) is the WBTC holding and dV/d(ETH price) the WETH holding.
       hedge_legs: {WBTC: BTCUSDT, WETH: ETHUSDT}
       verified_on_etherscan: true
+    - id: WBTC_USDC_30bp
+      # Added to narrow the profitability crossover, which three pools bracketed
+      # only between 28% and 52% annualised volatility. BTC/USD should sit inside
+      # that range: below ETH/USD, above the BTC/ETH cross.
+      address: "0x99ac8ca7087fa4a2a1fb6357269965a2014abc35"
+      token0: {symbol: WBTC, decimals: 8, address: "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599"}
+      token1: {symbol: USDC, decimals: 6, address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"}
+      fee_tier_bps: 30
+      tick_spacing: 60
+      invert_price: false       # price is token1/token0 = USDC per WBTC, i.e. USD per BTC
+      cex_symbol: BTCUSDT       # quotes USD per BTC too
+      cex_invert: false
+      hedge_legs: {WBTC: BTCUSDT}
+      verified_on_etherscan: true
     - id: USDC_USDT_1bp
       address: "0x3416cf6c708da44db2624d63ea0aaef7113527c6"
       token0: {symbol: USDC, decimals: 6,  address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"}

@@ -13,6 +13,7 @@ split.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from decimal import Decimal
 
 import pandas as pd
@@ -140,3 +141,34 @@ def build_weekly_panel(
 
     out = pd.concat(frames, ignore_index=True)
     return out.rename(columns={out.columns[0]: "week"}).sort_values(["pool", "week"])
+
+
+def pools_missing_from_cache(cached: pd.DataFrame | None,
+                             want: Iterable[str]) -> set[str]:
+    """Which pools of `want` a fee cache does not cover.
+
+    The fee cache is keyed on nothing, so "the file exists" is not evidence it
+    is current. Growing the pool universe once left it a universe behind, and
+    the new pool merged into the panel with zero fees.
+    """
+    want = set(want)
+    if cached is None or len(cached) == 0:
+        return want
+    return want - set(cached["pool"].unique())
+
+
+def assert_every_pool_has_fees(fees: pd.DataFrame, want: Iterable[str]) -> None:
+    """Raise if any pool in `want` carries no non-zero fee row.
+
+    Zero is a valid fee for a quiet day, which is exactly why this needs its own
+    check: a pool that is *entirely* zero is not quiet, it is missing, and its
+    net return silently becomes -LVR. That produced a -57% annual return with
+    0.0% of weeks positive and no gate fired.
+    """
+    want = set(want)
+    if "fees_usd" not in fees.columns:
+        raise ValueError("fee table has no fees_usd column")
+    priced = set(fees.loc[fees["fees_usd"].fillna(0) > 0, "pool"].unique())
+    starved = sorted(want - priced)
+    if starved:
+        raise ValueError(f"pools with no non-zero fees: {starved}")
