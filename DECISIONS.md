@@ -1582,3 +1582,53 @@ by coincidence of composition.
 This removes the project's last positive-Sharpe claim. What survives is the
 measurement stack, H3's domain of validity, and the negative result about where
 the edge is not.
+
+## Step 4 — 2023 explained: it is two days, not a year ⭐
+
+β = 0.372 in 2023 against 0.918–0.944 later was carried as unexplained. It is
+not a year effect.
+
+**The level is right; only the slope is wrong.** Aggregate empirical/analytical
+is **0.961** in 2023 — so the closed form is unbiased on average that year and
+wrong only in shape. A regime story would move the level.
+
+**It localises to two days.** By quarter: 2023Q1 0.838, Q2 0.703, **Q3 0.130**,
+Q4 0.640. Q3's top five day-pool cells are 35.8% of its analytical LVR at a
+ratio of 0.182, and all five fall on **17–18 August 2023**. Q3 without them:
+1.063 — normal.
+
+Dropping the top 1% of σ days (σ > 1.30, 53 of 5,223 cells) collapses the
+spread: 2023 → **0.779**, 2024 0.908, 2025 0.926, 2026 1.019.
+
+### Three mechanisms tested, all three refused
+
+| hypothesis | prediction | result |
+|---|---|---|
+| no-arbitrage fee band | ratio rises with σ/fee | **no** — elasticity −0.048, R² 0.008; β is *higher* at low σ/fee (1.093 vs 0.776) |
+| jumps | jump-robust variance fixes β | **no** — bipower moves 2023 β 0.372 → 0.381 |
+| oversampling | RV inflates at fine sampling | **no** — it deflates; rv(1s)/rv(300s) = 0.52 on the three most volatile August days |
+
+The leading remaining candidate is exhaustion of a ±10% range during a large
+intraday move: the closed form assumes liquidity at every price, while a
+concentrated position has a bounded amount to give up. `share_in_range` is 1.000
+throughout, but that is a post-recentring daily aggregate and does not measure
+intraday traversal, so it neither confirms nor refutes this. **Left open and
+labelled, not asserted.**
+
+### What this does establish
+
+The closed form's bias is **monotone in σ**:
+
+| σ bucket | median σ | empirical/analytical |
+|---|---|---|
+| q1 | 0.024 | **2.092** |
+| q2 | 0.293 | 1.166 |
+| q3 | 0.450 | 1.073 |
+| p75–90 | 0.610 | 1.027 |
+| p90–99 | 0.852 | 0.958 |
+| top 1% | 1.465 | **0.761** |
+
+It under-predicts at low σ — the adverse-selection floor H3 found on the peg —
+is unbiased around **σ ≈ 0.6–0.9**, and over-predicts above. That is a single
+statement of domain of validity spanning both known failures, and it replaces
+"2023 is different" entirely.
