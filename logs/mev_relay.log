@@ -101,3 +101,17 @@ fetching relay payments for 4,000 + 4,000 blocks
   sandwich: 2,500/4,000  delivered 1,008  1702s
   sandwich: 2,750/4,000  delivered 1,060  2022s
   sandwich: 3,000/4,000  delivered 1,108  2124s
+  sandwich: 3,250/4,000  delivered 1,145  2476s
+  sandwich: 3,500/4,000  delivered 1,174  2735s
+  sandwich: 3,750/4,000  delivered 1,190  3067s
+  sandwich: 4,000/4,000  delivered 1,203  3218s
+  control: 250/4,000  delivered 120  230s
+  control: 500/4,000  delivered 179  570s
+  control: 750/4,000  delivered 240  890s
+  control: 1,000/4,000  delivered 312  1071s
+  control: 1,250/4,000  delivered 369  1273s
+  control: 1,500/4,000  delivered 410  1602s
+  control: 1,750/4,000  delivered 439  1802s
+  control: 2,000/4,000  delivered 463  2141s
+  control: 2,250/4,000  delivered 495  2323s
+  control: 2,500/4,000  delivered 518  7089s

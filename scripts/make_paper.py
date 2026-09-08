@@ -830,6 +830,58 @@ def build_story():  # noqa: C901 — a document is linear by nature
         "same factor while multiplying gas by more. Concentration is sign-neutral on the "
         "market-making result and merely levers it."))
 
+    # ---------------- 6.8 MEV against the relay ----------------
+    mv = read("mev_relay_validation.csv").set_index("metric")["value"]
+    s.append(H("6.8 What the MEV classification misses", "h2"))
+    s.append(P(
+        "MEV magnitude is the weakest quantity in this paper, and an earlier version said "
+        "so on the grounds that bundle-level attribution needs relay data we could not "
+        "obtain. That was wrong. The Flashbots relay does serve historical bidtraces; the "
+        "earlier attempt queried them by consensus slot rather than by block number and "
+        "read the empty responses as absence. What it publishes is the **payment from "
+        "builder to proposer** for each delivered block — the price the builder was willing "
+        "to pay to order that block, and therefore the market's own valuation of the "
+        "extractable value in it."))
+    s.append(TB(
+        ["Block group", "queried", "delivered", "relay coverage", "median payment"],
+        [["Contains a detected sandwich", "2,500",
+          f"{int(mv['sandwich_coverage'] * 2500):,}",
+          f"{mv['sandwich_coverage']:.1%}", f"<b>{mv['sandwich_median_eth']:.4f} ETH</b>"],
+         ["Contains a swap, no sandwich", "1,400",
+          f"{int(round(mv['control_coverage'] * 1400)):,}",
+          f"{mv['control_coverage']:.1%}", f"{mv['control_median_eth']:.4f} ETH"]],
+        "Table 11. Proposer payments for blocks in which the classifier does and does not "
+        "find a sandwich. Coverage is well below 100% because Flashbots is one relay among "
+        "several; a block delivered elsewhere is unobserved, not worthless, and is dropped "
+        "rather than counted as zero. The control fetch was stopped early — the relay "
+        "throttles progressively, from 0.2 seconds per block to roughly 35 — and the "
+        "realised sample size is reported rather than the target.",
+        widths=[52 * mm, 20 * mm, 22 * mm, 26 * mm, 30 * mm], bold_rows=(0,)))
+    s.append(P(
+        f"Blocks in which we detect a sandwich carry <b>{mv['payment_ratio']:.1f} times</b> "
+        f"the proposer payment of blocks that merely contain a swap, with a bootstrap 95% "
+        f"interval of [{mv['payment_ratio_lo']:.1f}, {mv['payment_ratio_hi']:.1f}]. That is "
+        "an independent, market-set confirmation that the classifier is finding real "
+        "extraction rather than pattern-matching noise, and it comes from a source with no "
+        "connection to the on-chain heuristics that produced the labels."))
+    s.append(P(
+        f"On those same blocks the profit we attribute is "
+        f"<b>{mv['classified_share_of_block_value']:.0%}</b> of what the builder paid the "
+        "proposer. We read this as economics rather than as a validation of magnitude. Our "
+        "estimator is <i>gross</i>: it is the token value the attacker gained, with no "
+        "deduction for the bid it had to place to obtain that position in the block. The "
+        "proposer payment is essentially that bid. Gross profit of the same order as the "
+        "bid is what a competitive searcher auction predicts — the rent is bid away to the "
+        "proposer, and the searcher keeps a thin margin."))
+    s.append(P(
+        "This sharpens the caveat rather than removing it, and it cuts in two directions. "
+        "The <b>count</b> of sandwiches remains a lower bound: we observe one pool, from "
+        "on-chain traces, on blocks delivered through one relay. But the <b>profit</b> "
+        "attached to each detected sandwich should not be read as a transfer to searchers, "
+        "because most of it is paid onward to the proposer. Neither quantity enters the "
+        "decomposition, which is why the central results do not move; but the earlier "
+        "framing of MEV as a purely one-sided undercount was too simple."))
+
     # ---------------- 7. faults ----------------
     s.append(H("7. Three construction faults"))
     s.append(P(

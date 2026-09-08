@@ -53,6 +53,7 @@ RELAY = ("https://boost-relay.flashbots.net/relay/v1/data/bidtraces/"
 CACHE = REPO_ROOT / "data" / "raw" / "relay_payments.parquet"
 OUT = REPO_ROOT / "outputs" / "tables"
 N_PER_GROUP = 2500
+FETCH = bool(int(__import__("os").environ.get("FETCH", "0")))
 RNG = np.random.default_rng(20260908)
 
 
@@ -139,6 +140,15 @@ def main() -> int:
     if CACHE.exists():
         pay = pd.read_parquet(CACHE)
         print(f"relay cache: {len(pay):,} blocks")
+    elif PARTIAL.exists() and not FETCH:
+        # The relay throttles progressively: the first 200 blocks cost 0.2s each
+        # and the last 200 cost 35s each. Rather than let a fetch that has
+        # already answered the question run for another day, the analysis is
+        # allowed to finalise from the checkpoint. Sample sizes are reported
+        # exactly, so a truncated control group is visible rather than implied.
+        pay = pd.read_parquet(PARTIAL)
+        print(f"finalising from checkpoint: {len(pay):,} blocks "
+              f"(set FETCH=1 to keep fetching)")
     else:
         a = RNG.choice(sand_blocks, min(N_PER_GROUP, len(sand_blocks)), replace=False)
         b = RNG.choice(swap_blocks, min(N_PER_GROUP, len(swap_blocks)), replace=False)

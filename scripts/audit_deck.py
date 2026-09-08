@@ -198,6 +198,15 @@ def claims() -> list[tuple[str, float, float, float]]:
                                 ("hi", 0.294, 3e-3)):
         out.append((f"Slide 8 shape regression {field}", claimed,
                     float(reg[field]), tol))
+    # --- slide 15: MEV against the relay ---------------------------------- #
+    mv = load("mev_relay_validation.csv").set_index("metric")["value"]
+    for metric, claimed, tol in (("payment_ratio", 7.0, 5e-2),
+                                 ("payment_ratio_lo", 5.7, 5e-2),
+                                 ("payment_ratio_hi", 8.6, 5e-2),
+                                 ("classified_share_of_block_value", 1.01, 6e-3),
+                                 ("sandwich_median_eth", 0.3691, 1e-4),
+                                 ("control_median_eth", 0.0528, 1e-4)):
+        out.append((f"Slide 15 MEV {metric}", claimed, float(mv[metric]), tol))
     return out
 
 

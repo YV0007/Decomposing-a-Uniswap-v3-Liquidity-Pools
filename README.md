@@ -72,6 +72,11 @@ beating LightGBM by 19% on RMSE at **p < 0.0001**.
 **A fee band does not reduce LVR.** Across a 100× fee range, LVR per unit
 variance moves 1.50×, and the widest tier is not the lowest.
 
+**The MEV classifier finds real extraction.** Blocks with a detected sandwich
+carry **7.0× the builder→proposer payment** of blocks with a swap and none
+(95% CI [5.7, 8.6]) — an independent, market-set check with no connection to the
+on-chain heuristics that produced the labels.
+
 **The edge is in fee forecasting, not volatility forecasting.** Replacing each
 component with its own oracle: perfect variance forecasting is worth **0.9pp**,
 perfect fee forecasting **11.4pp — 80% of the gap to the ceiling.** No allocation
@@ -87,6 +92,8 @@ volume-forecasting problem wearing a volatility costume.*
 | 8 | Optimal range width | ✅ |
 | — | Robustness; all 7 open questions | ✅ closed |
 | — | Cross-section: 7 pools, 4 asset pairs, 23× volatility range | ✅ |
+| — | MEV validated against relay proposer payments | ✅ |
+| — | Risk-free benchmark from the US Treasury daily series | ✅ |
 | — | Working paper, `outputs/paper/` | ✅ regenerated from the tables |
 
 | Hypothesis | Verdict |

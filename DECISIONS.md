@@ -1733,3 +1733,50 @@ that a pool pays when its fees exceed its costs.
 **1.064**, R² = 0.208. The level is right at 19.5% σ, so the sixfold
 under-prediction seen on the peg has already disappeared by 20% volatility.
 The low R² reflects 485 pool-days on a thin pool, not a level failure.
+
+## Step 10 — MEV against the relay: a wrong claim and a better caveat ⭐
+
+We reported bundle-level MEV attribution as unobtainable and treated MEV
+magnitude as a one-sided undercount. **The first half was wrong.** The Flashbots
+relay does serve historical bidtraces; the earlier attempt queried them by
+consensus `slot` rather than by `block_number` and read the empty responses as
+absence.
+
+The relay publishes the **builder→proposer payment** per delivered block — the
+market's own price for the right to order that block.
+
+| Block group | queried | delivered | coverage | median payment |
+|---|---|---|---|---|
+| **contains a detected sandwich** | 2,500 | 713 | 28.5% | **0.3691 ETH** |
+| contains a swap, no sandwich | 1,400 | 299 | 21.4% | 0.0528 ETH |
+
+**Sandwich blocks carry 7.0× the proposer payment**, 95% CI [5.7, 8.6]. That is
+independent, market-set confirmation that the classifier finds real extraction —
+from a source with no connection to the on-chain heuristics that made the labels.
+
+### The 101% is economics, not validation
+
+On those blocks our attributed profit is **101% of the proposer payment**. That
+is not "we captured it all". Our estimator is **gross** — the token value the
+attacker gained, with no deduction for the bid it placed to get that position —
+and the proposer payment *is* essentially that bid.
+
+> Gross profit of the same order as the bid is exactly what a **competitive
+> searcher auction** predicts: the rent is bid away to the proposer and the
+> searcher keeps a thin margin.
+
+### The caveat, corrected in both directions
+
+- The **count** is still a lower bound: one pool, on-chain traces, one relay.
+- The **profit** per detected sandwich must **not** be read as a transfer to
+  searchers, because most of it is paid onward to the proposer.
+
+Neither enters the decomposition, so no central result moves. But "a purely
+one-sided undercount" was too simple and is withdrawn.
+
+*Two process notes worth keeping. The fetch spent hours competing with a stale
+duplicate process that an earlier check had wrongly reported dead — the check
+counted grep's own shell. And the relay throttles progressively: 0.2 seconds per
+block at the start, roughly 35 at the end. The job now checkpoints every 200
+blocks and can finalise from the checkpoint, so a throttled fetch yields an
+answer with an honestly reported sample size instead of running for a day.*

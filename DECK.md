@@ -451,7 +451,16 @@ R² = 0.055. We report the interval, not the point.
 2.09 → 0.76 monotonically in σ. We do not model the floor at the low end.
 
 **MEV magnitude is the least robust number here**, though attribution is neutral
-so the decomposition does not rest on it.
+so the decomposition does not rest on it. We now have an independent check:
+blocks where the classifier finds a sandwich carry **7.0× the
+builder→proposer payment** of blocks with a swap and none (95% CI
+[5.7, 8.6]) — market-set
+confirmation the classifier finds real extraction. Our attributed profit is
+101% of that payment, which is economics
+rather than validation: our estimate is **gross of the searcher's own bid**, and
+the payment *is* that bid, so parity is what a competitive auction predicts.
+**The count is still a lower bound; the profit is mostly paid onward to the
+proposer, not kept by the searcher.**
 
 **Still open:** what happens on extreme-volatility days (range exhaustion is the
 leading candidate, untested); whether `fees/σ²` is forecastable at all; whether
