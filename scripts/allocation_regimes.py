@@ -149,6 +149,20 @@ def main() -> int:
     for c in R.columns:
         rows.append(stats(R[c], f"B. FORCED — always {c}", n_trials))
 
+    # Why the forecast does not find the best pool: dump the weekly pick against
+    # the ex-post winner, so the failure can be read as a pattern rather than
+    # inferred from a single summary number.
+    diag = pd.DataFrame({"week": R.index, "picked": pick.to_numpy(),
+                         "best": R.idxmax(axis=1).to_numpy(),
+                         "picked_return": chosen.to_numpy(),
+                         "best_return": R.max(axis=1).to_numpy(),
+                         "peg_return": R["USDC_USDT_1bp"].to_numpy()
+                         if "USDC_USDT_1bp" in R.columns else np.nan,
+                         "peg_predicted_rank": P.rank(axis=1, ascending=False)
+                         ["USDC_USDT_1bp"].to_numpy()
+                         if "USDC_USDT_1bp" in P.columns else np.nan})
+    diag.to_csv(REPO_ROOT / "outputs" / "tables" / "allocation_picks.csv", index=False)
+
     t = pd.DataFrame(rows)
     show = t.copy()
     for c in ("ann_return", "volatility", "max_drawdown", "total_return", "weeks_positive"):
