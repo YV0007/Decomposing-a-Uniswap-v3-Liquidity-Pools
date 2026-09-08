@@ -66,7 +66,7 @@ def main() -> int:
         print(f"{y:>6} {beta(g):8.3f} {r:11.3f} {g.sigma_annual.median():13.3f} {len(g):>6}")
         rows.append({"test": "by_year", "year": int(y), "beta": beta(g),
                      "agg_ratio": float(r)})
-    print("\n  A level bias would move the ratio. It does not: 2023 is 0.961."
+    print("\n  A level bias would move the ratio. It does not: 2023 is 0.958."
           "\n  So the closed form is right on average in 2023 and wrong in shape.")
 
     print("\n--- it is two days ---\n")

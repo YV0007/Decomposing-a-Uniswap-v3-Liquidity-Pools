@@ -113,48 +113,101 @@ already delta-hedged by the identity on slide 4.
 |---|---|---|---|---|---|---|---|
 | **USDC/USDT 1bp** | **2.3%** | +10.3% | −1.6% | **6.49** | **+8.43%** | **[+5.0%, +11.6%]** | **83%** |
 | WBTC/ETH 30bp | 28.3% | +32.8% | −31.5% | 1.04 | +0.71% | [−1.6%, +3.4%] | 44% |
+| **WBTC/USDC 30bp** | **40.0%** | +61.1% | −56.3% | 1.09 | **+4.09%** | [−0.5%, +9.0%] | 47% |
 | ETH/USDC 5bp | 52.3% | +88.8% | −96.8% | 0.92 | −9.10% | [−15.6%, −3.3%] | 26% |
 | ETH/USDC 30bp | 52.4% | +96.7% | −97.9% | 0.99 | −2.31% | [−5.2%, +1.3%] | 21% |
 
-> **`corr(σ, net return) = −0.923`.** Liquidity provision is profitable where
-> volatility is low and loss-making where it is high. The crossover — where fees
-> stop covering LVR — sits between 28% and 52% annualised.
+**Liquidity provision is not uniformly loss-making.** Two of five pools pay.
+This falsified our own stated test: an earlier version claimed no pool had fees
+exceeding LVR in 86 pool-years. Extending the universe found one, then a second.
 
-**The mechanism is the theory: LVR scales with σ², fee income does not.** Double
-volatility and adverse selection quadruples while fees rise far less.
+### But volatility is not the mechanism — and the sixth pool is why
 
-*This falsified our own stated test. An earlier version of this deck claimed no
-pool had fees exceeding LVR in 86 pool-years. Extending the universe found one.*
+WBTC/USDC earns **+4.09% at 40% σ**, more than WBTC/ETH's +0.71% at 28% σ. If
+volatility ranked pools that could not happen. Three things follow, and each
+weakens the tidy version of this slide:
+
+- `corr(σ, net)` is **−0.568** across six pools (−0.822 on the five fitted),
+  not the −0.923 an earlier four-pool version reported.
+- Fitting `net = a + b·σ²` on 213 pool-months puts the crossover at **σ\* = 43.5%
+  with a 95% CI of [32.2%, 76.2%] and R² = 0.055**. There is no well-determined
+  crossover, and the decile curve is not monotone.
+- **Within** a pool the slope on σ² is **+0.060, CI [−0.242, +0.390]**. The sign
+  flips and it cannot be distinguished from zero — a Simpson's paradox.
+
+> The cross-pool pattern is a statement about **which pools happen to be
+> volatile**, not about what volatility does to a given pool.
+
+**The old mechanism was wrong.** We claimed LVR scales with σ² while fee income
+does not. In this sample both do, at nearly the same rate — volume rises with
+volatility:
+
+```
+fees = +0.043 + 3.06·σ²   R² = 0.839
+LVR  = −0.003 + 3.26·σ²   R² = 0.921
+```
+
+Net is the small difference between two large, near-parallel terms, which is
+exactly why its R² is 0.055. What separates pools is **fee income per unit
+variance**: since `LVR/σ²` is 3.10–3.46 on every non-peg pool, "does this pool
+pay?" reduces to "is `fees/σ²` above ~3.3?" That ranks all five perfectly
+(Spearman +1.000) — but it is partly mechanical, and lagged one month it does
+**not** forecast better than the naive rule (76.2% vs 78.6%).
 
 *(ETH/USDC 100bp withheld: a $100k position is 113% of its active liquidity.)*
+
+*Figure: `crossover_profitability.png`*
 
 ---
 
 ## 8 — H3: does σ²/8 hold? ⭐
 
-3,842 pool-days, empirical LVR on analytical, Newey-West errors.
+7,675 pool-days across six pools, empirical LVR on analytical, Newey-West errors.
 
 | Pool | σ | β | R² | p(β=1) | level match |
 |---|---|---|---|---|---|
 | USDC/USDT 1bp | 2.3% | 0.634 | **0.002** | 0.000 | **6.60** |
 | **WBTC/ETH 30bp** | 28.3% | **0.956** | **0.628** | **0.644** | **1.031** |
+| WBTC/USDC 30bp | 40.0% | 0.666 | 0.487 | 0.007 | **1.015** |
 | ETH/USDC 5bp | 52.3% | 0.784 | 0.618 | 0.015 | 0.972 |
 | ETH/USDC 30bp | 52.4% | 0.838 | 0.620 | 0.143 | 1.011 |
 
-**Where it works it works well** — 62% of daily variation explained with **zero
-fitted parameters**, and on WBTC/ETH the null β = 1 cannot be rejected at all.
+**Where it works it works well** — around 62% of daily variation explained with
+**zero fitted parameters**, and on WBTC/ETH the null β = 1 cannot be rejected.
 
-**Where it fails, it fails informatively.** On the peg R² is 0.002 and realised
-LVR is **6.6× the prediction**. That is not a broken pool: it is the diffusive
-term vanishing and exposing a floor the theory does not model.
+### The bias is monotone in volatility — one curve, not a list of exceptions
 
-> **LVR = a diffusive part σ²/8 captures, plus a floor it does not.**
-> Volatile pools: the first dominates, the theory works. A peg: the second
-> dominates, and it fails sixfold.
+| σ bucket | median σ | realised / predicted |
+|---|---|---|
+| q1 | 0.024 | **2.09** |
+| q2 | 0.293 | 1.17 |
+| q3 | 0.450 | 1.07 |
+| p75–90 | 0.610 | 1.03 |
+| p90–99 | 0.852 | 0.96 |
+| top 1% | 1.465 | **0.76** |
 
-**The closed form has a measured domain of validity: roughly 28–53% annualised.**
+> **σ²/8 under-predicts in calm markets, is unbiased around σ ≈ 0.6–0.9, and
+> over-predicts in extreme ones.** The peg (6.6× on the pool, 2.09 here) and the
+> crash days are the two ends of the same curve, not separate failures.
 
-*Figures: `h3_theory_vs_empirical.png`, `h3_by_regime.png`*
+At low σ the diffusive term vanishes and exposes a **floor of adverse
+selection** — discrete blocks, jumps, MEV-ordered flow — that the theory does
+not model. At extreme σ it over-charges.
+
+### This also disposes of the "2023 anomaly"
+
+β was 0.372 in 2023 against 0.918–0.944 later. It is **two days**, not a year:
+2023Q3 has β = 0.130, its top five day-pool cells are 35.8% of the quarter's
+analytical LVR at a ratio of 0.182, and all five fall on **17–18 August 2023**.
+Drop the top 1% of σ days and 2023 moves to 0.779 while the spread across years
+collapses. The aggregate 2023 ratio is 0.958, so the level was never wrong.
+
+*Three explanations were tested and refused: the no-arbitrage fee band (β is
+higher, not lower, at low σ/fee), jumps (bipower moves β 0.372 → 0.381), and
+oversampling (variance deflates at fine sampling). Range exhaustion during a
+large intraday move remains open and is labelled as such.*
+
+*Figures: `h3_theory_vs_empirical.png`, `h3_by_regime.png`, `lvr_bias_by_sigma.png`*
 
 ---
 
@@ -243,31 +296,57 @@ it cannot overfit because its structure came from economics, not from the data.
 
 ---
 
-## 13 — H7: the strategy ⚠️ *a static rule beats the model*
+## 13 — H7: the strategy ❌ *the rule does not survive either*
 
-Four pools (100bp excluded for capacity), weekly, full costs, out-of-sample.
+Five pools (100bp excluded for capacity), weekly, full costs, out-of-sample,
+165 weeks. **Oracle rows removed — they are a ceiling, not a strategy.**
 
-| Strategy | ann. return | Sharpe | max DD | deflated Sharpe |
+| Strategy | ann. return | Sharpe | max DD | deflated p |
 |---|---|---|---|---|
-| Oracle — perfect foresight | **+14.6%** | **3.96** | 0.0% | **passes** |
-| **Static: always the lowest-σ pool** | **+6.4%** | **1.96** | −3.4% | 0.83 |
-| Our forecast (calibrated) | +0.1% | 0.03 | −4.7% | 0.06 |
-| Passive equal-weight | −1.4% | −0.68 | −5.1% | 0.00 |
+| Always USDC/USDT 1bp | +6.4% | 1.96 | −3.4% | 0.83 |
+| Always WBTC/USDC 30bp | +3.9% | 0.88 | −5.7% | 0.75 |
+| Our forecast (calibrated) | +1.5% | 0.36 | −5.0% | 0.20 |
+| Passive equal-weight | −0.3% | −0.15 | −3.3% | 0.03 |
 | Always ETH/USDC 5bp | −10.1% | −2.59 | −27.4% | 0.00 |
 
-**A static rule with no forecasting beats our model sixtyfold.** It captures 45%
-of the available edge; the model captures 9%.
+**Nothing clears the 0.95 bar.** The model captures 11% of the available edge.
 
-And the rule is not fitted — it falls out of slide 7: *provide where
-`fees/LVR > 1`, which means provide where volatility is low.*
+*For scale, the oracle ceiling — perfect foresight, not a strategy — is **+14.6% at Sharpe 3.96** on the four-pool universe and +17.3% at Sharpe 3.71 with WBTC/USDC added. Being forced to allocate every week rather than holding cash costs only 0.4pp, because the oracle is almost never out.*
 
-**The actionable conclusion is a rule, not a model.** Consistent with H5 and H6
-throughout: the forecasting adds little, the theory adds a lot.
+### The static rule was the last positive claim, and it fails three tests
 
-*Honest caveat: even the static rule scores 0.83 against a 0.95 deflated-Sharpe
-bar with 10 logged specifications. Suggestive, not established.*
+An earlier version of this deck recommended *"always hold the lowest-σ pool"* at
++6.4% and Sharpe 1.96. That number is **not implementable** — it is "always hold
+USDC/USDT", a pool chosen with hindsight, before gas. Selecting on **lagged**
+volatility and charging gas gives **+4.31% at Sharpe 1.39**.
 
-*Figure: `backtest_returns.png`*
+**1. It is measured against zero, not cash.** The Sharpe here is `mean/sd` with
+no risk-free rate, while the position ties up real capital:
+
+| cash rate | excess ann. | Sharpe | deflated p |
+|---|---|---|---|
+| 0% | +4.31% | 1.39 | 0.699 |
+| **4%** | **+0.31%** | **0.10** | **0.082** |
+| 5% | −0.69% | −0.22 | 0.023 |
+
+**2. It is not a volatility rule.** Down the σ ladder: rank 1 **+4.3%**, rank 2
+**−1.2%**, rank 3 **+2.6%**, rank 4 **−6.2%**. The second-lowest-σ pool loses
+money. A mechanism would decay monotonically; this is pool selection.
+
+**3. It is regime-dependent.** 2023: −1.0%, positive in 12.5% of weeks. First
+half Sharpe 0.76, second half 2.66.
+
+> **Retired.** The honest statement is *"the USDC/USDT pool paid well in
+> 2024–2026 before financing costs"* — a description of one pool in one regime.
+
+**What survives is the negative result, and it is a real one:** the edge is not
+in forecasting volatility. Replacing each component with its own oracle shows
+perfect variance forecasting is worth **0.9pp** and perfect fee forecasting
+**11.4pp — 80% of the gap to the ceiling.** σ²/8 predicts the cost side well and
+says nothing about the income side, and the income side is where the uncertainty
+lives. **This is a volume-forecasting problem wearing a volatility costume.**
+
+*Figures: `backtest_returns.png`, `static_rule.png`*
 
 ---
 
@@ -301,26 +380,38 @@ the best slope, and its 1.085 ratio says jumps transfer real value.
 
 ## 15 — What we do not claim
 
-**Scope.** Mainnet only. Simulated positions, not observed ones. Three asset
-pairs — enough to establish that volatility governs the answer, not enough to
-locate the crossover precisely.
+**Scope.** Mainnet only. Simulated positions, not observed ones. Six pools,
+three asset pairs and a peg — enough to show that a single-variable story does
+not survive, not enough to replace it.
 
-**H4 is not supportable as written**, and we say so rather than reporting a weak
-version of it. **H5 and H7 are negative** and reported as such.
+**Three of seven hypotheses are negative and reported as such.** H4's premise
+was wrong, H5 does not forecast, H7's rule does not survive costs.
 
-**σ²/8 has a lower bound** — it fails entirely below roughly 28% annualised
-volatility, and we do not model the floor that replaces it.
+**The central mechanism was retracted mid-project.** We claimed LVR scales with
+σ² while fee income does not. Both scale with σ², at nearly the same rate. What
+we retained is weaker and better supported: `LVR/σ²` is near-constant off the
+peg, so pools differ in **fee income per unit variance**, not in volatility
+as such.
+
+**`corr(σ, net)` is between-pool only.** Within pools the slope's CI spans zero.
+Nothing here licenses a causal reading of volatility on LP profitability.
+
+**The crossover is not located.** σ\* = 43.5% with a CI of [32.2%, 76.2%] and
+R² = 0.055. We report the interval, not the point.
+
+**σ²/8 has a measured bias curve, not a single domain.** Realised/predicted runs
+2.09 → 0.76 monotonically in σ. We do not model the floor at the low end.
 
 **MEV magnitude is the least robust number here**, though attribution is neutral
 so the decomposition does not rest on it.
 
-**Not established:** why 2023 behaves differently from later years; where
-exactly the profitability crossover sits; whether L2 economics differ.
+**Still open:** what happens on extreme-volatility days (range exhaustion is the
+leading candidate, untested); whether `fees/σ²` is forecastable at all; whether
+L2 economics differ.
 
-**What would falsify the central claim now:** a low-volatility pool where fees
-persistently fail to cover LVR, or a high-volatility one where they do. The
-claim is no longer "LPs lose money" — it is that `fees/LVR` decides it and
-volatility decides `fees/LVR`.
+**What would falsify what remains:** a pool whose `LVR/σ²` sits far from ~3.3
+without being a peg, or a demonstration that `fees/σ²` is predictable a month
+ahead — which would convert the one negative result we are most confident in.
 
 ---
 

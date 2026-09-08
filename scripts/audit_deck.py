@@ -63,11 +63,13 @@ def claims() -> list[tuple[str, float, float, float]]:
     # --- slide 13: the four-pool allocation ------------------------------ #
     r = load("allocation_regimes.csv").set_index("strategy")
     for key, field, claimed in (
-        ("A. FLEXIBLE — oracle (best pool, cash if all negative)", "ann_return", 0.146),
-        ("A. FLEXIBLE — oracle (best pool, cash if all negative)", "sharpe", 3.96),
-        ("A. FLEXIBLE — forecast (our strategy)", "ann_return", 0.001),
+        ("A. FLEXIBLE — oracle (best pool, cash if all negative)", "ann_return", 0.173),
+        ("A. FLEXIBLE — oracle (best pool, cash if all negative)", "sharpe", 3.71),
+        ("A. FLEXIBLE — forecast (our strategy)", "ann_return", 0.015),
         ("B. FORCED — always USDC_USDT_1bp", "ann_return", 0.064),
         ("B. FORCED — always USDC_USDT_1bp", "sharpe", 1.96),
+        ("B. FORCED — always WBTC_USDC_30bp", "ann_return", 0.039),
+        ("B. FORCED — always WBTC_USDC_30bp", "sharpe", 0.88),
         ("B. FORCED — always ETH_USDC_5bp", "ann_return", -0.101),
     ):
         out.append((f"Slide 13 {key[:28]} {field}", claimed, float(r.loc[key, field]), 6e-3))
@@ -114,6 +116,57 @@ def claims() -> list[tuple[str, float, float, float]]:
     g = pos[pos.pool == "ETH_USDC_5bp"].groupby("half_width")[col].mean()
     out += [("Robustness 5bp ±2%", -0.6436, float(g.loc[0.02]), 2e-3),
             ("Robustness 5bp ±50%", -0.0176, float(g.loc[0.50]), 2e-3)]
+
+    # --- slide 7: the sixth pool and the crossover ------------------------ #
+    da = load("decomposition_fullsample_all.csv").set_index("pool")
+    for pool, field, claimed in (("WBTC_USDC_30bp", "net_market_making", 0.0409),
+                                 ("WBTC_USDC_30bp", "fees", 0.6113),
+                                 ("WBTC_USDC_30bp", "lvr", 0.5628),
+                                 ("WBTC_ETH_30bp", "net_market_making", 0.0071),
+                                 ("USDC_USDT_1bp", "net_market_making", 0.0843)):
+        out.append((f"Slide 7 {pool} {field}", claimed,
+                    float(da.loc[pool, field]), 6e-4))
+
+    c = load("crossover.csv").set_index("metric")
+    for metric, claimed, tol in (("crossover_sigma", 0.435, 2e-3),
+                                 ("corr_sigma_net_6pool", -0.568, 3e-3),
+                                 ("corr_sigma_net_5pool", -0.822, 3e-3),
+                                 ("slope_within_pool", 0.060, 2e-3),
+                                 ("r2_net_on_sigma2", 0.055, 2e-3),
+                                 ("hit_rate_lagged_ratio", 0.762, 3e-3),
+                                 ("hit_rate_lagged_sigma", 0.786, 3e-3)):
+        out.append((f"Slide 7 {metric}", claimed, float(c.loc[metric, "value"]), tol))
+
+    # --- slide 8: the new pool's H3, and the bias curve -------------------- #
+    h = load("cross_section_h3.csv").set_index("pool")
+    for pool, field, claimed in (("WBTC_USDC_30bp", "beta", 0.666),
+                                 ("WBTC_USDC_30bp", "r2", 0.487),
+                                 ("WBTC_USDC_30bp", "ratio", 1.015)):
+        out.append((f"Slide 8 {pool} {field}", claimed, float(h.loc[pool, field]), 1e-3))
+
+    b = load("lvr_bias_by_sigma.csv").set_index("sbin")
+    for sbin, claimed in (("q1", 2.09), ("q2", 1.17), ("top1%", 0.76)):
+        out.append((f"Slide 8 bias {sbin}", claimed,
+                    float(b.loc[sbin, "agg_ratio"]), 6e-3))
+
+    w = load("why_2023.csv")
+    ex = w[w.test == "ex_top1pct"].set_index("year")
+    out.append(("Slide 8 2023 beta ex top 1%", 0.779, float(ex.loc[2023, "beta_ex"]), 2e-3))
+    yr = w[w.test == "by_year"].set_index("year")
+    out.append(("Slide 8 2023 aggregate ratio", 0.958, float(yr.loc[2023, "agg_ratio"]), 2e-3))
+
+    # --- slide 13: the retired static rule --------------------------------- #
+    sr = load("static_rule.csv")
+    rf = sr[sr.test == "risk_free_sensitivity"].set_index("rf")
+    for rate, field, claimed in ((0.00, "excess_ann", 0.0431), (0.00, "sharpe", 1.39),
+                                 (0.04, "excess_ann", 0.0031), (0.04, "deflated_prob", 0.082),
+                                 (0.05, "excess_ann", -0.0069)):
+        out.append((f"Slide 13 rule rf={rate:.0%} {field}", claimed,
+                    float(rf.loc[rate, field]), 6e-3))
+    ld = sr[sr.test == "rank_ladder"].set_index("rank")
+    for rank, claimed in ((1, 0.0431), (2, -0.0117), (3, 0.0263), (4, -0.0620)):
+        out.append((f"Slide 13 ladder rank {rank}", claimed,
+                    float(ld.loc[rank, "ann"]), 6e-3))
     return out
 
 

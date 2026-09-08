@@ -1,5 +1,21 @@
 # Phase Report — Generalisation Beyond ETH/USDC
 
+> **Superseded in part — read with DECISIONS.md steps 2–4.** This report is kept
+> as the record of that phase. Three of its conclusions were later overturned by
+> work it made possible:
+>
+> - **`corr(σ, net) = −0.923` is retracted.** It is −0.568 across six pools, and
+>   the relationship does not reproduce *within* pools (slope +0.060, CI spanning
+>   zero) — a Simpson's paradox.
+> - **"LVR scales with σ², fee income does not" is false in this sample.** Both
+>   scale with σ² at nearly the same rate; pools differ in fee income per unit
+>   variance.
+> - **The static rule is retired.** It is not implementable as quoted, earns
+>   nothing against a realistic cash rate, and is not a volatility rule.
+>
+> The measurement work, the numéraire and hedge-map defects, and the falsification
+> of the "LPs always lose" claim all stand.
+
 **7 September 2026.** 34 commits · 257 tests · 5.7 GB · 5 pools · 2 asset pairs + a peg
 
 This phase addressed the single biggest weakness in the project: every result up

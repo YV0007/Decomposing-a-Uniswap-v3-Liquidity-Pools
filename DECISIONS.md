@@ -1589,7 +1589,7 @@ the edge is not.
 not a year effect.
 
 **The level is right; only the slope is wrong.** Aggregate empirical/analytical
-is **0.961** in 2023 — so the closed form is unbiased on average that year and
+is **0.958** in 2023 — so the closed form is unbiased on average that year and
 wrong only in shape. A regime story would move the level.
 
 **It localises to two days.** By quarter: 2023Q1 0.838, Q2 0.703, **Q3 0.130**,
