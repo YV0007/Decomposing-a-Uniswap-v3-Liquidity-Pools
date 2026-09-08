@@ -191,11 +191,18 @@ def hedge_error_by_frequency(sweep: pd.DataFrame):
 
 
 def profitability_vs_volatility(decomp: pd.DataFrame, vol: pd.DataFrame):
-    """The paper's central chart: net return against volatility, with the crossover.
+    """The paper's central chart: net return against volatility.
 
-    Each pool is one point. Fee income and adverse selection are both drawn, so
-    the reader can see *why* the net crosses zero — LVR rises with the square of
-    volatility while fees do not, and the lines cross between them.
+    Each pool is one point, and both sides of the decomposition are drawn,
+    because the point of the top panel is that they are *near-parallel*: fee
+    income rises with variance almost as steeply as LVR does, since volume rises
+    with volatility. Net is the small gap between them, which is why the bottom
+    panel is noisy and why the crossover is not well determined.
+
+    An earlier version of this figure asserted that LVR scales with variance
+    while fee income does not, and shaded a narrow band labelled "crossover
+    bracketed here". Both were wrong: the regression puts the crossover at 43.5%
+    with a 95% interval of [32.2%, 76.2%], so the interval is drawn instead.
     """
     apply_style()
     d = decomp.merge(vol, left_on="pool", right_index=True)
@@ -210,7 +217,8 @@ def profitability_vs_volatility(decomp: pd.DataFrame, vol: pd.DataFrame):
     a1.set_ylabel("annualised, as a share of notional")
     a1.yaxis.set_major_formatter(lambda v, _: f"{v:.0%}")
     a1.legend(fontsize=8)
-    a1.set_title("LVR scales with σ²; fee income does not", fontsize=10)
+    a1.set_title("Both sides scale with variance, and nearly in parallel",
+                  fontsize=10)
 
     a2.axhline(0, color="#888", linewidth=0.9)
     colours = [INCOME_COLOUR if v > 0 else COST_COLOUR for v in d.net_market_making]
@@ -220,11 +228,14 @@ def profitability_vs_volatility(decomp: pd.DataFrame, vol: pd.DataFrame):
     # at the point where this line happens to meet zero.
     a2.plot(d.median_sigma, d.net_market_making, "--", color=NET_COLOUR, linewidth=1,
             alpha=0.5, zorder=2)
-    lo = d[d.net_market_making > 0].median_sigma.max()
-    hi = d[d.net_market_making < 0].median_sigma.min()
-    a2.axvspan(lo, hi, color="#bbbbbb", alpha=0.18, zorder=1)
-    a2.text((lo + hi) / 2, d.net_market_making.min() * 0.55,
-            "crossover\nbracketed here", ha="center", fontsize=7.5, color="#555555")
+    # The 95% interval for the crossover from the pooled pool-month regression,
+    # not the gap between adjacent pools: six points cannot bracket anything.
+    lo, hi, star = 0.3217, 0.7624, 0.4350
+    a2.axvspan(lo, hi, color="#bbbbbb", alpha=0.16, zorder=1)
+    a2.axvline(star, color="#777777", linestyle=":", linewidth=1, zorder=2)
+    a2.text(star, d.net_market_making.min() * 0.62,
+            "σ* = 43.5%\n95% CI [32%, 76%]", ha="center", fontsize=7.2,
+            color="#555555")
     for _, r in d.iterrows():
         a2.annotate(r["pool"].replace("_", " "), (r.median_sigma, r.net_market_making),
                     textcoords="offset points", xytext=(6, 6), fontsize=7.5)
@@ -232,7 +243,7 @@ def profitability_vs_volatility(decomp: pd.DataFrame, vol: pd.DataFrame):
     a2.set_ylabel("net return")
     a2.xaxis.set_major_formatter(lambda v, _: f"{v:.0%}")
     a2.yaxis.set_major_formatter(lambda v, _: f"{v:+.0%}")
-    a2.set_title("Profitable below the crossover, loss-making above", fontsize=10)
+    a2.set_title("Net return does not order the pools by volatility", fontsize=10)
     fig.tight_layout()
     return fig
 

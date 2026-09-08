@@ -52,6 +52,7 @@ PIPELINE = [
     ("robustness_alignment.py", "robustness — block/CEX alignment", True, False),
     ("make_figures.py", "regenerate every figure", False, False),
     ("audit_deck.py", "audit — every deck number against its table", False, True),
+    ("make_paper.py", "typeset the working paper from the output tables", False, False),
 ]
 
 
