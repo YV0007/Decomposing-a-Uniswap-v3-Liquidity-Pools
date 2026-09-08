@@ -85,14 +85,24 @@ def main() -> int:
     print("=" * 88)
 
     print("\n--- test suite ---")
-    r = subprocess.run([sys.executable, "-m", "pytest", "tests/", "-q"],
+    # `-o addopts=` clears the config's own "-q" first. Without it the flag is
+    # applied twice, pytest goes to -qq, and the summary line disappears - which
+    # made this print "no result" while still passing, the exact silent gap the
+    # rest of the pipeline is built to avoid.
+    r = subprocess.run([sys.executable, "-m", "pytest", "tests/",
+                        "-o", "addopts=", "-q", "-p", "no:warnings"],
                        capture_output=True, text=True, cwd=REPO_ROOT,
                        env={**dict(__import__("os").environ), "PYTHONPATH": str(REPO_ROOT)})
     line = [l for l in r.stdout.split("\n") if "passed" in l or "failed" in l]
-    print(f"  {line[-1] if line else 'no result'}")
     if r.returncode != 0:
+        print(f"  {line[-1] if line else r.stdout[-400:]}")
         print("\nTESTS FAILED — stopping. A pipeline standing on failing tests proves nothing.")
         return 1
+    if not line:
+        print(f"  could not read a pytest summary:\n{r.stdout[-400:]}")
+        print("\nSTOPPING — an unverifiable test run is not a passing one.")
+        return 1
+    print(f"  {line[-1]}")
 
     failures = []
     for script, desc, needs_raw, is_gate in PIPELINE:
