@@ -1,97 +1,67 @@
-# Where the project stands — 8 September 2026
+# Project complete — 8 September 2026
 
-**52 commits · 266 tests passing · 75/75 deck checks · 11 GB · 6 pools · €0 spent**
+**56 commits · 266 tests passing · 80/80 deck checks · `reproduce.py --full` green end to end · 6 pools · 11 GB · €0**
 
-The seven-step finishing plan is done through step 6. Step 7 (`reproduce.py
---full`) is running.
-
----
-
-## The headline, after this round
-
-The project set out to show that liquidity provision loses money once LVR is
-counted. It ends somewhere more defensible and less comfortable:
-
-> **Nothing in this project supports a positive-Sharpe LP strategy, and the
-> mechanism we proposed for why some pools pay does not survive its own data.**
-
-Three claims were retracted this round — each by a test the project ran on
-itself, and each is now documented rather than quietly dropped.
-
-### 1. "Volatility decides whether LPing pays" — retracted
-
-`corr(σ, net)` was reported at −0.923 on four pools. It is **−0.568 on six**.
-Adding WBTC/USDC broke the ordering: it earns **+4.09% at 40% σ**, more than
-WBTC/ETH's +0.71% at 28% σ.
-
-And the relationship is **Simpson's paradox**. Within a pool, the slope on σ² is
-+0.060 with a CI of [−0.242, +0.390] — the sign flips and it cannot be
-distinguished from zero. The cross-pool pattern says which pools *happen* to be
-volatile, not what volatility does to a pool.
-
-### 2. "LVR scales with σ², fee income does not" — false in this sample
-
-```
-fees = +0.043 + 3.06·σ²   R² = 0.839
-LVR  = −0.003 + 3.26·σ²   R² = 0.921
-```
-
-Volume rises with volatility, so both sides scale with variance at nearly the
-same rate. Net is the small difference between two large, near-parallel terms —
-which is why net's R² on σ² is 0.055 and the crossover CI runs **[32.2%, 76.2%]**
-around σ\* = 43.5%. **There is no well-determined crossover to report.**
-
-What replaces it is narrower and better supported: `LVR/σ²` is **3.10–3.46 on
-every non-peg pool**, so "does this pool pay?" reduces to "is `fees/σ²` above
-~3.3?" That ranks all five pools perfectly — but it is partly mechanical, and
-lagged a month it does **not** forecast better than the naive rule.
-
-### 3. The static rule — retired
-
-"+6.4% at Sharpe 1.96" was not implementable: it is "hold USDC/USDT", chosen
-with hindsight, before gas. On lagged volatility with gas it is +4.31%/1.39, and
-it fails three tests — worthless against a realistic cash rate (**+0.31% excess
-at 4%**), not a volatility rule (**rank 2 loses money** while ranks 1 and 3 make
-it), and regime-dependent (2023: −1.0%).
-
-This removes the project's last positive-Sharpe claim.
+Every planned stage, both extension phases, the seven-step finishing plan and one
+extra question are closed. The deliverable is
+[`outputs/paper/LVR_MEV_WorkingPaper.pdf`](outputs/paper/LVR_MEV_WorkingPaper.pdf),
+an 11-page working paper that regenerates from the output tables.
 
 ---
 
-## What survives, and is worth presenting
+## The result
 
-**The measurement stack.** Six pools reconstructed from an archive node with no
-API keys, every layer gated against an independent source: prices against
-on-chain state, fees against `feeGrowthInside`, LVR three independent ways.
+> **The cost of providing liquidity is now measurable without assumption; the
+> return to it is not forecastable, and the two facts have the same cause.**
 
-**σ²/8 has a measured bias curve.** Realised/predicted runs monotonically from
-**2.09** at the peg through unbiased around σ ≈ 0.6–0.9 to **0.76** in the top 1%
-of days. The two failures previously reported separately are the two ends of one
-curve.
+σ²/8 prices the cost side well — ~62% of daily variation with zero fitted
+parameters, beating gradient boosting at p < 0.0001 — and says nothing about the
+income side, which is where the uncertainty lives. Perfect variance forecasting
+is worth **0.9pp**; perfect fee forecasting **11.4pp**.
 
-**2023 is solved.** β = 0.372 vs 0.918–0.944 was **two days** — 17–18 August
-2023. Drop the top 1% of σ days and 2023 becomes 0.779. Three explanations were
-tested and *refused* (fee band, jumps, oversampling); range exhaustion is the
-open candidate and is labelled as such.
+## What stands
 
-**The negative result is the real finding.** Perfect volatility forecasting is
-worth **0.9pp**; perfect fee forecasting **11.4pp — 80% of the gap to the
-ceiling**. This is a volume-forecasting problem wearing a volatility costume,
-and that is why a theory about the cost side does not become a strategy.
+| | |
+|---|---|
+| **Liquidity provision is not uniformly loss-making** | Two of five pools pay: USDC/USDT **+8.43%**, WBTC/USDC **+4.09%**. This met the project's own falsification test. |
+| **σ²/8 has a measured bias curve** | Realised/predicted runs **2.09 → 0.76** monotonically in σ. Both previously separate failures are the ends of one curve. |
+| **Theory beats ML** | Only model with positive OOS R² (+0.126); Diebold–Mariano p < 0.0001. |
+| **A fee band does not reduce LVR** | Across a 100× fee range the slope moves 1.50×. |
+| **No strategy clears the bar** | Nothing reaches a 0.95 deflated Sharpe. |
 
----
+## What was retracted — each by a test the project ran on itself
 
-## Defects found this round
+| Retracted | Replaced by |
+|---|---|
+| `corr(σ, net) = −0.923` | −0.568 on six pools; **within** pools the slope's CI spans zero — Simpson's paradox |
+| "LVR scales with σ², fee income does not" | Both scale with σ² at nearly the same rate (3.06 vs 3.26) |
+| "A static rule earns +6.4% at Sharpe 1.96" | Not implementable; ~0 against a realistic cash rate; **rank 2 on the σ ladder loses money** |
+| "Range exhaustion explains extreme days" | Refuted **backwards**: trending days score 1.261, oscillating days 0.780 |
 
-- **A stale fee cache** gave WBTC/USDC zero fees for 188 weeks and a −57% annual
-  return. Caught only because the monthly decomposition independently said
-  +4.09%. Now guarded, with nine regression tests.
-- **`reproduce.py` silently lost its own test count** — `addopts = "-q"` plus a
-  second `-q` made pytest `-qq` and dropped the summary line. It now stops
-  rather than printing "no result".
-- **The deck audit caught a number I had written from an ad-hoc filter** (0.961
-  where the committed table says 0.958). It grew from 44 checks to **75**.
+The last one produced the project's final positive finding: the over-prediction
+sits on days that **travel a long way without going anywhere**. A pool can be
+arbitraged at most once per block and movement below the round-trip cost is
+never arbitraged, so oscillation generates variance no arbitrageur can convert
+into profit. Four of four candidate mechanisms were tested and refused; the shape
+effect needed none of them.
 
-## Remaining
+## Defects found, all now guarded by tests
 
-Step 7 only: the full rebuild from raw data, then a final commit.
+| Defect | Why it was invisible |
+|---|---|
+| A stale cache gave one pool **zero fees for 188 weeks** (−57%/yr) | Zero is a valid fee. Caught only because the monthly decomposition independently said +4.09% |
+| `int24` decoded at the declared width | Invisible on ETH/USDC, universal on the peg. Caught by a columnar writer refusing the integer |
+| The hedge shorted ETH against a dollar delta | Funding reached −9,856% of notional |
+| `reproduce.py` lost its own test count | `addopts="-q"` plus a second `-q` makes pytest `-qq` |
+| The central figure asserted a retracted claim | Caught while typesetting the paper |
+
+## What is genuinely left
+
+Nothing on the plan. Three extensions, none of which any conclusion depends on:
+
+1. **A realised risk-free series** — FRED is unreachable from this machine, so
+   the static rule's retirement rests on a sensitivity band.
+2. **A seventh pool between 2.3% and 28.3% σ** — that region is unobserved.
+3. **A Dune key** — the only place one would help is bundle-level MEV, which the
+   public Flashbots relay cannot serve for 2023. MEV magnitudes are a one-sided
+   undercount without it.

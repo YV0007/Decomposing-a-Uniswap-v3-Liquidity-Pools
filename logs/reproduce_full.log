@@ -1,0 +1,113 @@
+========================================================================================
+REPRODUCE — full rebuild
+========================================================================================
+
+--- test suite ---
+  266 passed in 12.19s
+
+--- RUN   Stage 1.1 — pool addresses, token order, decimals
+    PASS            15.0s  verify_pools.py
+    GATE: PASS — safe to set verified_on_etherscan: true
+
+--- RUN   Stage 1 — price reconstruction gate
+    PASS            26.8s  stage1_pool_state.py
+    === STAGE 1 GATE: PASS — proceed to Stage 2 ===
+
+--- RUN   Stage 1.3 — CEX alignment, causality
+    PASS            11.5s  stage1b_alignment.py
+    wrote data/interim/aligned_ETH_USDC_30bp_2023-01.parquet
+
+--- RUN   Stage 2 — fee accrual vs feeGrowthInside
+    PASS             4.3s  stage2_fees.py
+    === STAGE 2 GATE: PASS ===
+
+--- RUN   Stage 3 — LVR sanity gate
+    PASS            13.2s  stage3_lvr.py
+    wrote outputs/tables/stage3_lvr_2023-01.csv
+
+--- RUN   fetch swaps and CEX klines
+    PASS           422.0s  fetch_all.py
+    === fetch_all complete ===
+
+--- RUN   fetch perp prices, funding, DVOL
+    PASS             6.2s  fetch_hedge_inputs.py
+    DVOL: 44/44 months
+
+--- RUN   build the derived layer
+    PASS             0.8s  build_derived.py
+    built 0, failed 0
+
+--- RUN   Stage 5 — decomposition, full sample
+    PASS           759.8s  stage5_fullsample.py
+    wrote decomposition_fullsample_all.csv and cohorts_fullsample_all.csv
+
+--- RUN   H3 — the closed form against observed LVR
+    PASS             2.9s  h3_regression.py
+    wrote outputs/tables/h3_regression.csv and h3_theory_vs_empirical.png
+
+--- RUN   weekly forecast panel
+    PASS             1.1s  build_panel.py
+      usable rows after lags and targets: 1,087
+
+--- RUN   H5 and H6 — forecasting and the horse race
+    PASS             6.2s  stage6_h5_h6.py
+    wrote outputs/tables/h5_forecast.csv and h6_horse_race.csv
+
+--- RUN   H7 — allocation strategy
+    PASS            19.5s  stage7_backtest.py
+    wrote outputs/tables/stage7_backtest.csv and allocation_signal.csv
+
+--- RUN   Stage 8 — optimal range width
+    PASS            18.3s  stage8_range_width.py
+    wrote outputs/tables/range_width_sweep_2023-01.csv
+
+--- RUN   fetch and build WBTC/ETH and USDC/USDT
+    PASS           419.4s  build_extension_pools.py
+      WBTC_USDC_30bp: 43 months built, 0 failed
+
+--- RUN   cross-section — does sigma^2/8 generalise?
+    PASS             2.2s  cross_section.py
+    wrote cross_section_h3.csv, cross_section_lvr_slopes.csv, cross_section_volatility.csv
+
+--- RUN   allocation — flexible vs forced, five pools
+    PASS             7.6s  allocation_regimes.py
+    wrote outputs/tables/allocation_regimes.csv
+
+--- RUN   step 2 — the crossover and the within-pool test
+    PASS            14.6s  crossover.py
+    wrote crossover.csv, crossover_deciles.csv, crossover_ranking.csv
+
+--- RUN   step 3 — can the static rule be recommended?
+    PASS             1.8s  static_rule.py
+    wrote outputs/tables/static_rule.csv
+
+--- RUN   step 4 — what is different about 2023
+    PASS             0.8s  why_2023.py
+    wrote why_2023.csv, lvr_bias_by_sigma.csv
+
+--- RUN   robustness — subperiods, regimes, Q2
+    PASS           659.9s  robustness_subperiods_q2.py
+    wrote robustness_subperiods.csv, robustness_regimes.csv, q2_volatility_estimators.csv
+
+--- RUN   robustness — range width, hedge frequency
+    PASS          3494.8s  robustness_position.py
+    wrote outputs/tables/robustness_position.csv (430 rows)
+
+--- RUN   robustness — MEV classification rules
+    PASS           790.4s  robustness_mev.py
+    wrote outputs/tables/robustness_mev.csv
+
+--- RUN   robustness — block/CEX alignment
+    PASS          1244.6s  robustness_alignment.py
+    wrote robustness_alignment.csv and robustness_alignment_summary.csv
+
+--- RUN   regenerate every figure
+    PASS             6.2s  make_figures.py
+      range_width_jan2023.png                 119 KB
+
+--- RUN   audit — every deck number against its table
+    PASS             0.8s  audit_deck.py
+    80 match, 0 mismatch
+
+========================================================================================
+All stages and gates passed.
