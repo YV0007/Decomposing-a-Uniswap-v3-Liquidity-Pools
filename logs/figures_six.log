@@ -1,0 +1,16 @@
+  H3 scatter: beta 0.810, R2 0.618
+
+13 figures written to outputs/figures/
+  h3_theory_vs_empirical.png              151 KB
+  crossover_profitability.png             213 KB
+  h3_cross_section.png                    105 KB
+  allocation_ladder.png                   156 KB
+  h3_by_regime.png                         71 KB
+  fee_tier_lvr_flat.png                    71 KB
+  range_width_full_sample.png             121 KB
+  mev_span_sensitivity.png                 94 KB
+  backtest_returns.png                     94 KB
+  waterfall_ETH_USDC_5bp.png               91 KB
+  waterfall_ETH_USDC_30bp.png              86 KB
+  waterfall_ETH_USDC_100bp.png             85 KB
+  range_width_jan2023.png                 118 KB

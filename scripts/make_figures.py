@@ -195,6 +195,82 @@ def fig_backtest_curve():
     return fig
 
 
+def fig_lvr_bias_by_sigma():
+    """Step 4 — the closed form's domain of validity, in one chart.
+
+    The single most useful theoretical result the project has: sigma^2/8 does
+    not simply work or fail, it under-predicts below roughly 0.6 annualised
+    volatility, is unbiased between about 0.6 and 0.9, and over-predicts above.
+    Both previously separate failures - the peg and the extreme days - are the
+    two ends of this curve.
+    """
+    t = read("lvr_bias_by_sigma.csv")
+    if t is None:
+        return None
+    fig, ax = plt.subplots(figsize=(7.2, 4.2))
+    x, y = t["median_sigma"].to_numpy(), t["agg_ratio"].to_numpy()
+    ax.axhline(1.0, color="0.35", lw=1, ls="--", zorder=1)
+    ax.plot(x, y, "-o", color=NET_COLOUR, lw=2, ms=7, zorder=3)
+    for xi, yi, n in zip(x, y, t["n"]):
+        ax.annotate(f"{yi:.2f}", (xi, yi), textcoords="offset points",
+                    xytext=(0, 9), ha="center", fontsize=8)
+    ax.axhspan(0.95, 1.05, color=NET_COLOUR, alpha=0.10, zorder=0)
+    ax.set_xscale("log")
+    ax.set_xlabel("annualised volatility (log scale)")
+    ax.set_ylabel("realised LVR / closed form")
+    ax.set_title("Where $\\sigma^2/8$ holds: under-predicts calm, over-predicts extreme")
+    ax.annotate("adverse-selection floor\n(the peg)", (x[0], y[0]),
+                textcoords="offset points", xytext=(26, -6), fontsize=8, color="0.3")
+    ax.annotate("over-predicts\n(top 1% of days)", (x[-1], y[-1]),
+                textcoords="offset points", xytext=(-30, -34), ha="center",
+                fontsize=8, color="0.3")
+    ax.margins(y=0.16)
+    fig.tight_layout()
+    return fig
+
+
+def fig_static_rule():
+    """Step 3 — the rule against cash, and down the volatility ladder."""
+    t = read("static_rule.csv")
+    if t is None:
+        return None
+    rf = t[t.test == "risk_free_sensitivity"]
+    ld = t[t.test == "rank_ladder"]
+    if rf.empty or ld.empty:
+        return None
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(10.5, 4.0))
+
+    a1.axhline(0, color="0.35", lw=1)
+    a1.plot(rf["rf"] * 100, rf["excess_ann"] * 100, "-o",
+            color=NET_COLOUR, lw=2, ms=7)
+    a1.set_xlabel("assumed cash rate (%)")
+    a1.set_ylabel("excess return (% a year)")
+    a1.set_title("Against cash, the rule earns nothing")
+    for _, r in rf.iterrows():
+        a1.annotate(f"p={r['deflated_prob']:.2f}", (r["rf"] * 100, r["excess_ann"] * 100),
+                    textcoords="offset points", xytext=(6, 6), fontsize=8, color="0.3")
+
+    cols = [INCOME_COLOUR if v > 0 else COST_COLOUR for v in ld["ann"]]
+    a2.bar(ld["rank"].astype(int), ld["ann"] * 100, color=cols, width=0.62)
+    a2.axhline(0, color="0.35", lw=1)
+    # The pool name goes on the axis, not in the bar: the shorter bars cannot
+    # hold it, and outside the bar it collides with the title.
+    a2.set_xticks(ld["rank"].astype(int))
+    a2.set_xticklabels([f"{int(r['rank'])}\n{str(r['modal_pool']).replace('_', ' ')}"
+                        for _, r in ld.iterrows()], fontsize=8)
+    a2.set_xlabel("rank by lagged volatility (1 = lowest)")
+    a2.set_ylabel("return (% a year)")
+    a2.set_title("Not a volatility rule: rank 2 loses money")
+    for _, r in ld.iterrows():
+        up = r["ann"] > 0
+        a2.annotate(f"{r['ann'] * 100:+.1f}%", (int(r["rank"]), r["ann"] * 100),
+                    textcoords="offset points", xytext=(0, 4 if up else -12),
+                    ha="center", fontsize=8, color="0.25")
+    a2.margins(y=0.14)
+    fig.tight_layout()
+    return fig
+
+
 def main() -> int:
     made = []
     fig, fit = fig_h3_scatter()
@@ -208,7 +284,9 @@ def main() -> int:
                      ("fee_tier_lvr_flat", fig_fee_tier_lvr),
                      ("range_width_full_sample", fig_range_width_full),
                      ("mev_span_sensitivity", fig_mev_sensitivity),
-                     ("backtest_returns", fig_backtest_curve)):
+                     ("backtest_returns", fig_backtest_curve),
+                     ("lvr_bias_by_sigma", fig_lvr_bias_by_sigma),
+                     ("static_rule", fig_static_rule)):
         try:
             f = fn()
             if f is not None:
