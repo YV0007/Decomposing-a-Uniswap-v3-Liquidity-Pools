@@ -1475,3 +1475,59 @@ evidence that forced it. Empty is fine; silently editing an entry above is not.
 | Date | Entry | Was | Now | Evidence |
 |---|---|---|---|---|
 | 2026-09-05 | Q1 MEV attribution | `flow_toxicity` leads | `neutral` leads | Walking the three legs from the LP's side: the LP round-trips, keeps ~the victim's inventory effect, and earns three fees instead of one. The toxicity channel is dynamic and not identified from one pool's swap log. See 4.2 |
+
+## Step 2 — the crossover, and a reversal of the mechanism ⭐⭐
+
+**The crossover cannot be located, and the reason is informative.**
+
+Fitting `net = a + b·σ²` on 213 pool-months (ETH/USDC 100bp excluded as not a
+price-taker) gives σ* = **43.5%**, but with a month-clustered 95% CI of
+**[32.2%, 76.2%]** and **R² = 0.055**. Dropping the peg moves the point estimate
+to 28.8% with R² = 0.013. The decile curve is not monotone: mean net is positive
+in the two lowest deciles, negative through the middle, positive again around
+41–46%, negative at the top. **There is no clean single crossing to report.**
+
+### The reversal
+
+The project carried the claim *"LVR scales with σ², fee income does not."*
+**In this sample that is false.** Volume rises with volatility, so:
+
+```
+fees = +0.0427 + 3.0626·σ²   R² = 0.839
+lvr  = -0.0033 + 3.2613·σ²   R² = 0.921
+```
+
+Both sides scale with variance, and at nearly the same rate. Net is the small
+difference between two large, near-parallel terms — which is exactly why R² on
+net is 0.055 and the crossover CI spans 44 points.
+
+### Simpson's paradox
+
+Across pools, `corr(σ, net) = −0.822` (5 fitted pools). **Within** pools the
+slope on σ² is **+0.060, 95% CI [−0.242, +0.390], P(>0) = 0.65** — the sign
+flips and it cannot be distinguished from zero. Per-pool slopes are positive in
+4 of 5.
+
+> The cross-pool result is a statement about **which pools happen to be
+> volatile**, not about what volatility does to a given pool. "Volatility
+> decides whether liquidity provision pays" is a between-pool association and
+> must not be read as a mechanism.
+
+This retracts the strong reading of `corr(σ, net) = −0.923` reported earlier
+(itself now −0.568 on six pools, −0.822 on the five fitted).
+
+### What actually separates the pools
+
+`LVR/σ²` is **3.10–3.46 on every non-peg pool** and 41.8 on the peg — the same
+breakdown of the diffusion at near-zero variance that H3 found. With the cost
+side that stable, *"does this pool pay?"* reduces to *"is fee income per unit
+variance above ~3.3?"*
+
+Ranking on `fees/σ²` orders all five pools **perfectly** (Spearman +1.000)
+against −0.900 for σ. Two caveats, both stated rather than buried: it is partly
+mechanical, since `net = fees − LVR`; and lagged one month it does **not**
+forecast better than the naive σ rule (76.2% vs 78.6% of months positive).
+
+**The better cross-sectional descriptor is not the better forecast** — the same
+conclusion the oracle decomposition reached from the other side. The binding
+constraint is predicting fee income, not describing it after the fact.
