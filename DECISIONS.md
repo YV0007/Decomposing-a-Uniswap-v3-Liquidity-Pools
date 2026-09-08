@@ -1531,3 +1531,54 @@ forecast better than the naive σ rule (76.2% vs 78.6% of months positive).
 **The better cross-sectional descriptor is not the better forecast** — the same
 conclusion the oracle decomposition reached from the other side. The binding
 constraint is predicting fee income, not describing it after the fact.
+
+## Step 3 — the static rule is retired ⭐⭐
+
+The rule "always hold the lowest-σ pool" was the paper's only actionable
+recommendation, reported at +6.4% and Sharpe 1.96. Three tests, and it fails all
+three.
+
+**First, that headline was not implementable.** +6.4% is *"always hold
+USDC/USDT"* — a pool chosen with hindsight, before gas. Selecting on **lagged**
+30-day volatility and charging gas gives **+4.31% at Sharpe 1.39** over 183
+weeks. Gas alone is 1.16%/yr of the gap.
+
+**1. Sharpe is measured against zero, not cash.** `deflated_sharpe_ratio` uses
+`mean/sd` with no risk-free rate, but the position ties up real capital. FRED
+was unreachable from this machine, so a sensitivity band is reported rather than
+an invented series:
+
+| risk-free | excess ann. | Sharpe | deflated p |
+|---|---|---|---|
+| 0% | +4.31% | 1.39 | 0.699 |
+| 2% | +2.31% | 0.75 | 0.378 |
+| **4%** | **+0.31%** | **0.10** | **0.082** |
+| 5% | −0.69% | −0.22 | 0.023 |
+
+At any plausible 2023–2026 cash rate the rule earns approximately nothing.
+
+**2. It is not a volatility rule — it is one pool.** Walking down the σ ladder,
+performance does not decay, it oscillates:
+
+| rank by lagged σ | ann. | Sharpe | modal pool |
+|---|---|---|---|
+| 1 | +4.31% | 1.39 | USDC/USDT 1bp |
+| 2 | **−1.17%** | −0.61 | WBTC/ETH 30bp |
+| 3 | +2.63% | 0.59 | WBTC/USDC 30bp |
+| 4 | −6.20% | −1.78 | ETH/USDC 5bp |
+
+The second-lowest-σ pool **loses money**. A volatility mechanism would decay
+monotonically. This is the same conclusion step 2 reached: σ ranks pools only
+by coincidence of composition.
+
+**3. It is regime-dependent.** 2023: −1.01%, positive in 12.5% of weeks. 2024–26:
++7.5%, +7.3%, +2.2%. First half Sharpe 0.76 (deflated 0.248), second half 2.66.
+
+> **Retired.** The honest statement is *"the USDC/USDT pool paid well in
+> 2024–2026 before financing costs"*, which is a description of one pool in one
+> regime, not a rule. The paper should carry it as an observation with its
+> failure modes stated, and should not recommend it.
+
+This removes the project's last positive-Sharpe claim. What survives is the
+measurement stack, H3's domain of validity, and the negative result about where
+the edge is not.
