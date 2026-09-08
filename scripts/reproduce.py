@@ -47,6 +47,7 @@ PIPELINE = [
     ("static_rule.py", "step 3 — can the static rule be recommended?", True, False),
     ("why_2023.py", "step 4 — what is different about 2023", True, False),
     ("range_exhaustion.py", "step 8 — does the shape of the day matter?", True, False),
+    ("mev_relay_validation.py", "step 10 — MEV undercount against relay payments", True, False),
     ("robustness_subperiods_q2.py", "robustness — subperiods, regimes, Q2", True, False),
     ("robustness_position.py", "robustness — range width, hedge frequency", True, False),
     ("robustness_mev.py", "robustness — MEV classification rules", True, False),

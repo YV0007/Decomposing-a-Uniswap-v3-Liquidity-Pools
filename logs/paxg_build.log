@@ -1,0 +1,212 @@
+
+=== PAXG_USDC_5bp: CEX reference PAXGUSDT ===
+  downloading PAXGUSDT-1s-2025-04.zip ...
+    -> 21.9 MB
+  downloading PAXGUSDT-1s-2025-05.zip ...
+    -> 23.4 MB
+  downloading PAXGUSDT-1s-2025-06.zip ...
+    -> 24.5 MB
+  downloading PAXGUSDT-1s-2025-07.zip ...
+    -> 22.3 MB
+  downloading PAXGUSDT-1s-2025-08.zip ...
+    -> 21.9 MB
+  downloading PAXGUSDT-1s-2025-09.zip ...
+    -> 24.5 MB
+  downloading PAXGUSDT-1s-2025-10.zip ...
+    -> 32.1 MB
+  downloading PAXGUSDT-1s-2025-11.zip ...
+    -> 26.3 MB
+  downloading PAXGUSDT-1s-2025-12.zip ...
+    -> 26.3 MB
+  downloading PAXGUSDT-1s-2026-01.zip ...
+    -> 32.6 MB
+  downloading PAXGUSDT-1s-2026-02.zip ...
+    -> 32.3 MB
+  downloading PAXGUSDT-1s-2026-03.zip ...
+    -> 34.1 MB
+  downloading PAXGUSDT-1s-2026-04.zip ...
+    -> 25.8 MB
+  downloading PAXGUSDT-1s-2026-05.zip ...
+    -> 24.8 MB
+  downloading PAXGUSDT-1s-2026-06.zip ...
+    -> 24.6 MB
+  downloading PAXGUSDT-1s-2026-07.zip ...
+    -> 22.9 MB
+fetching swaps 0x5ae13baaef0620fdae1d355495dc51a17adb4082 blocks 22170334-22385292
+  blocks 22170334-22220333  + 1993 logs  (total    1993)   23.3%
+  blocks 22220334-22270333  + 4007 logs  (total    6000)   46.5%
+  blocks 22270334-22320333  + 4017 logs  (total   10017)   69.8%
+  blocks 22320334-22370333  + 4069 logs  (total   14086)   93.0%
+  blocks 22370334-22385292  +  882 logs  (total   14968)  100.0%
+  wrote 14968 swaps -> 0x5ae13baaef0620fdae1d355495dc51a17adb4082_22170334_22385292_v3.parquet
+fetching swaps 0x5ae13baaef0620fdae1d355495dc51a17adb4082 blocks 22385293-22606141
+  blocks 22385293-22435292  + 3189 logs  (total    3189)   22.6%
+  blocks 22435293-22485292  + 1902 logs  (total    5091)   45.3%
+  blocks 22485293-22535292  + 1926 logs  (total    7017)   67.9%
+  blocks 22535293-22585292  + 2111 logs  (total    9128)   90.6%
+  blocks 22585293-22606141  +  534 logs  (total    9662)  100.0%
+  wrote 9662 swaps -> 0x5ae13baaef0620fdae1d355495dc51a17adb4082_22385293_22606141_v3.parquet
+fetching swaps 0x5ae13baaef0620fdae1d355495dc51a17adb4082 blocks 22606142-22820672
+  blocks 22606142-22656141  + 1902 logs  (total    1902)   23.3%
+  blocks 22656142-22706141  + 2333 logs  (total    4235)   46.6%
+  blocks 22706142-22756141  + 2987 logs  (total    7222)   69.9%
+  blocks 22756142-22806141  + 2579 logs  (total    9801)   93.2%
+  blocks 22806142-22820672  +  417 logs  (total   10218)  100.0%
+  wrote 10218 swaps -> 0x5ae13baaef0620fdae1d355495dc51a17adb4082_22606142_22820672_v3.parquet
+fetching swaps 0x5ae13baaef0620fdae1d355495dc51a17adb4082 blocks 22820673-23042512
+  blocks 22820673-22870672  + 1506 logs  (total    1506)   22.5%
+  blocks 22870673-22920672  + 1313 logs  (total    2819)   45.1%
+  blocks 22920673-22970672  + 1545 logs  (total    4364)   67.6%
+  blocks 22970673-23020672  + 2615 logs  (total    6979)   90.2%
+  blocks 23020673-23042512  + 1039 logs  (total    8018)  100.0%
+  wrote 8018 swaps -> 0x5ae13baaef0620fdae1d355495dc51a17adb4082_22820673_23042512_v3.parquet
+fetching swaps 0x5ae13baaef0620fdae1d355495dc51a17adb4082 blocks 23042513-23264564
+  blocks 23042513-23092512  + 2960 logs  (total    2960)   22.5%
+  blocks 23092513-23142512  + 2438 logs  (total    5398)   45.0%
+  blocks 23142513-23192512  + 2300 logs  (total    7698)   67.6%
+  blocks 23192513-23242512  + 2390 logs  (total   10088)   90.1%
+  blocks 23242513-23264564  + 1164 logs  (total   11252)  100.0%
+  wrote 11252 swaps -> 0x5ae13baaef0620fdae1d355495dc51a17adb4082_23042513_23264564_v3.parquet
+fetching swaps 0x5ae13baaef0620fdae1d355495dc51a17adb4082 blocks 23264565-23479242
+  blocks 23264565-23314564  + 3468 logs  (total    3468)   23.3%
+  blocks 23314565-23364564  + 3045 logs  (total    6513)   46.6%
+  blocks 23364565-23414564  + 2568 logs  (total    9081)   69.9%
+  blocks 23414565-23464564  + 3789 logs  (total   12870)   93.2%
+  blocks 23464565-23479242  + 1512 logs  (total   14382)  100.0%
+  wrote 14382 swaps -> 0x5ae13baaef0620fdae1d355495dc51a17adb4082_23264565_23479242_v3.parquet
+fetching swaps 0x5ae13baaef0620fdae1d355495dc51a17adb4082 blocks 23479243-23700765
+  blocks 23479243-23529242  + 4643 logs  (total    4643)   22.6%
+  blocks 23529243-23579242  + 8086 logs  (total   12729)   45.1%
+  blocks 23579243-23629242  +10327 logs  (total   23056)   67.7%
+  blocks 23629243-23679242  + 8805 logs  (total   31861)   90.3%
+  blocks 23679243-23700765  + 3507 logs  (total   35368)  100.0%
+  wrote 35368 swaps -> 0x5ae13baaef0620fdae1d355495dc51a17adb4082_23479243_23700765_v3.parquet
+fetching swaps 0x5ae13baaef0620fdae1d355495dc51a17adb4082 blocks 23700766-23914919
+  blocks 23700766-23750765  + 3918 logs  (total    3918)   23.3%
+  blocks 23750766-23800765  + 6833 logs  (total   10751)   46.7%
+  blocks 23800766-23850765  + 6985 logs  (total   17736)   70.0%
+  blocks 23850766-23900765  + 5402 logs  (total   23138)   93.4%
+  blocks 23900766-23914919  + 1242 logs  (total   24380)  100.0%
+  wrote 24380 swaps -> 0x5ae13baaef0620fdae1d355495dc51a17adb4082_23700766_23914919_v3.parquet
+fetching swaps 0x5ae13baaef0620fdae1d355495dc51a17adb4082 blocks 23914920-24136051
+  blocks 23914920-23964919  + 5742 logs  (total    5742)   22.6%
+  blocks 23964920-24014919  + 4476 logs  (total   10218)   45.2%
+  blocks 24014920-24064919  + 4648 logs  (total   14866)   67.8%
+  blocks 24064920-24114919  + 5814 logs  (total   20680)   90.4%
+  blocks 24114920-24136051  + 4520 logs  (total   25200)  100.0%
+  wrote 25200 swaps -> 0x5ae13baaef0620fdae1d355495dc51a17adb4082_23914920_24136051_v3.parquet
+fetching swaps 0x5ae13baaef0620fdae1d355495dc51a17adb4082 blocks 24136052-24358291
+  blocks 24136052-24186051  + 9685 logs  (total    9685)   22.5%
+  blocks 24186052-24236051  + 6122 logs  (total   15807)   45.0%
+  blocks 24236052-24286051  + 5896 logs  (total   21703)   67.5%
+  blocks 24286052-24336051  +10188 logs  (total   31891)   90.0%
+  blocks 24336052-24358291  + 9100 logs  (total   40991)  100.0%
+  wrote 40991 swaps -> 0x5ae13baaef0620fdae1d355495dc51a17adb4082_24136052_24358291_v3.parquet
+fetching swaps 0x5ae13baaef0620fdae1d355495dc51a17adb4082 blocks 24358292-24558866
+  blocks 24358292-24408291  +15239 logs  (total   15239)   24.9%
+  blocks 24408292-24458291  + 7505 logs  (total   22744)   49.9%
+  blocks 24458292-24508291  + 6482 logs  (total   29226)   74.8%
+  blocks 24508292-24558291  + 9794 logs  (total   39020)   99.7%
+  blocks 24558292-24558866  +  100 logs  (total   39120)  100.0%
+  wrote 39120 swaps -> 0x5ae13baaef0620fdae1d355495dc51a17adb4082_24358292_24558866_v3.parquet
+fetching swaps 0x5ae13baaef0620fdae1d355495dc51a17adb4082 blocks 24558867-24781025
+  blocks 24558867-24608866  +11402 logs  (total   11402)   22.5%
+  blocks 24608867-24658866  + 6953 logs  (total   18355)   45.0%
+  blocks 24658867-24708866  + 8602 logs  (total   26957)   67.5%
+  blocks 24708867-24758866  +12844 logs  (total   39801)   90.0%
+  blocks 24758867-24781025  + 2928 logs  (total   42729)  100.0%
+  wrote 42729 swaps -> 0x5ae13baaef0620fdae1d355495dc51a17adb4082_24558867_24781025_v3.parquet
+fetching swaps 0x5ae13baaef0620fdae1d355495dc51a17adb4082 blocks 24781026-24996366
+  blocks 24781026-24831025  + 5966 logs  (total    5966)   23.2%
+  blocks 24831026-24881025  + 4299 logs  (total   10265)   46.4%
+  blocks 24881026-24931025  + 3099 logs  (total   13364)   69.7%
+  blocks 24931026-24981025  + 2239 logs  (total   15603)   92.9%
+  blocks 24981026-24996366  +  831 logs  (total   16434)  100.0%
+  wrote 16434 swaps -> 0x5ae13baaef0620fdae1d355495dc51a17adb4082_24781026_24996366_v3.parquet
+fetching swaps 0x5ae13baaef0620fdae1d355495dc51a17adb4082 blocks 24996367-25218796
+  blocks 24996367-25046366  + 2900 logs  (total    2900)   22.5%
+  blocks 25046367-25096366  + 3358 logs  (total    6258)   45.0%
+  blocks 25096367-25146366  + 4543 logs  (total   10801)   67.4%
+  blocks 25146367-25196366  + 3206 logs  (total   14007)   89.9%
+  blocks 25196367-25218796  +  943 logs  (total   14950)  100.0%
+  wrote 14950 swaps -> 0x5ae13baaef0620fdae1d355495dc51a17adb4082_24996367_25218796_v3.parquet
+fetching swaps 0x5ae13baaef0620fdae1d355495dc51a17adb4082 blocks 25218797-25433937
+  blocks 25218797-25268796  + 3815 logs  (total    3815)   23.2%
+  blocks 25268797-25318796  + 4293 logs  (total    8108)   46.5%
+  blocks 25318797-25368796  + 2890 logs  (total   10998)   69.7%
+  blocks 25368797-25418796  + 3809 logs  (total   14807)   93.0%
+  blocks 25418797-25433937  + 1410 logs  (total   16217)  100.0%
+  wrote 16217 swaps -> 0x5ae13baaef0620fdae1d355495dc51a17adb4082_25218797_25433937_v3.parquet
+fetching swaps 0x5ae13baaef0620fdae1d355495dc51a17adb4082 blocks 25433938-25656291
+  blocks 25433938-25483937  + 3965 logs  (total    3965)   22.5%
+  blocks 25483938-25533937  + 3959 logs  (total    7924)   45.0%
+  blocks 25533938-25583937  + 3190 logs  (total   11114)   67.5%
+  blocks 25583938-25633937  + 3387 logs  (total   14501)   89.9%
+  blocks 25633938-25656291  + 1898 logs  (total   16399)  100.0%
+  wrote 16399 swaps -> 0x5ae13baaef0620fdae1d355495dc51a17adb4082_25433938_25656291_v3.parquet
+  cache hit: 0x5ae13baaef0620fdae1d355495dc51a17adb4082_22170334_22385292_v3.parquet
+  downloading PAXGUSDT-1s-2025-03.zip ...
+    -> 20.0 MB
+  cache hit: PAXGUSDT-1s-2025-04.zip (21.9 MB)
+  PAXG_USDC_5bp 2025-04: 12,896 blocks, vol coverage 100.0%
+  cache hit: 0x5ae13baaef0620fdae1d355495dc51a17adb4082_22385293_22606141_v3.parquet
+  cache hit: PAXGUSDT-1s-2025-04.zip (21.9 MB)
+  cache hit: PAXGUSDT-1s-2025-05.zip (23.4 MB)
+  PAXG_USDC_5bp 2025-05: 8,480 blocks, vol coverage 100.0%
+  cache hit: 0x5ae13baaef0620fdae1d355495dc51a17adb4082_22606142_22820672_v3.parquet
+  cache hit: PAXGUSDT-1s-2025-05.zip (23.4 MB)
+  cache hit: PAXGUSDT-1s-2025-06.zip (24.5 MB)
+  PAXG_USDC_5bp 2025-06: 9,091 blocks, vol coverage 100.0%
+  cache hit: 0x5ae13baaef0620fdae1d355495dc51a17adb4082_22820673_23042512_v3.parquet
+  cache hit: PAXGUSDT-1s-2025-06.zip (24.5 MB)
+  cache hit: PAXGUSDT-1s-2025-07.zip (22.3 MB)
+  PAXG_USDC_5bp 2025-07: 7,405 blocks, vol coverage 100.0%
+  cache hit: 0x5ae13baaef0620fdae1d355495dc51a17adb4082_23042513_23264564_v3.parquet
+  cache hit: PAXGUSDT-1s-2025-07.zip (22.3 MB)
+  cache hit: PAXGUSDT-1s-2025-08.zip (21.9 MB)
+  PAXG_USDC_5bp 2025-08: 10,306 blocks, vol coverage 100.0%
+  cache hit: 0x5ae13baaef0620fdae1d355495dc51a17adb4082_23264565_23479242_v3.parquet
+  cache hit: PAXGUSDT-1s-2025-08.zip (21.9 MB)
+  cache hit: PAXGUSDT-1s-2025-09.zip (24.5 MB)
+  PAXG_USDC_5bp 2025-09: 12,956 blocks, vol coverage 100.0%
+  cache hit: 0x5ae13baaef0620fdae1d355495dc51a17adb4082_23479243_23700765_v3.parquet
+  cache hit: PAXGUSDT-1s-2025-09.zip (24.5 MB)
+  cache hit: PAXGUSDT-1s-2025-10.zip (32.1 MB)
+  PAXG_USDC_5bp 2025-10: 29,565 blocks, vol coverage 100.0%
+  cache hit: 0x5ae13baaef0620fdae1d355495dc51a17adb4082_23700766_23914919_v3.parquet
+  cache hit: PAXGUSDT-1s-2025-10.zip (32.1 MB)
+  cache hit: PAXGUSDT-1s-2025-11.zip (26.3 MB)
+  PAXG_USDC_5bp 2025-11: 21,789 blocks, vol coverage 100.0%
+  cache hit: 0x5ae13baaef0620fdae1d355495dc51a17adb4082_23914920_24136051_v3.parquet
+  cache hit: PAXGUSDT-1s-2025-11.zip (26.3 MB)
+  cache hit: PAXGUSDT-1s-2025-12.zip (26.3 MB)
+  PAXG_USDC_5bp 2025-12: 21,954 blocks, vol coverage 100.0%
+  cache hit: 0x5ae13baaef0620fdae1d355495dc51a17adb4082_24136052_24358291_v3.parquet
+  cache hit: PAXGUSDT-1s-2025-12.zip (26.3 MB)
+  cache hit: PAXGUSDT-1s-2026-01.zip (32.6 MB)
+  PAXG_USDC_5bp 2026-01: 34,199 blocks, vol coverage 100.0%
+  cache hit: 0x5ae13baaef0620fdae1d355495dc51a17adb4082_24358292_24558866_v3.parquet
+  cache hit: PAXGUSDT-1s-2026-01.zip (32.6 MB)
+  cache hit: PAXGUSDT-1s-2026-02.zip (32.3 MB)
+  PAXG_USDC_5bp 2026-02: 32,724 blocks, vol coverage 100.0%
+  cache hit: 0x5ae13baaef0620fdae1d355495dc51a17adb4082_24558867_24781025_v3.parquet
+  cache hit: PAXGUSDT-1s-2026-02.zip (32.3 MB)
+  cache hit: PAXGUSDT-1s-2026-03.zip (34.1 MB)
+  PAXG_USDC_5bp 2026-03: 36,706 blocks, vol coverage 100.0%
+  cache hit: 0x5ae13baaef0620fdae1d355495dc51a17adb4082_24781026_24996366_v3.parquet
+  cache hit: PAXGUSDT-1s-2026-03.zip (34.1 MB)
+  cache hit: PAXGUSDT-1s-2026-04.zip (25.8 MB)
+  PAXG_USDC_5bp 2026-04: 15,406 blocks, vol coverage 100.0%
+  cache hit: 0x5ae13baaef0620fdae1d355495dc51a17adb4082_24996367_25218796_v3.parquet
+  cache hit: PAXGUSDT-1s-2026-04.zip (25.8 MB)
+  cache hit: PAXGUSDT-1s-2026-05.zip (24.8 MB)
+  PAXG_USDC_5bp 2026-05: 14,188 blocks, vol coverage 100.0%
+  cache hit: 0x5ae13baaef0620fdae1d355495dc51a17adb4082_25218797_25433937_v3.parquet
+  cache hit: PAXGUSDT-1s-2026-05.zip (24.8 MB)
+  cache hit: PAXGUSDT-1s-2026-06.zip (24.6 MB)
+  PAXG_USDC_5bp 2026-06: 14,992 blocks, vol coverage 100.0%
+  cache hit: 0x5ae13baaef0620fdae1d355495dc51a17adb4082_25433938_25656291_v3.parquet
+  cache hit: PAXGUSDT-1s-2026-06.zip (24.6 MB)
+  cache hit: PAXGUSDT-1s-2026-07.zip (22.9 MB)
+  PAXG_USDC_5bp 2026-07: 15,330 blocks, vol coverage 100.0%
+  PAXG_USDC_5bp: 16 months built, 0 failed

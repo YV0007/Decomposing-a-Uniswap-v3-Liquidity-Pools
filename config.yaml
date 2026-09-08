@@ -97,6 +97,27 @@ universe:
       cex_invert: false
       hedge_legs: {WBTC: BTCUSDT}
       verified_on_etherscan: true
+    - id: PAXG_USDC_5bp
+      # Added to populate the volatility gap. The six pools above cluster at
+      # 2.3% (a peg) and then 28-53%; nothing sits between, and that is exactly
+      # the region where "LVR/sigma^2 is ~3.3 off the peg" is untested. Gold
+      # against the dollar runs near 15%.
+      #
+      # SHORTER SAMPLE. This pool has no liquidity before April 2025, so it
+      # carries ~16 months against 43 for the others. It is reported as a
+      # supplementary point and is excluded from any table that compares pools
+      # over the common window.
+      address: "0x5ae13baaef0620fdae1d355495dc51a17adb4082"
+      token0: {symbol: PAXG, decimals: 18, address: "0x45804880de22913dafe09f4980848ece6ecbaf78"}
+      token1: {symbol: USDC, decimals: 6,  address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"}
+      fee_tier_bps: 5
+      tick_spacing: 10
+      invert_price: false       # price is token1/token0 = USDC per PAXG, i.e. USD per ounce
+      cex_symbol: PAXGUSDT      # quotes USD per ounce too
+      cex_invert: false
+      hedge_legs: {PAXG: PAXGUSDT}
+      first_month: "2025-04"    # no liquidity before this
+      verified_on_etherscan: true
     - id: USDC_USDT_1bp
       address: "0x3416cf6c708da44db2624d63ea0aaef7113527c6"
       token0: {symbol: USDC, decimals: 6,  address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"}

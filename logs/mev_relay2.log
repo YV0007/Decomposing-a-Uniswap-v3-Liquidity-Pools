@@ -1,0 +1,99 @@
+=== classifying sandwiches on ETH_USDC_5bp ===
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_16308189_16530246_v3.parquet
+  2023-01: 232,938 swaps, 438 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_16530247_16730070_v3.parquet
+  2023-02: 234,183 swaps, 454 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_16730071_16950601_v3.parquet
+  2023-03: 239,576 swaps, 1,012 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_16950602_17162285_v3.parquet
+  2023-04: 161,026 swaps, 139 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_17162286_17382264_v3.parquet
+  2023-05: 142,097 swaps, 163 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_17382265_17595508_v3.parquet
+  2023-06: 130,385 swaps, 168 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_17595509_17816432_v3.parquet
+  2023-07: 111,180 swaps, 86 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_17816433_18037986_v3.parquet
+  2023-08: 128,824 swaps, 144 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_18037987_18251963_v3.parquet
+  2023-09: 104,929 swaps, 139 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_18251964_18473541_v3.parquet
+  2023-10: 142,083 swaps, 160 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_18473542_18687849_v3.parquet
+  2023-11: 140,577 swaps, 113 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_18687850_18908893_v3.parquet
+  2023-12: 169,535 swaps, 139 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_18908894_19129887_v3.parquet
+  2024-01: 187,369 swaps, 167 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_19129888_19336605_v3.parquet
+  2024-02: 155,926 swaps, 147 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_19336606_19557287_v3.parquet
+  2024-03: 206,315 swaps, 343 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_19557288_19771558_v3.parquet
+  2024-04: 211,394 swaps, 174 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_19771559_19993248_v3.parquet
+  2024-05: 222,669 swaps, 121 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_19993249_20207947_v3.parquet
+  2024-06: 187,326 swaps, 77 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_20207948_20429971_v3.parquet
+  2024-07: 193,201 swaps, 85 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_20429972_20651992_v3.parquet
+  2024-08: 204,026 swaps, 253 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_20651993_20866917_v3.parquet
+  2024-09: 134,394 swaps, 48 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_20866918_21089067_v3.parquet
+  2024-10: 125,368 swaps, 35 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_21089068_21303932_v3.parquet
+  2024-11: 168,554 swaps, 70 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_21303933_21525889_v3.parquet
+  2024-12: 182,311 swaps, 45 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_21525890_21747948_v3.parquet
+  2025-01: 185,193 swaps, 55 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_21747949_21948290_v3.parquet
+  2025-02: 236,284 swaps, 70 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_21948291_22170333_v3.parquet
+  2025-03: 228,128 swaps, 52 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_22170334_22385292_v3.parquet
+  2025-04: 218,449 swaps, 94 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_22385293_22606141_v3.parquet
+  2025-05: 191,797 swaps, 39 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_22606142_22820672_v3.parquet
+  2025-06: 156,507 swaps, 29 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_22820673_23042512_v3.parquet
+  2025-07: 161,063 swaps, 23 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_23042513_23264564_v3.parquet
+  2025-08: 186,490 swaps, 56 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_23264565_23479242_v3.parquet
+  2025-09: 138,316 swaps, 23 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_23479243_23700765_v3.parquet
+  2025-10: 167,175 swaps, 30 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_23700766_23914919_v3.parquet
+  2025-11: 191,831 swaps, 59 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_23914920_24136051_v3.parquet
+  2025-12: 154,894 swaps, 39 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_24136052_24358291_v3.parquet
+  2026-01: 141,644 swaps, 29 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_24358292_24558866_v3.parquet
+  2026-02: 241,910 swaps, 41 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_24558867_24781025_v3.parquet
+  2026-03: 197,831 swaps, 19 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_24781026_24996366_v3.parquet
+  2026-04: 150,867 swaps, 33 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_24996367_25218796_v3.parquet
+  2026-05: 134,171 swaps, 36 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_25218797_25433937_v3.parquet
+  2026-06: 201,103 swaps, 45 sandwiches
+  cache hit: 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640_25433938_25656291_v3.parquet
+  2026-07: 146,593 swaps, 23 sandwiches
+
+5,515 sandwiches in 5,485 blocks; 4,684,668 control blocks with a swap and no sandwich
+
+fetching relay payments for 2,500 + 2,500 blocks
+  sandwich: 0 already cached, 2,500 to fetch
+/Users/macbook/Desktop/LVR:MEV/scripts/mev_relay_validation.py:100: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  done = pd.concat([done, pd.DataFrame(rows)], ignore_index=True)
+  sandwich: 200/2,500  delivered 124  250s
+  sandwich: 400/2,500  delivered 224  556s
+  sandwich: 600/2,500  delivered 290  893s
+  sandwich: 800/2,500  delivered 355  1173s
+  sandwich: 1,000/2,500  delivered 423  1276s

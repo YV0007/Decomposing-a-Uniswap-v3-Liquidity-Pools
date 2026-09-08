@@ -49,6 +49,23 @@ class PoolSpec:
     #: pool); more than one entry means a single perp cannot do it. Hedging a
     #: USDC delta with an ETH perp produced a funding figure of -9,856%.
     hedge_legs: tuple = ()
+    #: First month with liquidity, "YYYY-MM". A pool listed later than the
+    #: sample start has no data before this and fetching it wastes hours on
+    #: empty ranges; more importantly, an empty month is not a quiet month and
+    #: must not enter a table as one.
+    first_month: str | None = None
+
+    @property
+    def first_ym(self) -> tuple[int, int] | None:
+        if not self.first_month:
+            return None
+        y, m = self.first_month.split("-")
+        return int(y), int(m)
+
+    def covers(self, year: int, month: int) -> bool:
+        """Is (year, month) inside this pool's own sample?"""
+        fy = self.first_ym
+        return fy is None or (year, month) >= fy
 
     @property
     def hedge_map(self) -> dict:
@@ -90,6 +107,7 @@ def _pool_from_dict(d: dict[str, Any]) -> PoolSpec:
         cex_symbol=d.get("cex_symbol", "ETHUSDT"),
         cex_invert=bool(d.get("cex_invert", False)),
         hedge_legs=tuple(sorted((d.get("hedge_legs") or {}).items())),
+        first_month=d.get("first_month"),
     )
 
 

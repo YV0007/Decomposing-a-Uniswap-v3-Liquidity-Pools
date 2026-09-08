@@ -7,10 +7,10 @@ decide whether it can be recommended at all.
 
 **1. Sharpe against what?** `src/utils/stats.py` computes `mean/sd` with no
 risk-free rate: the return is measured against zero, not against cash. But the
-position ties up real capital, and over 2023-2026 T-bills paid several percent.
-The FRED series could not be fetched from this machine, so rather than invent
-one this reports a **sensitivity band** across plausible rates and lets the
-reader put the cursor where they like.
+position ties up real capital, and over 2023-2026 the 4-week Treasury bill
+averaged 4.61 per cent. The realised daily series is used, carried forward from
+the last business day at or before each week end; a flat-rate grid is kept
+alongside so the result can be seen not to hinge on the choice.
 
 **2. Is it "lowest sigma", or is it "the peg"?** The rule is stated in terms of
 volatility, but it has only ever selected one pool. If it is really a statement
@@ -32,6 +32,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import numpy as np
 import pandas as pd
 
+from src.fetch.treasury import weekly_risk_free
 from src.utils.config import REPO_ROOT
 from src.utils.speclog import count_specifications
 from src.utils.stats import deflated_sharpe_ratio
@@ -86,9 +87,26 @@ def main() -> int:
 
     # ---- 1. the risk-free question --------------------------------------
     rule = series_for(d, 0)
-    print(f"--- 1. Sharpe against cash, not against zero ({len(rule)} weeks) ---\n")
-    print(f"{'rf':>6} {'excess ann':>12} {'sharpe':>9} {'deflated p':>12}  verdict")
     rows = []
+    print(f"--- 1. Sharpe against cash, not against zero ({len(rule)} weeks) ---\n")
+
+    rf_wk = weekly_risk_free(pd.DatetimeIndex(rule.index))
+    realised = rule - rf_wk
+    rf_ann = float(rf_wk.mean() * 52)
+    dr = deflated_sharpe_ratio(realised, n_trials=n_trials)
+    print(f"  realised 4-week bill over these weeks : {rf_ann:.2%} a year")
+    print(f"  gross return                          : {rule.mean() * 52:+.2%}")
+    print(f"  excess of cash                        : {realised.mean() * 52:+.2%}")
+    print(f"  Sharpe on excess returns              : {dr['sharpe']:.2f}")
+    print(f"  deflated probability                  : {dr['deflated_sharpe_prob']:.3f}"
+          f"   ({'clears' if dr['deflated_sharpe_prob'] >= 0.95 else 'fails'} the 0.95 bar)")
+    rows.append({"test": "realised_risk_free", "rf": rf_ann,
+                 "excess_ann": float(realised.mean() * 52),
+                 "sharpe": dr["sharpe"],
+                 "deflated_prob": dr["deflated_sharpe_prob"]})
+
+    print(f"\n  flat-rate sensitivity, for comparison:\n")
+    print(f"{'rf':>6} {'excess ann':>12} {'sharpe':>9} {'deflated p':>12}  verdict")
     for rf in RF_GRID:
         s = score(rule, n_trials, rf)
         ex_ann = s["ann_return"] - rf
@@ -99,7 +117,8 @@ def main() -> int:
                      "excess_ann": ex_ann, "sharpe": s["sharpe"],
                      "deflated_prob": s["deflated_prob"]})
     print("\n  The reported +6.4% at Sharpe 1.96 is the rf = 0 row. Cash is the"
-          "\n  honest alternative for capital that is actually tied up.")
+          "\n  honest alternative for capital that is actually tied up, and the"
+          "\n  realised series lands between the 4% and 5% rows as it should.")
 
     # ---- 2. is it sigma, or is it the peg? -------------------------------
     print("\n--- 2. is the rule about volatility, or about one pool? ---\n")

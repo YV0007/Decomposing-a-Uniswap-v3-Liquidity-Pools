@@ -28,6 +28,7 @@ defined against a continuously rebalanced portfolio.
 | Pool | median σ | fees | LVR | **net** | 95% CI | months > 0 |
 |---|---|---|---|---|---|---|
 | **USDC/USDT 1bp** | **2.3%** | +10.3% | −1.6% | **+8.43%** | **[+5.0%, +11.6%]** | **83%** |
+| PAXG/USDC 5bp | 19.5% | +17.2% | −18.5% | −1.82% | [−6.2%, +3.4%] | 50% |
 | WBTC/ETH 30bp | 28.3% | +32.8% | −31.5% | +0.71% | [−1.6%, +3.4%] | 44% |
 | **WBTC/USDC 30bp** | **40.0%** | +61.1% | −56.3% | **+4.09%** | [−0.5%, +9.0%] | 47% |
 | ETH/USDC 5bp | 52.3% | +88.8% | −96.8% | −9.10% | [−15.6%, −3.3%] | 26% |
@@ -43,12 +44,17 @@ documented in [`DECISIONS.md`](DECISIONS.md) with the test that killed it.
 
 | Retracted | Replaced by |
 |---|---|
-| `corr(σ, net) = −0.923` | −0.568 on six pools; **within** pools the slope's CI spans zero (Simpson's paradox) |
+| `corr(σ, net) = −0.923` | −0.569 on seven pools; **within** pools the slope's CI spans zero (Simpson's paradox) |
 | "LVR scales with σ², fee income does not" | Both scale with σ² at nearly the same rate — `fees = 0.043 + 3.06σ²`, `LVR = −0.003 + 3.26σ²` |
 | "A static rule earns +6.4% at Sharpe 1.96" | Not implementable; +4.31% properly specified, and ~0 against a realistic cash rate |
 
-What survives is narrower: `LVR/σ²` is **3.10–3.46 on every non-peg pool**, so
-*does this pool pay?* reduces to *is fee income per unit variance above ~3.3?*
+| "`LVR/σ²` is ~3.3 off the peg" | **Falsified by the seventh pool**: gold at 19.5% σ returns **5.23** |
+| "A static rule earns +4.31%" | Against the **realised T-bill (4.62%)** it earns **−0.31%** |
+
+`LVR/σ²` is not a constant with one exception but a single declining curve —
+41.8 at 2.3% σ, **5.23 at 19.5%**, then 3.10–3.46 above 28%, where it flattens.
+The adverse-selection floor exists at every volatility and merely becomes small
+next to the diffusive term. A threshold rule is valid only above ~28%.
 
 ### The four results worth reading
 
@@ -80,7 +86,7 @@ volume-forecasting problem wearing a volatility costume.*
 | 6–7 | Forecasting, theory-vs-ML, allocation | ✅ |
 | 8 | Optimal range width | ✅ |
 | — | Robustness; all 7 open questions | ✅ closed |
-| — | Cross-section: 6 pools, 3 asset pairs, 23× volatility range | ✅ |
+| — | Cross-section: 7 pools, 4 asset pairs, 23× volatility range | ✅ |
 | — | Working paper, `outputs/paper/` | ✅ regenerated from the tables |
 
 | Hypothesis | Verdict |

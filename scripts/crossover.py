@@ -208,14 +208,21 @@ def main() -> int:
           "\n  terms, which is why R2 on net is only "
           f"{r2:.3f} and the crossover CI is wide.")
 
-    print("\n--- LVR per unit variance, by pool (the cost side is stable) ---")
+    print("\n--- LVR per unit variance, ordered by volatility ---")
     cost = {}
     for p_, g in fit.groupby("pool"):
         Xg = np.column_stack([np.ones(len(g)), g["sigma2"].to_numpy()])
-        cost[p_] = ols(g["lvr"].to_numpy(), Xg)[1]
-        print(f"  {p_:16s} {cost[p_]:9.3f}")
-    print("\n  ~3.1-3.5 on every non-peg pool, 41.8 on the peg - the same"
-          "\n  breakdown of the diffusion at near-zero variance that H3 found.")
+        cost[p_] = (float(g["sigma"].median()), ols(g["lvr"].to_numpy(), Xg)[1])
+    for p_, (sig, c) in sorted(cost.items(), key=lambda kv: kv[1][0]):
+        print(f"  {p_:16s} sigma {sig:6.3f}   LVR/sigma^2 {c:9.3f}")
+    print("\n  NOT a constant with one exception. Ordered by volatility this is a"
+          "\n  continuum: 41.8 at 2.3% sigma, 5.2 at 19.5%, then 3.1-3.5 from 28%"
+          "\n  upward, where it flattens. The adverse-selection floor H3 found on"
+          "\n  the peg is present at every volatility and merely becomes small"
+          "\n  relative to the diffusive term once sigma is high enough.")
+    print("\n  An earlier version of this script asserted ~3.3 on every non-peg"
+          "\n  pool. Adding a pool at 19.5% sigma - the region the claim had never"
+          "\n  been tested in - returned 5.2 and falsified it.")
 
     # ---- 6. a better ranking variable, and its limits ---------------------
     print("\n" + "=" * 84)
@@ -231,10 +238,14 @@ def main() -> int:
           f"(spearman {lv.sigma.corr(lv.net, method='spearman'):+.3f})")
     print(f"  corr(fees/sigma^2, net) = {lv.ratio.corr(lv.net):+.3f}  "
           f"(spearman {lv.ratio.corr(lv.net, method='spearman'):+.3f})")
-    print("\n  Since LVR/sigma^2 is ~3.3 everywhere off the peg, 'does this pool"
-          "\n  pay?' reduces to 'is fee income per unit variance above ~3.3?'."
-          "\n  Note this is partly mechanical: net = fees - LVR, so ranking on"
-          "\n  fees/sigma^2 is close to ranking on net/sigma^2.")
+    print("\n  This ranked all five pools perfectly before the gold pool was added"
+          "\n  and now ranks six at Spearman +0.83. The pool it misplaces is the"
+          "\n  one that broke the constant: PAXG clears a 3.3 threshold on fee"
+          "\n  income (3.41) yet loses money, because its OWN cost side is 5.2."
+          "\n  A single threshold only works where LVR/sigma^2 is flat, which is"
+          "\n  above roughly 28% annualised. Below that the threshold is"
+          "\n  pool-specific and the rule reduces to a tautology."
+          "\n  Note also that it is partly mechanical: net = fees - LVR.")
 
     # The honest test of a signal is whether it works with a lag.
     f = fit.sort_values(["pool", "period"]).copy()
@@ -254,9 +265,13 @@ def main() -> int:
           "\n  Consistent with the oracle decomposition: the binding constraint"
           "\n  is predicting fee income, not describing it after the fact.")
 
-    rows = [{"metric": "crossover_sigma", "value": star, "lo": lo, "hi": hi},
-            {"metric": "corr_sigma_net_6pool", "value": r_all, "lo": np.nan, "hi": np.nan},
-            {"metric": "corr_sigma_net_5pool", "value": r_fit, "lo": np.nan, "hi": np.nan},
+    rows = [{"metric": f"lvr_per_var_{k}", "value": float(v[1]), "lo": np.nan,
+             "hi": np.nan} for k, v in cost.items()]
+    rows += [{"metric": "spearman_ratio_net", "value":
+              float(lv.ratio.corr(lv.net, method="spearman")), "lo": np.nan, "hi": np.nan},
+             {"metric": "crossover_sigma", "value": star, "lo": lo, "hi": hi},
+            {"metric": "corr_sigma_net_all", "value": r_all, "lo": np.nan, "hi": np.nan},
+            {"metric": "corr_sigma_net_fitted", "value": r_fit, "lo": np.nan, "hi": np.nan},
             {"metric": "slope_between_pools", "value": b[1], "lo": np.nan, "hi": np.nan},
             {"metric": "slope_within_pool", "value": w, "lo": wlo, "hi": whi},
             {"metric": "p_within_slope_positive", "value": float(np.mean(boot > 0)),

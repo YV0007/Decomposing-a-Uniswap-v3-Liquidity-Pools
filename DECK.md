@@ -112,6 +112,7 @@ already delta-hedged by the identity on slide 4.
 | Pool | σ | fees | LVR | **fees/LVR** | **net** | 95% CI | months > 0 |
 |---|---|---|---|---|---|---|---|
 | **USDC/USDT 1bp** | **2.3%** | +10.3% | −1.6% | **6.49** | **+8.43%** | **[+5.0%, +11.6%]** | **83%** |
+| **PAXG/USDC 5bp** | **19.5%** | +17.2% | −18.5% | 0.93 | **−1.82%** | [−6.2%, +3.4%] | 50% |
 | WBTC/ETH 30bp | 28.3% | +32.8% | −31.5% | 1.04 | +0.71% | [−1.6%, +3.4%] | 44% |
 | **WBTC/USDC 30bp** | **40.0%** | +61.1% | −56.3% | 1.09 | **+4.09%** | [−0.5%, +9.0%] | 47% |
 | ETH/USDC 5bp | 52.3% | +88.8% | −96.8% | 0.92 | −9.10% | [−15.6%, −3.3%] | 26% |
@@ -127,12 +128,12 @@ WBTC/USDC earns **+4.09% at 40% σ**, more than WBTC/ETH's +0.71% at 28% σ. If
 volatility ranked pools that could not happen. Three things follow, and each
 weakens the tidy version of this slide:
 
-- `corr(σ, net)` is **−0.568** across six pools (−0.822 on the five fitted),
+- `corr(σ, net)` is **−0.569** across seven pools (−0.730 on the six fitted),
   not the −0.923 an earlier four-pool version reported.
-- Fitting `net = a + b·σ²` on 213 pool-months puts the crossover at **σ\* = 43.5%
-  with a 95% CI of [32.2%, 76.2%] and R² = 0.055**. There is no well-determined
+- Fitting `net = a + b·σ²` on 229 pool-months puts the crossover at **σ\* = 41.7%
+  with a 95% CI of [30.4%, 77.3%] and R² = 0.048**. There is no well-determined
   crossover, and the decile curve is not monotone.
-- **Within** a pool the slope on σ² is **+0.060, CI [−0.242, +0.390]**. The sign
+- **Within** a pool the slope on σ² is **+0.049, CI [−0.251, +0.379]**. The sign
   flips and it cannot be distinguished from zero — a Simpson's paradox.
 
 > The cross-pool pattern is a statement about **which pools happen to be
@@ -143,16 +144,40 @@ does not. In this sample both do, at nearly the same rate — volume rises with
 volatility:
 
 ```
-fees = +0.043 + 3.06·σ²   R² = 0.839
-LVR  = −0.003 + 3.26·σ²   R² = 0.921
+fees = +0.041 + 3.07·σ²   R² = 0.845
+LVR  = +0.001 + 3.25·σ²   R² = 0.921
 ```
 
 Net is the small difference between two large, near-parallel terms, which is
-exactly why its R² is 0.055. What separates pools is **fee income per unit
-variance**: since `LVR/σ²` is 3.10–3.46 on every non-peg pool, "does this pool
-pay?" reduces to "is `fees/σ²` above ~3.3?" That ranks all five perfectly
-(Spearman +1.000) — but it is partly mechanical, and lagged one month it does
-**not** forecast better than the naive rule (76.2% vs 78.6%).
+exactly why its R² is 0.048.
+
+### Then a seventh pool falsified the replacement too ⭐
+
+We had said `LVR/σ²` is 3.10–3.46 off the peg, so "does this pool pay?" reduces
+to "is `fees/σ²` above ~3.3?" — which ranked five pools perfectly. **It had never
+been tested between 2.3% and 28.3% σ, because nothing lived there.**
+
+| pool | median σ | `LVR/σ²` |
+|---|---|---|
+| USDC/USDT 1bp | 2.3% | **41.82** |
+| **PAXG/USDC 5bp** | **19.5%** | **5.23** |
+| WBTC/ETH 30bp | 28.3% | 3.10 |
+| WBTC/USDC 30bp | 40.0% | 3.32 |
+| ETH/USDC 30bp | 52.4% | 3.34 |
+| ETH/USDC 5bp | 52.3% | 3.46 |
+
+Gold at 19.5% σ returns **5.23**, clears a 3.3 fee threshold (3.41), and still
+**loses money**. Spearman falls **+1.000 → +0.829**.
+
+> **Not a constant with one exception — one declining curve that flattens above
+> ~28%.** The adverse-selection floor is present at every volatility and merely
+> becomes small next to the diffusive term once σ is high enough. Same shape as
+> the H3 bias curve on slide 8, on a different quantity — we now treat them as
+> one phenomenon.
+
+A threshold rule is valid **only above ~28% annualised**; below it the threshold
+is pool-specific and the rule is a tautology. It is also partly mechanical, and
+lagged one month does **not** beat the naive rule (76.2% vs 78.6%).
 
 *(ETH/USDC 100bp withheld: a $100k position is 113% of its active liquidity.)*
 
@@ -167,6 +192,7 @@ pay?" reduces to "is `fees/σ²` above ~3.3?" That ranks all five perfectly
 | Pool | σ | β | R² | p(β=1) | level match |
 |---|---|---|---|---|---|
 | USDC/USDT 1bp | 2.3% | 0.634 | **0.002** | 0.000 | **6.60** |
+| **PAXG/USDC 5bp** | **19.5%** | 0.718 | 0.208 | **0.121** | **1.064** |
 | **WBTC/ETH 30bp** | 28.3% | **0.956** | **0.628** | **0.644** | **1.031** |
 | WBTC/USDC 30bp | 40.0% | 0.666 | 0.487 | 0.007 | **1.015** |
 | ETH/USDC 5bp | 52.3% | 0.784 | 0.618 | 0.015 | 0.972 |
@@ -338,13 +364,18 @@ USDC/USDT", a pool chosen with hindsight, before gas. Selecting on **lagged**
 volatility and charging gas gives **+4.31% at Sharpe 1.39**.
 
 **1. It is measured against zero, not cash.** The Sharpe here is `mean/sd` with
-no risk-free rate, while the position ties up real capital:
+no risk-free rate, while the position ties up real capital. Against the
+**realised 4-week Treasury bill** (4.62% over these weeks, from the
+Treasury's own daily series):
 
-| cash rate | excess ann. | Sharpe | deflated p |
+| benchmark | excess ann. | Sharpe | deflated p |
 |---|---|---|---|
-| 0% | +4.31% | 1.39 | 0.699 |
-| **4%** | **+0.31%** | **0.10** | **0.082** |
-| 5% | −0.69% | −0.22 | 0.023 |
+| zero | +4.31% | 1.39 | 0.699 |
+| **realised T-bill** | **-0.31%** | **-0.10** | **0.039** |
+| flat 4% | +0.31% | 0.10 | 0.082 |
+| flat 5% | −0.69% | −0.22 | 0.023 |
+
+**It does not merely fail the bar — it loses to Treasury bills.**
 
 **2. It is not a volatility rule.** Down the σ ladder: rank 1 **+4.3%**, rank 2
 **−1.2%**, rank 3 **+2.6%**, rank 4 **−6.2%**. The second-lowest-σ pool loses
@@ -406,7 +437,7 @@ was wrong, H5 does not forecast, H7's rule does not survive costs.
 
 **The central mechanism was retracted mid-project.** We claimed LVR scales with
 σ² while fee income does not. Both scale with σ², at nearly the same rate. What
-we retained is weaker and better supported: `LVR/σ²` is near-constant off the
+we retained was that `LVR/σ²` is near-constant off the
 peg, so pools differ in **fee income per unit variance**, not in volatility
 as such.
 
@@ -426,7 +457,7 @@ so the decomposition does not rest on it.
 leading candidate, untested); whether `fees/σ²` is forecastable at all; whether
 L2 economics differ.
 
-**What would falsify what remains:** a pool whose `LVR/σ²` sits far from ~3.3
+**What already falsified the replacement:** a pool whose `LVR/σ²` sits far from ~3.3
 without being a peg, or a demonstration that `fees/σ²` is predictable a month
 ahead — which would convert the one negative result we are most confident in.
 

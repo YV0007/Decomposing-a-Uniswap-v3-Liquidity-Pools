@@ -123,25 +123,40 @@ def claims() -> list[tuple[str, float, float, float]]:
                                  ("WBTC_USDC_30bp", "fees", 0.6113),
                                  ("WBTC_USDC_30bp", "lvr", 0.5628),
                                  ("WBTC_ETH_30bp", "net_market_making", 0.0071),
-                                 ("USDC_USDT_1bp", "net_market_making", 0.0843)):
+                                 ("USDC_USDT_1bp", "net_market_making", 0.0843),
+                                 ("PAXG_USDC_5bp", "net_market_making", -0.0182),
+                                 ("PAXG_USDC_5bp", "fees", 0.1718),
+                                 ("PAXG_USDC_5bp", "lvr", 0.1854)):
         out.append((f"Slide 7 {pool} {field}", claimed,
                     float(da.loc[pool, field]), 6e-4))
 
     c = load("crossover.csv").set_index("metric")
-    for metric, claimed, tol in (("crossover_sigma", 0.435, 2e-3),
-                                 ("corr_sigma_net_6pool", -0.568, 3e-3),
-                                 ("corr_sigma_net_5pool", -0.822, 3e-3),
-                                 ("slope_within_pool", 0.060, 2e-3),
-                                 ("r2_net_on_sigma2", 0.055, 2e-3),
+    for metric, claimed, tol in (("crossover_sigma", 0.417, 2e-3),
+                                 ("corr_sigma_net_all", -0.569, 3e-3),
+                                 ("corr_sigma_net_fitted", -0.730, 3e-3),
+                                 ("slope_within_pool", 0.049, 2e-3),
+                                 ("r2_net_on_sigma2", 0.048, 2e-3),
+                                 ("spearman_ratio_net", 0.829, 3e-3),
                                  ("hit_rate_lagged_ratio", 0.762, 3e-3),
                                  ("hit_rate_lagged_sigma", 0.786, 3e-3)):
         out.append((f"Slide 7 {metric}", claimed, float(c.loc[metric, "value"]), tol))
+
+    # the cost-side curve: the number that falsified the "constant off the peg"
+    for pid, claimed in (("USDC_USDT_1bp", 41.82), ("PAXG_USDC_5bp", 5.23),
+                         ("WBTC_ETH_30bp", 3.10), ("WBTC_USDC_30bp", 3.32),
+                         ("ETH_USDC_30bp", 3.34), ("ETH_USDC_5bp", 3.46)):
+        out.append((f"Slide 7 LVR/sigma^2 {pid}", claimed,
+                    float(c.loc[f"lvr_per_var_{pid}", "value"]), 6e-3))
 
     # --- slide 8: the new pool's H3, and the bias curve -------------------- #
     h = load("cross_section_h3.csv").set_index("pool")
     for pool, field, claimed in (("WBTC_USDC_30bp", "beta", 0.666),
                                  ("WBTC_USDC_30bp", "r2", 0.487),
-                                 ("WBTC_USDC_30bp", "ratio", 1.015)):
+                                 ("WBTC_USDC_30bp", "ratio", 1.015),
+                                 ("PAXG_USDC_5bp", "beta", 0.718),
+                                 ("PAXG_USDC_5bp", "r2", 0.208),
+                                 ("PAXG_USDC_5bp", "p_beta_eq_1", 0.121),
+                                 ("PAXG_USDC_5bp", "ratio", 1.064)):
         out.append((f"Slide 8 {pool} {field}", claimed, float(h.loc[pool, field]), 1e-3))
 
     b = load("lvr_bias_by_sigma.csv").set_index("sbin")
@@ -157,6 +172,10 @@ def claims() -> list[tuple[str, float, float, float]]:
 
     # --- slide 13: the retired static rule --------------------------------- #
     sr = load("static_rule.csv")
+    real = sr[sr.test == "realised_risk_free"].iloc[0]
+    for field, claimed, tol in (("rf", 0.0462, 3e-4), ("excess_ann", -0.0031, 3e-4),
+                                ("sharpe", -0.10, 6e-3), ("deflated_prob", 0.039, 3e-3)):
+        out.append((f"Slide 13 realised rf {field}", claimed, float(real[field]), tol))
     rf = sr[sr.test == "risk_free_sensitivity"].set_index("rf")
     for rate, field, claimed in ((0.00, "excess_ann", 0.0431), (0.00, "sharpe", 1.39),
                                  (0.04, "excess_ann", 0.0031), (0.04, "deflated_prob", 0.082),

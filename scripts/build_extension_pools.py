@@ -24,7 +24,7 @@ from src.fetch.binance_data import load_klines_1s
 from src.fetch.rpc_client import RPCClient, fetch_swaps
 from src.utils.config import pool
 
-POOLS = ("WBTC_USDC_30bp",)
+POOLS = ("PAXG_USDC_5bp",)
 START, END = (2023, 1), (2026, 7)
 
 
@@ -37,13 +37,17 @@ def months(a, b):
 
 
 def main() -> int:
-    ms = months(START, END)
+    ms_all = months(START, END)
     bounds = month_bounds()
     client = RPCClient()
 
     for pid in POOLS:
         spec = pool(pid)
         spec.require_verified()
+        # A pool listed after the sample start has nothing before its first
+        # month. Fetching those ranges wastes hours and, worse, would write
+        # empty months that a later table cannot tell from quiet ones.
+        ms = [(y, m) for y, m in ms_all if spec.covers(y, m)]
         print(f"\n=== {pid}: CEX reference {spec.cex_symbol}"
               f"{' (inverted)' if spec.cex_invert else ''} ===", flush=True)
 

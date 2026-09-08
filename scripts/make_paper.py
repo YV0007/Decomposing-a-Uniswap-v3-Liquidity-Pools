@@ -152,7 +152,7 @@ def pct(v, dp=2, sign=True):
     return f"{v * 100:+.{dp}f}%" if sign else f"{v * 100:.{dp}f}%"
 
 
-LABEL = {"USDC_USDT_1bp": "USDC/USDT 1bp", "WBTC_ETH_30bp": "WBTC/ETH 30bp",
+LABEL = {"PAXG_USDC_5bp": "PAXG/USDC 5bp", "USDC_USDT_1bp": "USDC/USDT 1bp", "WBTC_ETH_30bp": "WBTC/ETH 30bp",
          "WBTC_USDC_30bp": "WBTC/USDC 30bp", "ETH_USDC_5bp": "ETH/USDC 5bp",
          "ETH_USDC_30bp": "ETH/USDC 30bp", "ETH_USDC_100bp": "ETH/USDC 100bp"}
 
@@ -318,12 +318,23 @@ def build_story():  # noqa: C901 — a document is linear by nature
     # ---------------- 3. data ----------------
     s.append(H("3. Data"))
     s.append(P(
-        "The universe is six Uniswap v3 mainnet pools chosen to span volatility rather than "
-        "liquidity: a stablecoin pair, a cross of two correlated majors, a major against the "
-        "dollar at three fee tiers, and a second major against the dollar. Median annualised "
-        "volatility ranges from 2.3% to 53.1% — a 23&#215; spread, and 528&#215; in variance, "
-        "which is the quantity LVR scales with. A theory that holds across that range is "
-        "saying something; one verified on a single pair is not."))
+        "The universe is seven Uniswap v3 mainnet pools chosen to span volatility rather "
+        "than liquidity: a stablecoin pair, gold against the dollar, a cross of two "
+        "correlated majors, a major against the dollar at three fee tiers, and a second "
+        "major against the dollar. Median annualised volatility ranges from 2.3% to 53.1% "
+        "— a 23&#215; spread, and 528&#215; in variance, which is the quantity LVR scales "
+        "with. A theory that holds across that range is saying something; one verified on a "
+        "single pair is not."))
+    s.append(P(
+        "The gold pool was added last and for one reason. The other six cluster at 2.3% and "
+        "then at 28–53%, leaving the whole region between unobserved — and that is exactly "
+        "where the claims in Section 6.4 had never been tested. PAXG/USDC runs near 20%. It "
+        "carries a <b>shorter sample</b>: the pool had no liquidity before April 2025, so it "
+        "contributes 16 monthly cohorts against 43 for the others. It is reported as a "
+        "supplementary point and excluded from anything requiring the common window. That "
+        "the crypto volatility range 3–28% is populated almost entirely by liquid-staking "
+        "tokens and tokenised commodities — assets with either no centralised reference "
+        "price or a thin pool — is itself the reason the region was empty."))
     xs = pd.read_parquet(REPO_ROOT / "data" / "processed" / "cross_section_daily.parquet")
     fees_raw = pd.read_parquet(REPO_ROOT / "data" / "processed" / "daily_fees_all.parquet")
     panel = pd.read_parquet(REPO_ROOT / "data" / "processed" / "weekly_panel_all.parquet")
@@ -460,8 +471,8 @@ def build_story():  # noqa: C901 — a document is linear by nature
         "Table 3 reports the decomposition over 43 monthly cohorts per pool. The project's "
         "own stated falsification test was a pool in which fees persistently exceed LVR by "
         "more than costs. It is met, twice."))
-    order = ["USDC_USDT_1bp", "WBTC_ETH_30bp", "WBTC_USDC_30bp", "ETH_USDC_5bp",
-             "ETH_USDC_30bp"]
+    order = ["USDC_USDT_1bp", "PAXG_USDC_5bp", "WBTC_ETH_30bp", "WBTC_USDC_30bp",
+             "ETH_USDC_5bp", "ETH_USDC_30bp"]
     vol = read("cross_section_volatility.csv").set_index("pool")
     rows = []
     for p in order:
@@ -498,8 +509,8 @@ def build_story():  # noqa: C901 — a document is linear by nature
         "Newey–West standard errors [6]. A slope of one and an intercept of zero would mean "
         "the theory is exactly right."))
     rows = []
-    for p in ["USDC_USDT_1bp", "WBTC_ETH_30bp", "WBTC_USDC_30bp", "ETH_USDC_5bp",
-              "ETH_USDC_30bp"]:
+    for p in ["USDC_USDT_1bp", "PAXG_USDC_5bp", "WBTC_ETH_30bp", "WBTC_USDC_30bp",
+              "ETH_USDC_5bp", "ETH_USDC_30bp"]:
         d = h3.loc[p]
         rows.append([LABEL[p], f"{d['median_sigma'] * 100:.1f}%", f"{d['beta']:.3f}",
                      f"{d['se']:.3f}", f"{d['r2']:.3f}",
@@ -621,8 +632,8 @@ def build_story():  # noqa: C901 — a document is linear by nature
         "volatility and net return of &#8722;0.923. Adding a sixth pool broke it, and the "
         "tests that followed dismantled the mechanism."))
     s.append(P(
-        f"The correlation is {cx['corr_sigma_net_6pool']:+.3f} across six pools and "
-        f"{cx['corr_sigma_net_5pool']:+.3f} across the five fitted. More decisively, "
+        f"The correlation is {cx['corr_sigma_net_all']:+.3f} across all seven pools and "
+        f"{cx['corr_sigma_net_fitted']:+.3f} across the six fitted. More decisively, "
         "WBTC/USDC earns "
         f"{pct(dec.loc['WBTC_USDC_30bp', 'net_market_making'])} at 40.0% volatility while "
         f"WBTC/ETH earns {pct(dec.loc['WBTC_ETH_30bp', 'net_market_making'])} at 28.3%. If "
@@ -657,15 +668,43 @@ def build_story():  # noqa: C901 — a document is linear by nature
         "happen to be volatile</i>, not about what volatility does to a given pool, and it "
         "must not be read causally."))
     s.append(P(
-        "What does separate the pools is narrower and better supported. LVR per unit "
-        "variance is 3.10–3.46 on every non-peg pool and 41.8 on the peg, so with the cost "
-        "side that stable the question <i>does this pool pay?</i> reduces to <i>is fee "
-        "income per unit variance above roughly 3.3?</i> That ranks all five pools "
-        "perfectly, Spearman +1.000, against &#8722;0.900 for volatility. We report two "
-        "caveats rather than burying them: the quantity is partly mechanical, since net is "
-        "fees minus LVR; and lagged one month it does <b>not</b> forecast better than the "
-        f"naive volatility rule ({cx['hit_rate_lagged_ratio'] * 100:.1f}% of months positive "
-        f"against {cx['hit_rate_lagged_sigma'] * 100:.1f}%)."))
+        "An earlier version of this paper offered a replacement: LVR per unit variance was "
+        "3.10&#8211;3.46 on every non-peg pool and 41.8 on the peg, so with the cost side "
+        "that stable, <i>does this pool pay?</i> reduced to <i>is fee income per unit "
+        "variance above roughly 3.3?</i> That ranked all five pools then in the sample "
+        "perfectly. <b>The gold pool falsified it.</b>"))
+    cost = [(k.replace("lvr_per_var_", ""), v) for k, v in cx.items()
+            if k.startswith("lvr_per_var_")]
+    vol_ = read("cross_section_volatility.csv").set_index("pool")["median_sigma"]
+    cost = sorted(((LABEL[k], vol_[k], v) for k, v in cost), key=lambda r: r[1])
+    s.append(TB(
+        ["Pool", "median &#963;", "LVR per unit variance"],
+        [[n, f"{sg * 100:.1f}%",
+          f"<b>{c:.2f}</b>" if n.startswith(("USDC/USDT", "PAXG")) else f"{c:.2f}"]
+         for n, sg, c in cost],
+        "Table 7. The cost side is not a constant off the peg. Ordered by volatility it is "
+        "a continuum, and the pool added to test the claim landed between the two regimes "
+        "the earlier reading had treated as the whole story.",
+        widths=[34 * mm, 26 * mm, 40 * mm]))
+    s.append(P(
+        "Read in order of volatility this is not a constant with one exception but a single "
+        "declining curve: 41.8 at 2.3%, <b>5.23 at 19.5%</b>, then 3.10&#8211;3.46 from 28% "
+        "upward, where it flattens. The adverse-selection floor is present at every "
+        "volatility and merely becomes small relative to the diffusive term once "
+        "&#963; is high enough — the same shape as the bias curve of Section 6.3, measured "
+        "on a different quantity."))
+    s.append(P(
+        "The consequence for the ranking rule is direct. Spearman falls from +1.000 to "
+        f"{cx['spearman_ratio_net']:+.3f}, and the pool it misplaces is the one that broke "
+        "the constant: gold clears a 3.3 threshold on fee income per unit variance (3.41) "
+        "and still loses money, because its own cost side is 5.23. <b>A single threshold "
+        "works only where LVR/&#963;<sup>2</sup> is flat, which is above roughly 28% "
+        "annualised.</b> Below that the threshold is pool-specific and the rule collapses "
+        "into the tautology that a pool pays when its fees exceed its costs. Two further "
+        "caveats stand: the quantity is partly mechanical, since net is fees minus LVR; and "
+        "lagged one month it does not forecast better than the naive volatility rule "
+        f"({cx['hit_rate_lagged_ratio'] * 100:.1f}% of months positive against "
+        f"{cx['hit_rate_lagged_sigma'] * 100:.1f}%)."))
 
     s.append(H("6.5 A fee band does not reduce the cost", "h2"))
     s.append(P(
@@ -675,12 +714,13 @@ def build_story():  # noqa: C901 — a document is linear by nature
     rows = [[LABEL[p], f"{int(slopes.loc[p, 'fee_bps'])} bp",
              f"{slopes.loc[p, 'slope']:.5f}", f"{slopes.loc[p, 'se']:.5f}",
              f"{slopes.loc[p, 'r2']:.3f}"]
-            for p in ["USDC_USDT_1bp", "ETH_USDC_5bp", "ETH_USDC_30bp",
-                      "WBTC_ETH_30bp", "WBTC_USDC_30bp", "ETH_USDC_100bp"]]
+            for p in ["USDC_USDT_1bp", "PAXG_USDC_5bp", "ETH_USDC_5bp",
+                      "ETH_USDC_30bp", "WBTC_ETH_30bp", "WBTC_USDC_30bp",
+                      "ETH_USDC_100bp"]]
     s.append(TB(
         ["Pool", "fee tier", "LVR per unit variance", "s.e.", "R<sup>2</sup>"],
         rows,
-        "Table 7. LVR per unit variance by fee tier. Across a 100&#215; range of fees the "
+        "Table 8. LVR per unit variance by fee tier. Across a 100&#215; range of fees the "
         "slope moves 1.50&#215;, and the widest tier is not the lowest. The stablecoin pool "
         "is shown for completeness but its LVR is not variance-driven at all "
         "(R<sup>2</sup> = 0.002), so a slope is not a meaningful quantity there.",
@@ -702,7 +742,7 @@ def build_story():  # noqa: C901 — a document is linear by nature
     s.append(TB(
         ["Model", "n out-of-sample", "RMSE (USD)", "OOS R<sup>2</sup>", "directional"],
         rows,
-        "Table 8. Out-of-sample forecast of weekly LVR. A Diebold–Mariano test [7] of the "
+        "Table 9. Out-of-sample forecast of weekly LVR. A Diebold–Mariano test [7] of the "
         "theory against gradient boosting gives a statistic of &#8722;5.77 (p &lt; 0.0001), "
         "favouring the closed form.",
         widths=[38 * mm, 28 * mm, 26 * mm, 26 * mm, 24 * mm], bold_rows=(0,)))
@@ -733,7 +773,7 @@ def build_story():  # noqa: C901 — a document is linear by nature
     s.append(TB(
         ["Strategy", "ann. return", "volatility", "Sharpe", "max DD", "deflated p"],
         rows,
-        "Table 9. Weekly allocation, five pools, 165 weeks, net of gas. Deflated "
+        "Table 10. Weekly allocation, five pools, 165 weeks, net of gas. Deflated "
         "probability is the Bailey–López de Prado statistic against ten logged trials; "
         "0.95 is the bar. Perfect-foresight rows are excluded as a ceiling rather than a "
         "strategy: that ceiling is +17.3% at Sharpe 3.71.",
@@ -750,12 +790,16 @@ def build_story():  # noqa: C901 — a document is linear by nature
         "pool</i>, a pool identified with hindsight, before gas. Selecting on lagged "
         "30-day volatility and charging gas gives "
         f"{pct(rf.iloc[0]['excess_ann'])} at Sharpe {rf.iloc[0]['sharpe']:.2f}."))
+    real = sr[sr.test == "realised_risk_free"].iloc[0]
     s.append(P(
         "Second, the Sharpe ratio is computed against zero rather than against cash, while "
-        "the position ties up real capital. We could not obtain a Treasury series from this "
-        "environment, so rather than invent one we report the sensitivity: at a 4% cash "
-        f"rate the rule earns {pct(rf.iloc[2]['excess_ann'])} excess with a deflated "
-        f"probability of {rf.iloc[2]['deflated_prob']:.3f}, and at 5% it is negative."))
+        "the position ties up real capital. The realised 4-week Treasury bill, taken from "
+        "the Treasury's own daily publication and carried forward from the last business "
+        f"day at or before each week end, averaged {real['rf'] * 100:.2f}% over these weeks "
+        f"— more than the rule earns. Net of it the rule returns "
+        f"<b>{pct(real['excess_ann'])} a year at a Sharpe of {real['sharpe']:.2f}</b>, with "
+        f"a deflated probability of {real['deflated_prob']:.3f}. It does not merely fail to "
+        "clear the bar; it loses to Treasury bills."))
     s.append(P(
         "Third, it is not a volatility rule. Walking down the volatility ladder, "
         "performance oscillates rather than decays: "

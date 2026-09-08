@@ -1669,3 +1669,67 @@ measured. That limitation is stated in the paper rather than elided.
 **Four of four candidate mechanisms have now been tested and refused.** The
 positive content is the shape effect itself, which is new and did not require
 any of them.
+
+## Step 9 — the seventh pool falsifies the replacement claim ⭐⭐
+
+Step 2 retracted "volatility decides whether LPing pays" and replaced it with
+something narrower: `LVR/σ²` is **3.10–3.46 on every non-peg pool**, so the
+question reduces to whether fee income per unit variance clears ~3.3. That
+ranked all five pools perfectly (Spearman +1.000).
+
+**It was never tested between 2.3% and 28.3% σ, because nothing lived there.**
+Adding a pool in that gap was the sharpest available test of it, and it fails.
+
+### Finding the pool
+
+The 3–28% band in crypto is populated almost entirely by liquid-staking tokens
+and tokenised commodities — assets with either no centralised reference price or
+no deep pool. Checked and rejected: wstETH/ETH, rETH/ETH, cbETH/ETH (no Binance
+1s reference); EURC/USDC (thin, and only from 2024); PAXG/WETH (an ETH cross, so
+ETH-dominated at ~54%, not in the gap).
+
+**PAXG/USDC 5bp** — gold against the dollar — verified on-chain, ~$2M TVL,
+median σ **19.5%**. It has no liquidity before April 2025, so it carries **16
+monthly cohorts against 43**. Reported as a supplementary point; a `first_month`
+field on `PoolSpec` keeps it out of the common window rather than writing empty
+months a later table could not tell from quiet ones.
+
+### What it did to the claims
+
+| | before | after |
+|---|---|---|
+| `LVR/σ²`, non-peg | 3.10–3.46, "a constant" | **3.10–5.23**; PAXG is 5.23 |
+| `fees/σ²` ranking | Spearman **+1.000** | **+0.829** |
+| `corr(σ, net)`, fitted | −0.822 | −0.730 |
+| crossover σ* | 43.5% [32.2, 76.2] | 41.7% [30.4, 77.3] |
+
+**PAXG clears a 3.3 threshold on fee income (3.41) and still loses money
+(−1.82%), because its own cost side is 5.23.** The threshold is not universal.
+
+### What replaces it — a curve, not a constant
+
+| pool | median σ | `LVR/σ²` |
+|---|---|---|
+| USDC/USDT 1bp | 2.3% | **41.82** |
+| **PAXG/USDC 5bp** | **19.5%** | **5.23** |
+| WBTC/ETH 30bp | 28.3% | 3.10 |
+| WBTC/USDC 30bp | 40.0% | 3.32 |
+| ETH/USDC 30bp | 52.4% | 3.34 |
+| ETH/USDC 5bp | 52.3% | 3.46 |
+
+> Not a constant with one exception — a single declining curve that **flattens
+> above roughly 28%**. The adverse-selection floor is present at every
+> volatility and merely becomes small relative to the diffusive term once σ is
+> high enough. This is the same shape as the H3 bias curve, measured on a
+> different quantity, which is why we now regard it as one phenomenon.
+
+A single threshold rule is therefore valid **only above ~28% annualised**. Below
+it the threshold is pool-specific and the rule degenerates into the tautology
+that a pool pays when its fees exceed its costs.
+
+### H3 on the new pool
+
+β = 0.718 (s.e. 0.182), **p(β=1) = 0.121 — cannot be rejected**, level match
+**1.064**, R² = 0.208. The level is right at 19.5% σ, so the sixfold
+under-prediction seen on the peg has already disappeared by 20% volatility.
+The low R² reflects 485 pool-days on a thin pool, not a level failure.
