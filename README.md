@@ -25,48 +25,52 @@ what would reverse it.
 range exit. `fees − LVR − gas`, which is already delta-hedged because LVR is
 defined against a continuously rebalanced portfolio.
 
-| Pool | median σ | fees | LVR | **fees/LVR** | **net** | 95% CI | months > 0 |
-|---|---|---|---|---|---|---|---|
-| **USDC/USDT 1bp** | **2.3%** | +10.3% | −1.6% | **6.49** | **+8.43%** | **[+5.0%, +11.6%]** | **83%** |
-| WBTC/ETH 30bp | 28.3% | +32.8% | −31.5% | 1.04 | +0.71% | [−1.6%, +3.4%] | 44% |
-| ETH/USDC 5bp | 52.3% | +88.8% | −96.8% | 0.92 | −9.10% | [−15.6%, −3.3%] | 26% |
-| ETH/USDC 30bp | 52.4% | +96.7% | −97.9% | 0.99 | −2.31% | [−5.2%, +1.3%] | 21% |
+| Pool | median σ | fees | LVR | **net** | 95% CI | months > 0 |
+|---|---|---|---|---|---|---|
+| **USDC/USDT 1bp** | **2.3%** | +10.3% | −1.6% | **+8.43%** | **[+5.0%, +11.6%]** | **83%** |
+| WBTC/ETH 30bp | 28.3% | +32.8% | −31.5% | +0.71% | [−1.6%, +3.4%] | 44% |
+| **WBTC/USDC 30bp** | **40.0%** | +61.1% | −56.3% | **+4.09%** | [−0.5%, +9.0%] | 47% |
+| ETH/USDC 5bp | 52.3% | +88.8% | −96.8% | −9.10% | [−15.6%, −3.3%] | 26% |
+| ETH/USDC 30bp | 52.4% | +96.7% | −97.9% | −2.31% | [−5.2%, +1.3%] | 21% |
 
-> **Liquidity provision pays exactly when fee income covers adverse selection,
-> and whether it does is governed by volatility.** `corr(σ, net) = −0.923`. The
-> crossover sits between 28% and 52% annualised.
+> **Liquidity provision is not uniformly loss-making — two of five pools pay.**
+> This falsified our own stated test: an earlier version claimed no pool had fees
+> exceeding LVR in 86 pool-years.
 
-The mechanism is the closed form this project set out to test: **LVR scales with
-σ², fee income does not.** Double the volatility and adverse selection
-quadruples while fees rise far less.
+**But volatility is not the mechanism, and an earlier version of this README said
+it was.** Three claims were retracted after the sixth pool was added; each is
+documented in [`DECISIONS.md`](DECISIONS.md) with the test that killed it.
 
-*This falsified our own stated test.* An earlier version of this README claimed
-LPs lose money and that no pool had fees exceeding LVR in 86 pool-years.
-Extending the universe beyond ETH/USDC found one, and the claim did not survive.
+| Retracted | Replaced by |
+|---|---|
+| `corr(σ, net) = −0.923` | −0.568 on six pools; **within** pools the slope's CI spans zero (Simpson's paradox) |
+| "LVR scales with σ², fee income does not" | Both scale with σ² at nearly the same rate — `fees = 0.043 + 3.06σ²`, `LVR = −0.003 + 3.26σ²` |
+| "A static rule earns +6.4% at Sharpe 1.96" | Not implementable; +4.31% properly specified, and ~0 against a realistic cash rate |
+
+What survives is narrower: `LVR/σ²` is **3.10–3.46 on every non-peg pool**, so
+*does this pool pay?* reduces to *is fee income per unit variance above ~3.3?*
 
 ### The four results worth reading
 
-**σ²/8 works, and its failure is informative.** Across 3,842 pool-days the closed
-form explains **62% of daily LVR variation with no fitted parameters** and
-predicts the aggregate three-and-a-half-year transfer to within **1%**. On
-WBTC/ETH — an independent asset pair — the null β = 1 cannot be rejected at all
-(p = 0.644). On the 2.3%-volatility peg it fails completely (R² 0.002, realised
-LVR 6.6× predicted), because the diffusive term vanishes and exposes a floor the
-theory does not model. **The closed form has a measured domain of validity.**
+**σ²/8 works, and its bias is monotone.** Across 7,696 pool-days the closed form
+explains ~62% of daily LVR variation with no fitted parameters. Realised over
+predicted runs **2.09 → 0.76** from a peg to the top percentile of days: it
+under-predicts in calm markets, where a floor of adverse selection it does not
+model dominates, is unbiased around σ ≈ 0.6–0.9, and over-predicts in extreme
+ones. **The two failures previously reported separately are the ends of one curve.**
 
-**Theory beats machine learning.** On identical purged folds, σ²/8 with a HAR-RV
+**Theory beats machine learning.** On identical purged folds, σ²/8 with a HAR
 variance forecast is the only model with positive out-of-sample R² (+0.126),
-beating LightGBM by 19% on RMSE at **p < 0.0001**. One parameter fixed by
-derivation against hundreds fitted on 366 observations.
+beating LightGBM by 19% on RMSE at **p < 0.0001**.
 
-**A fee band does not reduce LVR.** H4's premise is false, by derivation and by
-measurement. Across a 20× fee range, LVR per unit variance moves 6.7% with
-t = +0.30 — and the opposite sign to the prediction.
+**A fee band does not reduce LVR.** Across a 100× fee range, LVR per unit
+variance moves 1.50×, and the widest tier is not the lowest.
 
-**A static rule beats the model sixtyfold.** Always providing to the
-lowest-volatility pool earns +6.4% at Sharpe 1.96; the forecast-driven weekly
-allocation earns +0.1%. The rule is not fitted — it follows from the table
-above. *The actionable conclusion is a rule, not a model.*
+**The edge is in fee forecasting, not volatility forecasting.** Replacing each
+component with its own oracle: perfect variance forecasting is worth **0.9pp**,
+perfect fee forecasting **11.4pp — 80% of the gap to the ceiling.** No allocation
+rule clears a deflated-Sharpe bar. *Allocating across pools is a
+volume-forecasting problem wearing a volatility costume.*
 
 ## Status — complete
 
@@ -76,17 +80,18 @@ above. *The actionable conclusion is a rule, not a model.*
 | 6–7 | Forecasting, theory-vs-ML, allocation | ✅ |
 | 8 | Optimal range width | ✅ |
 | — | Robustness; all 7 open questions | ✅ closed |
-| — | Cross-section: 3 asset pairs, 23× volatility range | ✅ |
+| — | Cross-section: 6 pools, 3 asset pairs, 23× volatility range | ✅ |
+| — | Working paper, `outputs/paper/` | ✅ regenerated from the tables |
 
 | Hypothesis | Verdict |
 |---|---|
 | H1 the decomposition is computable | ✅ every gate passed |
 | H2 advertised yields overstate returns | ✅ confirmed, and qualified |
-| H3 σ²/8 holds | ✅ where its assumptions hold; **fails below ~28% σ** |
+| H3 σ²/8 holds | ✅ with a **measured bias curve**, monotone in σ |
 | H4 fee tier is the dominant determinant | ❌ **premise falsified** |
 | H5 net return is forecastable | ❌ worse than the mean |
 | H6 theory beats ML on LVR | ✅ **p < 0.0001** |
-| H7 economic significance | ⚠️ a profitable rule exists; **our forecast does not find it** |
+| H7 economic significance | ❌ **no rule clears the bar**; the static rule is retired |
 
 ## Quickstart
 

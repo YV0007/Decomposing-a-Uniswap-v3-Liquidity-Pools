@@ -565,9 +565,53 @@ def build_story():  # noqa: C901 — a document is linear by nature
         "substituting the bipower variation of Barndorff-Nielsen and Shephard [10] "
         "moves 2023 from 0.372 to 0.381. Microstructure "
         "oversampling predicts realised variance should inflate at fine sampling; it "
-        "deflates. Exhaustion of the &#177;10% range during a large intraday move remains "
-        "the leading candidate and is untested, because our in-range diagnostic is a "
-        "post-recentring daily aggregate that cannot see intraday traversal."))
+        "deflates."))
+    s.append(P(
+        "The fourth candidate, exhaustion of the &#177;10% range during a large intraday "
+        "move, is <b>refuted in the opposite direction</b>. The analytical rate already "
+        "handles a range exactly, since |dn/dS| is taken on the position's own amount "
+        "function and falls to zero at the boundaries, so any error must come from a "
+        "mismatch of frequency: &#963;<sup>2</sup> is a daily aggregate while |dn/dS| is "
+        "evaluated pointwise. That has a sharp test, because two days can share a variance "
+        "and differ entirely in shape. Define"))
+    s.append(EQ("trend share &#160;=&#160; |&#8721; r<sub>t</sub>| / "
+                "&#8730;(&#8721; r<sub>t</sub><sup>2</sup>)", 3))
+    s.append(P(
+        "which is 1 for a pure trend and near zero for a round trip. If converting out of "
+        "the range were the mechanism, trending days would over-predict. They do the "
+        "reverse."))
+    re_ = read("range_exhaustion.csv")
+    lr = re_[re_.test == "leaves_range_top5pct_sigma"].set_index("bucket")
+    reg = re_[re_.test == "regression"].iloc[0]
+    s.append(TB(
+        ["Top 5% of volatility days", "pool-days", "median &#963;", "realised / predicted"],
+        [["Price stays inside the range (oscillating)",
+          f"{int(lr.loc['stays', 'n'])}", f"{lr.loc['stays', 'median_sigma']:.3f}",
+          f"<b>{lr.loc['stays', 'agg_ratio']:.3f}</b>"],
+         ["Price leaves the range (trending)",
+          f"{int(lr.loc['leaves', 'n'])}", f"{lr.loc['leaves', 'median_sigma']:.3f}",
+          f"<b>{lr.loc['leaves', 'agg_ratio']:.3f}</b>"]],
+        "Table 6. Realised over predicted LVR on the most volatile days, split by the shape "
+        "of the move at comparable variance. Days on which the position converts out of its "
+        "range are the ones the closed form gets <i>right</i>.",
+        widths=[62 * mm, 24 * mm, 26 * mm, 34 * mm]))
+    s.append(P(
+        f"Regressing log(realised/predicted) on log &#963; and trend share over "
+        f"{int(reg['n']):,} pool-days gives a trend coefficient of "
+        f"{reg['coef']:+.3f} with a month-clustered 95% interval of "
+        f"[{reg['lo']:+.3f}, {reg['hi']:+.3f}] and P(coefficient &lt; 0) = "
+        f"{reg['p_negative']:.3f}. The sign is unambiguous and the wrong one for range "
+        "exhaustion."))
+    s.append(P(
+        "The over-prediction is therefore concentrated on days whose variance comes from "
+        "<b>oscillation rather than direction</b>. That points at discreteness on the "
+        "extraction side rather than at the position: a pool can be arbitraged at most "
+        "once per block, and movement smaller than the round-trip cost is never arbitraged "
+        "at all, so a day that travels a long way without going anywhere generates realised "
+        "variance that no arbitrageur can convert into profit. A directional move, by "
+        "contrast, is captured in full. We report this as the surviving account rather than "
+        "a demonstration: it is consistent with the sign, the magnitude and the tier "
+        "evidence, but we have not measured extraction per block directly."))
 
     s.append(H("6.4 Volatility does not rank pools", "h2"))
     s.append(P(
@@ -585,7 +629,7 @@ def build_story():  # noqa: C901 — a document is linear by nature
         "volatility ranked pools, that could not happen."))
     s.append(P("Fitting net return on variance across 213 pool-months gives"))
     s.append(EQ("net &#160;=&#160; a &#160;+&#160; b&#183;&#963;<sup>2</sup>, "
-                "&#160;&#160;&#160; &#963;* &#160;=&#160; &#8730;(&#8722;a/b)", 3))
+                "&#160;&#160;&#160; &#963;* &#160;=&#160; &#8730;(&#8722;a/b)", 4))
     s.append(P(
         f"with a crossover at &#963;* = {cx['crossover_sigma'] * 100:.1f}% but a "
         f"month-clustered 95% confidence interval of [{cxlo['crossover_sigma'] * 100:.1f}%, "
@@ -596,7 +640,7 @@ def build_story():  # noqa: C901 — a document is linear by nature
     s.append(EQ("fees &#160;=&#160; +0.043 &#160;+&#160; 3.06&#183;&#963;<sup>2</sup> "
                 "&#160;&#160;(R<sup>2</sup> = 0.839), &#160;&#160;&#160; "
                 "LVR &#160;=&#160; &#8722;0.003 &#160;+&#160; "
-                "3.26&#183;&#963;<sup>2</sup> &#160;&#160;(R<sup>2</sup> = 0.921)", 4))
+                "3.26&#183;&#963;<sup>2</sup> &#160;&#160;(R<sup>2</sup> = 0.921)", 5))
     s.append(P(
         "Volume rises with volatility, so fee income scales with variance almost as steeply "
         "as LVR does. Net return is the small difference between two large, near-parallel "
@@ -636,7 +680,7 @@ def build_story():  # noqa: C901 — a document is linear by nature
     s.append(TB(
         ["Pool", "fee tier", "LVR per unit variance", "s.e.", "R<sup>2</sup>"],
         rows,
-        "Table 6. LVR per unit variance by fee tier. Across a 100&#215; range of fees the "
+        "Table 7. LVR per unit variance by fee tier. Across a 100&#215; range of fees the "
         "slope moves 1.50&#215;, and the widest tier is not the lowest. The stablecoin pool "
         "is shown for completeness but its LVR is not variance-driven at all "
         "(R<sup>2</sup> = 0.002), so a slope is not a meaningful quantity there.",
@@ -658,7 +702,7 @@ def build_story():  # noqa: C901 — a document is linear by nature
     s.append(TB(
         ["Model", "n out-of-sample", "RMSE (USD)", "OOS R<sup>2</sup>", "directional"],
         rows,
-        "Table 7. Out-of-sample forecast of weekly LVR. A Diebold–Mariano test [7] of the "
+        "Table 8. Out-of-sample forecast of weekly LVR. A Diebold–Mariano test [7] of the "
         "theory against gradient boosting gives a statistic of &#8722;5.77 (p &lt; 0.0001), "
         "favouring the closed form.",
         widths=[38 * mm, 28 * mm, 26 * mm, 26 * mm, 24 * mm], bold_rows=(0,)))
@@ -689,7 +733,7 @@ def build_story():  # noqa: C901 — a document is linear by nature
     s.append(TB(
         ["Strategy", "ann. return", "volatility", "Sharpe", "max DD", "deflated p"],
         rows,
-        "Table 8. Weekly allocation, five pools, 165 weeks, net of gas. Deflated "
+        "Table 9. Weekly allocation, five pools, 165 weeks, net of gas. Deflated "
         "probability is the Bailey–López de Prado statistic against ten logged trials; "
         "0.95 is the bar. Perfect-foresight rows are excluded as a ceiling rather than a "
         "strategy: that ceiling is +17.3% at Sharpe 3.71.",
@@ -801,9 +845,10 @@ def build_story():  # noqa: C901 — a document is linear by nature
         "region between 2.3% and 28.3% annualised is unobserved entirely, and that gap is "
         "where the fee-income-per-unit-variance account would be tested hardest."))
     s.append(P(
-        "<b>The extreme-day mechanism is unresolved.</b> We refuse three explanations in "
-        "Section 6.3 and leave the leading candidate untested, because the diagnostic that "
-        "would test it is aggregated at the wrong frequency."))
+        "<b>The extreme-day mechanism is identified but not measured.</b> Four "
+        "explanations are refused in Section 6.3 and the surviving account — discreteness "
+        "on the extraction side — is inferred from the sign and magnitude of a shape "
+        "effect rather than from per-block extraction, which we do not measure."))
     s.append(P(
         "<b>No risk-free series.</b> The retirement of the static rule rests on a "
         "sensitivity band across plausible cash rates rather than a realised Treasury "

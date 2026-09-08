@@ -167,6 +167,18 @@ def claims() -> list[tuple[str, float, float, float]]:
     for rank, claimed in ((1, 0.0431), (2, -0.0117), (3, 0.0263), (4, -0.0620)):
         out.append((f"Slide 13 ladder rank {rank}", claimed,
                     float(ld.loc[rank, "ann"]), 6e-3))
+
+    # --- slide 8: the shape effect that refuted range exhaustion ----------- #
+    rex = load("range_exhaustion.csv")
+    lr = rex[rex.test == "leaves_range_top5pct_sigma"].set_index("bucket")
+    for bucket, claimed in (("stays", 0.780), ("leaves", 1.261)):
+        out.append((f"Slide 8 shape {bucket}", claimed,
+                    float(lr.loc[bucket, "agg_ratio"]), 2e-3))
+    reg = rex[rex.test == "regression"].iloc[0]
+    for field, claimed, tol in (("coef", 0.252, 2e-3), ("lo", 0.212, 3e-3),
+                                ("hi", 0.294, 3e-3)):
+        out.append((f"Slide 8 shape regression {field}", claimed,
+                    float(reg[field]), tol))
     return out
 
 

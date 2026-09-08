@@ -1632,3 +1632,40 @@ It under-predicts at low σ — the adverse-selection floor H3 found on the peg 
 is unbiased around **σ ≈ 0.6–0.9**, and over-predicts above. That is a single
 statement of domain of validity spanning both known failures, and it replaces
 "2023 is different" entirely.
+
+## Step 8 — the last open question, closed by refusing it ⭐
+
+Section 6.3 of the paper listed range exhaustion as the surviving candidate for
+why σ²/8 over-predicts on extreme days. **It is refuted, and in the opposite
+direction to the hypothesis.**
+
+The analytical rate already handles a range exactly — `|dn/dS|` is taken on the
+position's own amount function and falls to zero at the boundaries — so any
+error must be a mismatch of *frequency*: σ² is a daily aggregate while `|dn/dS|`
+is evaluated pointwise. Two days can share a variance and differ entirely in
+shape, which gives a sharp test. Define `trend share = |Σr| / √(Σr²)`, one for a
+pure trend and near zero for a round trip.
+
+| Top 5% of σ days | pool-days | median σ | realised / predicted |
+|---|---|---|---|
+| stays in range (oscillating) | 175 | 1.120 | **0.780** |
+| leaves range (trending) | 28 | 1.186 | **1.261** |
+
+Days on which the position converts out of its range are the ones the closed
+form gets **right**. Regressing `log(realised/predicted)` on `log σ` and trend
+share over 4,044 pool-days gives a trend coefficient of **+0.252, 95% CI
+[+0.212, +0.294], P(coef < 0) = 0.000**.
+
+> The over-prediction is concentrated on days whose variance comes from
+> **oscillation rather than direction**. A pool can be arbitraged at most once
+> per block, and movement below the round-trip cost is never arbitraged at all,
+> so a day that travels a long way without going anywhere produces realised
+> variance no arbitrageur can convert into profit.
+
+This is the surviving account, not a demonstration: it matches the sign, the
+magnitude and the earlier tier evidence, but per-block extraction is not
+measured. That limitation is stated in the paper rather than elided.
+
+**Four of four candidate mechanisms have now been tested and refused.** The
+positive content is the shape effect itself, which is new and did not require
+any of them.

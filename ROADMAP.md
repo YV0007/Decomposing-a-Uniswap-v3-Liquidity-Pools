@@ -1,15 +1,21 @@
 # LVR/MEV — Where We Are
 
-**Status as of 7 September 2026.** 44 commits · 257 tests · 10.4M swaps · 5 pools ·
-3 asset pairs · 6.0 GB
+**Status as of 8 September 2026.** 54 commits · 266 tests · 10.1M swaps · 6 pools ·
+3 asset pairs + a peg · 11 GB · EUR 0
 
-**The original plan is complete, and an extension phase overturned its central
-claim.** Liquidity provision is not uniformly loss-making: it pays where
-volatility is low enough that fees cover LVR, and USDC/USDT earns +8.43% a year
-with a confidence interval excluding zero. Details below.
+**Complete.** The original plan, two extension phases, a seven-step finishing
+plan, and a working paper in `outputs/paper/` that regenerates from the tables.
 
-**Headline result is in.** A re-centred ±10% LP position on ETH/USDC lost money
-over 43 months, significantly so on the 5bp pool. Details in Stage 5 below.
+**Liquidity provision is not uniformly loss-making.** Two of five pools pay —
+USDC/USDT at +8.43% a year and WBTC/USDC at +4.09%, both with confidence
+intervals that were the project's own stated falsification test.
+
+**But volatility is not why, and saying so cost us three claims.** The
+cross-pool association between volatility and net return reverses sign within
+pools; fee income scales with variance almost as steeply as LVR does; and no
+allocation rule survives a realistic cash rate. What replaces them is narrower
+and better supported: `LVR/σ²` is 3.10–3.46 on every non-peg pool, so the
+question is whether fee income per unit variance clears ~3.3.
 
 Read top to bottom. Each stage feeds the next, and a stage cannot be trusted
 until the one before it has passed its gate.
@@ -363,34 +369,34 @@ is about forecast skill, not about the opportunity.
 
 ## Honest summary
 
-**Solid.** The data layer, fees, LVR, the full-sample decomposition, and the
-range-width mathematics. Every gate could have failed and six real defects were
-caught by them.
+**Complete.** Every planned stage, both extension phases, the seven-step
+finishing plan, and a typeset working paper that regenerates from the tables.
+
+**Stood up.** The measurement stack — six pools, 7,696 pool-days, every layer
+gated against an independent source. The closed form, which explains ~62% of
+daily LVR variation with no fitted parameters and beats gradient boosting at
+p < 0.0001. And the range-width mathematics.
 
 **Weakened.** H4. Uniswap bundles tick spacing with fee tier, and the 100bp pool
-has no viable position size, so the three-way natural experiment is a two-way
-one.
+has no viable position size, so the three-way natural experiment is a two-way one.
 
-**Untouched.** Forecasting, the strategy backtest, and the deck.
+**Retracted.** Three claims, each by a test this project ran on itself:
+`corr(σ, net) = −0.923`; "LVR scales with σ² and fee income does not"; and the
+static allocation rule. See `DECISIONS.md` steps 2–4.
 
-**Open questions: 5 of 7 closed.** Remaining: which volatility estimator best
-matches observed LVR (Q2), and optimal fee tier as a function of σ (Q5).
+**Open questions: 7 of 7 closed.**
 
-**Everything planned is done, plus an extension phase.** What remains, in order
-of value:
+### What is genuinely left
 
-1. **Locate the profitability crossover.** We know it sits between 28% and 52%
-   annualised — a wide bracket from three points. One more pair in that range
-   (DAI/USDC, or a second majors cross) would narrow it, and it is the single
-   highest-value new data.
-2. **Better weekly volatility forecasting.** The direct lever on H7: the model
-   captures 9% of a 15.9pp edge and the LVR arm is where the miss is.
-   Calibration already took it from 5% to 9%; HAR-Q, implied vol or
-   jump-adjusted estimators are the next attempts.
-3. **Strengthen the static rule.** It is the paper's actionable recommendation
-   and scores 0.83 against a 0.95 deflated-Sharpe bar, on one peg pool over 177
-   weeks. Suggestive, not established.
-4. **Why 2023 differs.** β = 0.372 against 0.918–0.944 later, with the level
-   match stable throughout. Unexplained.
-5. **A Dune key.** The only place one would help: bundle-level MEV
-   identification, which the Flashbots public relay cannot serve for 2023.
+Nothing on the plan. The three items below are extensions, and none of the
+paper's conclusions depends on them:
+
+1. **A realised risk-free series.** The retirement of the static rule rests on a
+   sensitivity band across plausible cash rates because FRED is unreachable from
+   this machine. A Treasury path would pin the excess return down.
+2. **A seventh pool between 2.3% and 28.3% annualised volatility.** That whole
+   region is unobserved, and it is where the fee-income-per-unit-variance
+   account would be tested hardest.
+3. **A Dune key.** The only place one would help: bundle-level MEV
+   identification, which the Flashbots public relay cannot serve for 2023. The
+   MEV magnitudes are a one-sided undercount without it.

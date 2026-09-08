@@ -202,10 +202,27 @@ analytical LVR at a ratio of 0.182, and all five fall on **17–18 August 2023**
 Drop the top 1% of σ days and 2023 moves to 0.779 while the spread across years
 collapses. The aggregate 2023 ratio is 0.958, so the level was never wrong.
 
-*Three explanations were tested and refused: the no-arbitrage fee band (β is
-higher, not lower, at low σ/fee), jumps (bipower moves β 0.372 → 0.381), and
-oversampling (variance deflates at fine sampling). Range exhaustion during a
-large intraday move remains open and is labelled as such.*
+### Four mechanisms tested, four refused — and the fourth is informative
+
+| hypothesis | result |
+|---|---|
+| no-arbitrage fee band | **no** — β is *higher*, not lower, at low σ/fee |
+| jumps | **no** — bipower moves 2023 β 0.372 → 0.381 |
+| oversampling | **no** — variance *deflates* at fine sampling |
+| range exhaustion | **no — and backwards** |
+
+Splitting the most volatile days by the *shape* of the move at matched variance:
+days that **leave** the ±10% range score **1.261**; days that stay inside and
+merely oscillate score **0.780**. Trend coefficient **+0.252, CI [+0.212,
++0.294]**, P(coef < 0) = 0.000.
+
+> **The over-prediction is on days that travel a long way without going
+> anywhere.** A pool can be arbitraged at most once per block, and movement below
+> the round-trip cost is never arbitraged, so oscillation produces realised
+> variance no arbitrageur can convert into profit. Direction is captured in full.
+
+*Stated as the surviving account, not a demonstration: per-block extraction is
+not measured.*
 
 *Figures: `h3_theory_vs_empirical.png`, `h3_by_regime.png`, `lvr_bias_by_sigma.png`*
 
