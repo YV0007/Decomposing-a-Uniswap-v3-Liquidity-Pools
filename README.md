@@ -60,7 +60,7 @@ next to the diffusive term. A threshold rule is valid only above ~28%.
 
 **σ²/8 works, and its bias is monotone.** Across 7,696 pool-days the closed form
 explains ~62% of daily LVR variation with no fitted parameters. Realised over
-predicted runs **2.09 → 0.76** from a peg to the top percentile of days: it
+predicted runs **1.98 → 0.76** from a peg to the top percentile of days: it
 under-predicts in calm markets, where a floor of adverse selection it does not
 model dominates, is unbiased around σ ≈ 0.6–0.9, and over-predicts in extreme
 ones. **The two failures previously reported separately are the ends of one curve.**

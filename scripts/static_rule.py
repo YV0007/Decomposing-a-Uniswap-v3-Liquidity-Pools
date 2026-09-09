@@ -39,15 +39,20 @@ from src.utils.stats import deflated_sharpe_ratio
 
 PANEL = REPO_ROOT / "data" / "processed" / "weekly_panel_all.parquet"
 OUT = REPO_ROOT / "outputs" / "tables"
-EXCLUDE = "ETH_USDC_100bp"
+#: ETH/USDC 100bp is not a price-taker at $100k. PAXG/USDC is excluded for a
+#: different reason: it has no liquidity before April 2025, so including it
+#: would rank five pools for two years and six for the rest — and this table is
+#: read beside the allocation, which uses the five-pool universe. The two must
+#: sit on the same pool set or the comparison between them means nothing.
+EXCLUDE = ("ETH_USDC_100bp", "PAXG_USDC_5bp")
 GAS_WEEK = 22.39 / 100_000
-#: Plausible cash rates over 2023-2026. The exact path could not be fetched, so
-#: the honest presentation is a band rather than a single deflated number.
+#: Flat cash rates, kept as a sensitivity beside the realised Treasury series so
+#: the conclusion can be seen not to hinge on the level chosen.
 RF_GRID = (0.00, 0.02, 0.04, 0.05)
 
 
 def weekly(panel: pd.DataFrame) -> pd.DataFrame:
-    d = panel[panel.pool != EXCLUDE].copy()
+    d = panel[~panel.pool.isin(EXCLUDE)].copy()
     d = d.dropna(subset=["net_return", "realized_vol_30d"])
     return d.sort_values(["week", "pool"])
 

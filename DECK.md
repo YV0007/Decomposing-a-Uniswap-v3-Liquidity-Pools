@@ -205,15 +205,15 @@ lagged one month does **not** beat the naive rule (76.2% vs 78.6%).
 
 | σ bucket | median σ | realised / predicted |
 |---|---|---|
-| q1 | 0.024 | **2.09** |
-| q2 | 0.293 | 1.17 |
-| q3 | 0.450 | 1.07 |
-| p75–90 | 0.610 | 1.03 |
-| p90–99 | 0.852 | 0.96 |
-| top 1% | 1.465 | **0.76** |
+| q1 | 0.024 | **1.98** |
+| q2 | 0.272 | 1.17 |
+| q3 | 0.433 | 1.08 |
+| p75–90 | 0.597 | 1.03 |
+| p90–99 | 0.843 | 0.96 |
+| top 1% | 1.448 | **0.76** |
 
 > **σ²/8 under-predicts in calm markets, is unbiased around σ ≈ 0.6–0.9, and
-> over-predicts in extreme ones.** The peg (6.6× on the pool, 2.09 here) and the
+> over-predicts in extreme ones.** The peg (6.6× on the pool, 1.98 here) and the
 > crash days are the two ends of the same curve, not separate failures.
 
 At low σ the diffusive term vanishes and exposes a **floor of adverse
@@ -225,7 +225,7 @@ not model. At extreme σ it over-charges.
 β was 0.372 in 2023 against 0.918–0.944 later. It is **two days**, not a year:
 2023Q3 has β = 0.130, its top five day-pool cells are 35.8% of the quarter's
 analytical LVR at a ratio of 0.182, and all five fall on **17–18 August 2023**.
-Drop the top 1% of σ days and 2023 moves to 0.779 while the spread across years
+Drop the top 1% of σ days and 2023 moves to 0.801 while the spread across years
 collapses. The aggregate 2023 ratio is 0.958, so the level was never wrong.
 
 ### Four mechanisms tested, four refused — and the fourth is informative
@@ -448,7 +448,7 @@ Nothing here licenses a causal reading of volatility on LP profitability.
 R² = 0.055. We report the interval, not the point.
 
 **σ²/8 has a measured bias curve, not a single domain.** Realised/predicted runs
-2.09 → 0.76 monotonically in σ. We do not model the floor at the low end.
+1.98 → 0.76 monotonically in σ. We do not model the floor at the low end.
 
 **MEV magnitude is the least robust number here**, though attribution is neutral
 so the decomposition does not rest on it. We now have an independent check:

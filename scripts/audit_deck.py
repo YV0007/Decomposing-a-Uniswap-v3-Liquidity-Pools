@@ -160,13 +160,13 @@ def claims() -> list[tuple[str, float, float, float]]:
         out.append((f"Slide 8 {pool} {field}", claimed, float(h.loc[pool, field]), 1e-3))
 
     b = load("lvr_bias_by_sigma.csv").set_index("sbin")
-    for sbin, claimed in (("q1", 2.09), ("q2", 1.17), ("top1%", 0.76)):
+    for sbin, claimed in (("q1", 1.98), ("q2", 1.17), ("top1%", 0.76)):
         out.append((f"Slide 8 bias {sbin}", claimed,
                     float(b.loc[sbin, "agg_ratio"]), 6e-3))
 
     w = load("why_2023.csv")
     ex = w[w.test == "ex_top1pct"].set_index("year")
-    out.append(("Slide 8 2023 beta ex top 1%", 0.779, float(ex.loc[2023, "beta_ex"]), 2e-3))
+    out.append(("Slide 8 2023 beta ex top 1%", 0.801, float(ex.loc[2023, "beta_ex"]), 2e-3))
     yr = w[w.test == "by_year"].set_index("year")
     out.append(("Slide 8 2023 aggregate ratio", 0.958, float(yr.loc[2023, "agg_ratio"]), 2e-3))
 

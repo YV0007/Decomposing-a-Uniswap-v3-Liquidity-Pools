@@ -97,7 +97,7 @@ def main() -> int:
                      "beta_ex": b_ex})
     print(f"\n  cutoff sigma = {cut:.2f} annualised; {len(np_) - len(keep)} of "
           f"{len(np_)} day-pool cells removed.")
-    print("  2023 moves 0.425 -> 0.779 and the spread across years collapses.")
+    print("  2023 moves 0.425 -> 0.801 and the spread across years collapses.")
 
     print("\n--- the closed form's bias is monotone in sigma ---\n")
     d["sbin"] = pd.qcut(d.sigma_annual, [0, .25, .5, .75, .9, .99, 1.0],

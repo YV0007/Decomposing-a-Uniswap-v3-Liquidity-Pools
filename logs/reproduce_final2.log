@@ -94,3 +94,15 @@ REPRODUCE — full rebuild
     wrote outputs/tables/mev_relay_validation.csv
 
 --- RUN   robustness — subperiods, regimes, Q2
+    PASS           514.4s  robustness_subperiods_q2.py
+    wrote robustness_subperiods.csv, robustness_regimes.csv, q2_volatility_estimators.csv
+
+--- RUN   robustness — range width, hedge frequency
+    PASS          2858.6s  robustness_position.py
+    wrote outputs/tables/robustness_position.csv (430 rows)
+
+--- RUN   robustness — MEV classification rules
+    PASS           603.4s  robustness_mev.py
+    wrote outputs/tables/robustness_mev.csv
+
+--- RUN   robustness — block/CEX alignment
