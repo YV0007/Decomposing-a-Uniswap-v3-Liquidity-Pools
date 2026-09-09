@@ -205,7 +205,7 @@ def build_story():  # noqa: C901 — a document is linear by nature
                "pools and 43 months, and testing whether a closed-form price for "
                "adverse selection becomes a tradable edge", "subtitle"))
     s.append(P("Yehor Vasylchenko", "author"))
-    s.append(P("Vienna University of Economics and Business", "affil"))
+    s.append(P("University of Vienna", "affil"))
     s.append(P("September 2026", "affil"))
     s.append(P("Working paper", "affil"))
 
