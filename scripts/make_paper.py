@@ -56,6 +56,8 @@ S = {
                    textColor=MUTED, spaceAfter=11),
     "affil": _s("af", fontName="Helvetica", fontSize=8.6, leading=12,
                 textColor=MUTED, spaceAfter=1),
+    "author": _s("au", fontName="Helvetica-Bold", fontSize=9.6, leading=13,
+                 textColor=INK, spaceAfter=3),
     "abshead": _s("ah", fontName="Helvetica-Bold", fontSize=8.6, leading=11,
                   textColor=INK, spaceBefore=13, spaceAfter=4),
     "abstract": _s("ab", fontName="Times-Roman", fontSize=8.9, leading=12.2,
@@ -202,7 +204,7 @@ def build_story():  # noqa: C901 — a document is linear by nature
     s.append(P("Decomposing fee income against loss-versus-rebalancing across seven "
                "pools and 43 months, and testing whether a closed-form price for "
                "adverse selection becomes a tradable edge", "subtitle"))
-    s.append(P("WUTIS — WU Academic Trading and Investment Society", "affil"))
+    s.append(P("Yehor Vasylchenko", "author"))
     s.append(P("Vienna University of Economics and Business", "affil"))
     s.append(P("September 2026", "affil"))
     s.append(P("Working paper", "affil"))
@@ -1036,8 +1038,7 @@ def main() -> int:
     doc = BaseDocTemplate(str(path), pagesize=A4,
                           leftMargin=20 * mm, rightMargin=20 * mm,
                           topMargin=18 * mm, bottomMargin=17 * mm,
-                          title=TITLE, author="WUTIS — WU Academic Trading and "
-                                              "Investment Society")
+                          title=TITLE, author="Yehor Vasylchenko")
     frame = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height, id="f")
     doc.addPageTemplates([PageTemplate(id="all", frames=[frame], onPage=decorate)])
     doc.build(build_story())
