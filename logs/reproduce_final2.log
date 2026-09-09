@@ -106,3 +106,20 @@ REPRODUCE — full rebuild
     wrote outputs/tables/robustness_mev.csv
 
 --- RUN   robustness — block/CEX alignment
+    PASS         31717.7s  robustness_alignment.py
+    wrote robustness_alignment.csv and robustness_alignment_summary.csv
+
+--- RUN   regenerate every figure
+    PASS            13.2s  make_figures.py
+      range_width_jan2023.png                 119 KB
+
+--- RUN   audit — every deck number against its table
+    PASS             1.0s  audit_deck.py
+    104 match, 0 mismatch
+
+--- RUN   typeset the working paper from the output tables
+    PASS             2.2s  make_paper.py
+    wrote outputs/paper/LVR_MEV_WorkingPaper.pdf
+
+========================================================================================
+All stages and gates passed.

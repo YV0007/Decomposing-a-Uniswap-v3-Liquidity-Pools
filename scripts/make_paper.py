@@ -199,7 +199,7 @@ def build_story():  # noqa: C901 — a document is linear by nature
     s = []
     # ---------------- title block ----------------
     s.append(P(TITLE, "title"))
-    s.append(P("Decomposing fee income against loss-versus-rebalancing across six "
+    s.append(P("Decomposing fee income against loss-versus-rebalancing across seven "
                "pools and 43 months, and testing whether a closed-form price for "
                "adverse selection becomes a tradable edge", "subtitle"))
     s.append(P("WUTIS — WU Academic Trading and Investment Society", "affil"))
@@ -220,14 +220,15 @@ def build_story():  # noqa: C901 — a document is linear by nature
         "covers it is an empirical question that is usually answered with pool-level "
         "aggregates, which conflate providers with different ranges and entry dates. "
         "We reconstruct a single $100k position at &#177;10% from raw swap events on "
-        "an Ethereum archive node — no vendor API, no subgraph — for six Uniswap v3 "
+        "an Ethereum archive node — no vendor API, no subgraph — for seven Uniswap v3 "
         "pools spanning a 23&#215; range of volatility, and decompose its return into "
         f"fees, LVR and gas over {len(read('cohorts_fullsample_all.csv'))} monthly "
         "cohorts. Fee accrual is validated against the pool's own "
         "<i>feeGrowthInside</i> accumulator read on-chain, and the reconstructed price "
         "against pool state. We find that liquidity provision is <b>not</b> uniformly "
-        f"loss-making: two of five pools pay, from {pct(dec.loc['USDC_USDT_1bp', 'net_market_making'])} "
-        f"a year on a stablecoin pair to {pct(dec.loc['ETH_USDC_5bp', 'net_market_making'])} "
+        f"loss-making: the stablecoin pool earns {pct(dec.loc['USDC_USDT_1bp', 'net_market_making'])} "
+        "a year with a confidence interval excluding zero, against "
+        f"{pct(dec.loc['ETH_USDC_5bp', 'net_market_making'])} "
         "on the deepest ETH/USDC tier. The closed form explains around 62% of daily "
         "variation in realised LVR with zero fitted parameters, and its bias is "
         f"monotone in volatility — realised over predicted runs "
@@ -276,7 +277,7 @@ def build_story():  # noqa: C901 — a document is linear by nature
     s.append(P(
         "This paper does that. We specify one position — $100,000 deployed at &#177;10% "
         "around spot, re-centred when it exits — reconstruct it from raw swap events for "
-        "six pools over 43 months, and decompose its return into fee income, LVR and gas. "
+        "seven pools over up to 43 months, and decompose its return into fee income, LVR and gas. "
         "The specification is deliberately unremarkable: it is what a competent provider "
         "would run, not an optimised strategy, and every parameter is varied in "
         "Section 6.7."))
@@ -341,7 +342,7 @@ def build_story():  # noqa: C901 — a document is linear by nature
     s.append(TB(
         ["Construction step", "Observations", "Note"],
         [["Swap events decoded", f"{int(fees_raw['swaps'].sum()):,}",
-          "1 Jan 2023 – 31 Jul 2026, six pools"],
+          "1 Jan 2023 – 31 Jul 2026, seven pools"],
          ["Blocks traversed", f"{int(xs.n_blocks.sum()):,}", "archive node, no vendor API"],
          ["Pool-days with LVR and &#963;", f"{len(xs):,}", "empirical and analytical both present"],
          ["Monthly position cohorts", f"{len(read('cohorts_fullsample_all.csv')):,}",
@@ -468,7 +469,8 @@ def build_story():  # noqa: C901 — a document is linear by nature
     s.append(H("6. Results"))
     s.append(H("6.1 Does providing liquidity pay?", "h2"))
     s.append(P(
-        "Table 3 reports the decomposition over 43 monthly cohorts per pool. The project's "
+        "Table 3 reports the decomposition, 43 monthly cohorts per pool except the gold "
+        "pool's 16. The project's "
         "own stated falsification test was a pool in which fees persistently exceed LVR by "
         "more than costs. It is met, twice."))
     order = ["USDC_USDT_1bp", "PAXG_USDC_5bp", "WBTC_ETH_30bp", "WBTC_USDC_30bp",
@@ -484,8 +486,8 @@ def build_story():  # noqa: C901 — a document is linear by nature
     s.append(TB(
         ["Pool", "median &#963;", "fees", "LVR", "gas", "net", "95% CI", "months &gt; 0"],
         rows,
-        "Table 3. Decomposition of a $100k position at &#177;10%, 43 monthly cohorts per "
-        "pool, annualised. Net is fees &#8722; LVR &#8722; gas and is already delta-hedged "
+        "Table 3. Decomposition of a $100k position at &#177;10%, annualised; 43 monthly "
+        "cohorts per pool except PAXG/USDC, which has 16. Net is fees &#8722; LVR &#8722; gas and is already delta-hedged "
         "by the identity in Equation (1). Confidence intervals are block bootstrap over "
         "whole months. ETH/USDC 100bp is withheld throughout: a $100k position is 113% of "
         "its active liquidity, so its returns are not price-taking measurements.",
@@ -499,7 +501,7 @@ def build_story():  # noqa: C901 — a document is linear by nature
         "matters more than it first appears."))
     s.append(IMG("crossover_profitability.png",
                  "Figure 1. Net market-making return against median annualised volatility, "
-                 "six pools. The negative slope across pools is real but, as Section 6.4 "
+                 "seven pools. The negative slope across pools is real but, as Section 6.4 "
                  "shows, is not a statement about what volatility does to a given pool.",
                  width=118 * mm))
 
@@ -541,7 +543,7 @@ def build_story():  # noqa: C901 — a document is linear by nature
         [[r["sbin"], f"{r['median_sigma']:.3f}", f"{int(r['n']):,}",
           f"<b>{r['agg_ratio']:.2f}</b>" if r["sbin"] in ("q1", "top1%")
           else f"{r['agg_ratio']:.2f}"] for _, r in bias.iterrows()],
-        "Table 5. Ratio of realised to predicted LVR by volatility bucket, all six pools "
+        "Table 5. Ratio of realised to predicted LVR by volatility bucket, all seven pools "
         "pooled. The closed form under-predicts in calm markets and over-predicts in "
         "extreme ones.",
         widths=[26 * mm, 26 * mm, 26 * mm, 34 * mm], bold_rows=(0, 5)))
@@ -961,7 +963,7 @@ def build_story():  # noqa: C901 — a document is linear by nature
     s.append(H("9. Conclusion"))
     s.append(P(
         "Providing liquidity without an oracle has a price, that price has a closed form, "
-        "and the closed form is right. Across six pools spanning a 23&#215; range of "
+        "and the closed form is right. Across seven pools spanning a 23&#215; range of "
         "volatility it explains around 62% of daily variation in realised loss-versus-"
         "rebalancing with no fitted parameters, beats gradient boosting decisively out of "
         "sample, and has a bias that is monotone and therefore characterisable: it "
@@ -969,7 +971,8 @@ def build_story():  # noqa: C901 — a document is linear by nature
         "model dominates, and over-predicts in extreme ones."))
     s.append(P(
         "Whether the price is worth paying depends on the pool. Liquidity provision is not "
-        "uniformly loss-making — two of five pools pay, one of them significantly — which "
+        "uniformly loss-making — three of six pools have a positive point estimate and one "
+        "is significantly positive — which "
         "falsified our own stated test. But the mechanism usually offered for this, that "
         "volatility determines the answer, does not survive. The cross-sectional "
         "association reverses sign within pools, and fee income scales with variance almost "
