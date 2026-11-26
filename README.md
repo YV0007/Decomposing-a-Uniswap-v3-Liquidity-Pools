@@ -91,11 +91,11 @@ Allocation, weekly, all costs, 2023-01 to 2026-07:
 | static USDC/USDT, excess over realised rf (4.62%) | −0.3% | −0.10 | 0.04 |
 | ex-post best pool each week | +17.3% | 3.71 | |
 
-What the tables say, and what they do not. `fees = 0.043 + 3.06σ²` and `LVR = −0.003 + 3.26σ²` across pools, so the net is a difference of near-parallel terms. Cross-pool `corr(σ, net) = −0.57`, but within pools the fixed-effects slope is +0.05 with CI [−0.25, +0.38]: a Simpson's paradox, not a rule. `LVR/σ²` is one declining curve (41.8 at the peg, 5.2 at 19.5% σ, 3.1 to 3.5 above 28%), so an adverse-selection floor the diffusion model omits dominates in calm markets. Replacing each forecast component with its oracle, perfect variance forecasting is worth 0.9 pp and perfect fee forecasting 11.4 pp: the allocation problem is a volume-forecasting problem. Four earlier claims were falsified by later stages; each is recorded with the test that killed it in [`DECISIONS.md`](DECISIONS.md).
+What the tables say, and what they do not. `fees = 0.043 + 3.06σ²` and `LVR = −0.003 + 3.26σ²` across pools, so the net is a difference of near-parallel terms. Cross-pool `corr(σ, net) = −0.57`, but within pools the fixed-effects slope is +0.05 with CI [−0.25, +0.38]: a Simpson's paradox, not a rule. `LVR/σ²` is one declining curve (41.8 at the peg, 5.2 at 19.5% σ, 3.1 to 3.5 above 28%), so an adverse-selection floor the diffusion model omits dominates in calm markets. Replacing each forecast component with its oracle, perfect variance forecasting is worth 0.9 pp and perfect fee forecasting 11.4 pp: the allocation problem is a volume-forecasting problem. Four earlier claims were falsified by later stages; each is recorded with the test that killed it in [`docs/DECISIONS.md`](docs/DECISIONS.md).
 
 The position is simulated, not observed; path-dependence of v3 range management is approximated and stated. Sandwich detection is same-address and undercounts searchers who rotate addresses, which is why it is checked against relay payments rather than trusted. MEV's dollar magnitude is the least robust number in the paper and is reported as such.
 
-[Working paper](outputs/paper/LVR_MEV_WorkingPaper.pdf) · [every modelling decision and what would reverse it](DECISIONS.md) · [research design](LVR_MEV_PROJECT.md) · [published SQL equivalents of each extraction](dune/)
+[Working paper](outputs/paper/LVR_MEV_WorkingPaper.pdf) · [every modelling decision and what would reverse it](docs/DECISIONS.md) · [research design](docs/LVR_MEV_PROJECT.md) · [published SQL equivalents of each extraction](dune/)
 
 ## What is included
 
