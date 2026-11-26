@@ -12,9 +12,17 @@ import pandas as pd
 import pytest
 
 from src.strategy.allocate import allocation_signal, normalise_weights
+from src.utils.config import REPO_ROOT
 from src.strategy.backtest import (benchmark_equal_weight,
                                    benchmark_fifty_fifty_rebalanced,
                                    benchmark_hold_tokens, run_backtest)
+
+
+# The raw dataset is reproducible from the fetchers and is not committed, so
+# the two tests that replay a real month skip where it is absent (CI).
+needs_data = pytest.mark.skipif(
+    not (REPO_ROOT / "data" / "raw" / "month_blocks.json").exists(),
+    reason="needs the fetched dataset under data/raw")
 
 
 def _preds(n=20):
@@ -116,6 +124,7 @@ def test_normalise_weights_handles_all_negative():
 # The return identity
 # --------------------------------------------------------------------------- #
 
+@needs_data
 def test_return_identity_holds_on_real_data():
     """`total = rebalanced + market_making`, and the three are distinct.
 
@@ -142,6 +151,7 @@ def test_return_identity_holds_on_real_data():
     assert r.rebalanced_return != 0
 
 
+@needs_data
 def test_market_making_return_excludes_the_price_move():
     """Two months with opposite ETH moves must not flip the market-making sign
     merely because the price direction flipped."""
