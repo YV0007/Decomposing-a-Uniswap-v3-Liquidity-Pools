@@ -21,3 +21,4 @@ outputs/tables/**
 
 # The specification log IS committed — it is the multiple-testing record.
 !outputs/specification_log.csv
+*.egg-info/
